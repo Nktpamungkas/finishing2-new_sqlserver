@@ -1,0 +1,230 @@
+<?php
+header("Content-type: application/octet-stream");
+header("Content-Disposition: attachment; filename=report-produksi-".date($_GET['tglawal']).".xls");//ganti nama sesuai keperluan
+header("Pragma: no-cache");
+header("Expires: 0");
+//disini script laporan anda
+?>
+<?php 
+  	mysql_connect("localhost","dit","4dm1n");
+    mysql_select_db("dyeing")or die("Gagal Koneksi");
+?>
+<body>
+<?php
+
+	$tglawal=$_GET[tglawal];
+	$tglakhir=$_GET[tglakhir];
+	$shft=$_GET[shift];	
+if($tglakhir != "" and $tglawal != "")
+		{$tgl=" DATE_FORMAT(a.`tgl_update`,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";}else{$tgl=" ";}
+		if($shft=="ALL"){$shift=" ";}else{$shift=" AND a.`shift`='$shft' ";}
+
+?>
+<table width="100%" border="1">
+  <tr>
+    <th colspan="2" rowspan="4">&nbsp;</th>
+    <th colspan="13" rowspan="4"><h2>FORM PRODUKSI HARIAN DYEING</h2></th>
+    <td colspan="2">No. Form</td>
+    <td colspan="3">: FW-02-DYE-03</td>
+  </tr>
+  <tr>
+    <td colspan="2">No. Revisi</td>
+    <td colspan="3">: 04</td>
+  </tr>
+  <tr>
+    <td colspan="2">Tgl. Terbit</td>
+    <td colspan="3">: 1 April 2017</td>
+  </tr>
+  <tr>
+    <td colspan="2">Halaman</td>
+    <td colspan="3">:</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<strong>Periode: <?php echo $tglawal; ?> s/d <?php echo $tglakhir; ?></strong><br>
+<strong>Shift: <?php echo $shft; ?></strong><br />
+<table width="100%" border="1">
+    <tr>
+      <th rowspan="2" bgcolor="#99FF99">NO.</th>
+      <th rowspan="2" bgcolor="#99FF99">SHIFT</th>
+      <th rowspan="2" bgcolor="#99FF99">NO MC</th>
+      <th rowspan="2" bgcolor="#99FF99">LANGGANAN / BUYER</th>
+      <th rowspan="2" bgcolor="#99FF99">NO ORDER</th>
+      <th rowspan="2" bgcolor="#99FF99">JENIS KAIN</th>
+      <th rowspan="2" bgcolor="#99FF99">WARNA</th>
+      <th rowspan="2" bgcolor="#99FF99">K.W</th>
+      <th rowspan="2" bgcolor="#99FF99">LOT</th>
+      <th rowspan="2" bgcolor="#99FF99">ROLL</th>
+      <th rowspan="2" bgcolor="#99FF99">QTY</th>
+      <th rowspan="2" bgcolor="#99FF99">PROSES</th>
+      <th rowspan="2" bgcolor="#99FF99">PERBAIKAN</th>
+      <th rowspan="2" bgcolor="#99FF99">K.R</th>
+      <th colspan="2" bgcolor="#99FF99">JAM PROSES</th>
+      <th rowspan="2" bgcolor="#99FF99">POINT</th>
+      <th colspan="2" bgcolor="#99FF99">STOP MESIN</th>
+      <th rowspan="2" bgcolor="#99FF99">KODE STOP</th>
+    </tr>
+    <tr>
+      <th bgcolor="#99FF99">IN</th>
+      <th bgcolor="#99FF99">OUT</th>
+      <th bgcolor="#99FF99">JAM</th>
+      <th bgcolor="#99FF99">S/D</th>
+    </tr>
+    <?php 
+	
+		$sql=mysql_query(" SELECT 
+	*
+FROM
+	`tbl_produksi` a
+
+WHERE
+	".$tgl.$shift." ORDER BY a.`no_mesin` ASC");
+  
+   $no=1;
+   
+   $c=0;
+    while($rowd=mysql_fetch_array($sql)){
+		   ?>
+      <tr valign="top">
+      <td><?php echo $no;?></td>
+      <td><?php echo $rowd['shift'];?></td>
+      <td>'<?php echo $rowd['no_mesin'];?></td>
+      <td><?php echo $rowd['langganan'];?></td>
+      <td><?php echo $rowd['no_order']; ?></td>
+      <td><?php echo $rowd['jenis_kain'];?></td>
+      <td><?php echo $rowd['warna']; ?></td>
+      <td><?php echo $rowd['k_w']; ?></td>
+      <td>'<?php echo $rowd['lot']; ?></td>
+      <td><?php echo $rowd['rol']; ?></td>
+      <td><?php echo $rowd['qty']; ?></td>
+      <td><?php echo $rowd['proses']; ?></td>
+      <td><?php echo $rowd['perbaikan']; ?></td>
+      <td><?php echo $rowd['k_r'];?></td>
+      <td><?php echo $rowd['jam_in']; ?></td>
+      <td><?php echo $rowd['jam_out'];?></td>
+      <td><?php echo $rowd['poin'];?></td>
+      <td><?php echo $rowd['stop_l'];?></td>
+      <td><?php echo $rowd['stop_r'];?></td>
+      <td><?php echo $rowd['kd_stop'];?></td>
+    </tr>
+     <?php 
+	 
+	 $no++;} ?>
+    <tr>
+       <td colspan="6" bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+    </tr>
+    <tr>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <th bgcolor="#99FF99">Total</th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <th bgcolor="#99FF99"><?php echo $totcones;?></th>
+      <th bgcolor="#99FF99"><?php echo $totqty;?></th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <th bgcolor="#99FF99"><?php echo $totberat;?></th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+    </tr>
+</table>
+  <table width="100%" border="1">
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th colspan="2">&nbsp;</th>
+    <th colspan="3">DIBUAT OLEH:</th>
+    <th colspan="7">DIPERIKSA OLEH:</th>
+    <th colspan="8">DIKETAHUI OLEH:</th>
+    </tr>
+  <tr>
+    <td colspan="2">NAMA</td>
+    <td colspan="3">&nbsp;</td>
+    <td colspan="7">&nbsp;</td>
+    <td colspan="8">&nbsp;</td>
+    </tr>
+  <tr>
+    <td colspan="2">JABATAN</td>
+    <td colspan="3">&nbsp;</td>
+    <td colspan="7">&nbsp;</td>
+    <td colspan="8">&nbsp;</td>
+    </tr>
+  <tr>
+    <td colspan="2">TANGGAL</td>
+    <td colspan="3">&nbsp;</td>
+    <td colspan="7">&nbsp;</td>
+    <td colspan="8">&nbsp;</td>
+    </tr>
+  <tr>
+    <td height="60" colspan="2" valign="top">TANDA TANGAN</td>
+    <td colspan="3">&nbsp;</td>
+    <td colspan="7">&nbsp;</td>
+    <td colspan="8">&nbsp;</td>
+    </tr>
+</table>
+
+</body>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Laporan Produksi Harian Dyeing</title>
+<script>
+function confirmDelete(url) {
+    if (confirm("Yakin Hapus data ini?")) {
+        window.location.href=url;
+    } else {
+        false;
+    }       
+}
+</script>
+</head>
+
+<body>
+<?php
+if($_POST[awal]!=""){
+	$tglawal=$_POST[awal];
+	$tglakhir=$_POST[akhir];
+	}
+	else{
+	$tglawal=$_GET[tgl1];
+	$tglakhir=$_GET[tgl2];	
+		}
+		if($_POST[shift]!=""){$shft=$_POST[shift];}
+		else{$shft=$_GET[shift];}
+	if($tglakhir != "" and $tglawal != "")
+		{$tgl=" DATE_FORMAT(a.`tgl_update`,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";}else{$tgl=" ";}
+	if($shft=="ALL"){ $shift=" ";}else{$shift=" AND a.`shift`='$shft' ";}
+$row = 30;
+$hal = isset($_GET['hal']) ? $_GET['hal'] : 0;
+$pageSql = " SELECT 
+	*
+FROM
+	`tbl_produksi` a
+
+WHERE
+	".$tgl.$shift." ORDER BY a.`no_mesin` ASC ";
+$pageQry = mysql_query($pageSql) or die ("error: ".mysql_error());
+$jml	 = mysql_num_rows($pageQry);
+$max	 = ceil($jml/$row);
+?>
+<input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='index.php'" class="art-button"/>
+<input type="button" name="button3" id="button3" value="Cetak" onclick="window.open('pages/reports-cetak.php?tglawal=<?php echo $tglawal; ?>&amp;tglakhir=<?php echo $tglakhir; ?>&amp;shift=<?php echo $shft; ?>', '_blank')" class="art-button"/>
+<input type="button" name="button" id="button" value="Cetak Ke Excel" onClick="window.location.href='pages/reports-excel.php?tglawal=<?php echo $tglawal; ?>&amp;tglakhir=<?php echo $tglakhir; ?>&amp;shift=<?php echo $shft; ?>'" class="art-button"/>
+<br />
+<strong><br />
+</strong>
+<form id="form1" name="form1" method="post" action="">
+<strong>  Periode: <?php echo $tglawal; ?> s/d <?php echo $tglakhir; ?></strong><br />
+<strong>Shift: <?php echo $shft;?></strong>
+<div align="right">Halaman Ke :
+    <?php
+	for ($h = 1; $h <= $max; $h++) {
+		$list[$h] = $row * $h - $row;
+		echo " <a href='?p=reports&shift=$shft&tgl1=$tglawal&tgl2=$tglakhir&hal=$list[$h]'>$h</a> ";
+	}
+	?>
+  </div>
+  
+  <table width="100%" border="0">
+    <tr>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">NO.</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">NO MC</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">KAPASITAS</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">LANGGANAN / BUYER</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">NO ORDER</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">JENIS KAIN</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">WARNA</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">K.W</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">LOT</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">ROLL</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">QTY</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">% LOADING</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">L:R</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">PEMAKAIAN AIR</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">PROSES</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">KETERANGAN</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">K.R</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">R.B / R.L</font></td>
+      <td colspan="2" bgcolor="#99FF99"><font size="-2">JAM PROSES</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">LAMA PROSES</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">POINT</font></td>
+      <td colspan="2" bgcolor="#99FF99"><font size="-2">STOP MESIN</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">LAMA STOP</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">KODE STOP</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">SHIFT</font></td>
+      <td rowspan="2" bgcolor="#99FF99"><font size="-2">AKSI</font></td>
+    </tr>
+    <tr>
+      <td bgcolor="#99FF99"><font size="-2">IN</font></td>
+      <td bgcolor="#99FF99"><font size="-2">OUT</font></td>
+      <td bgcolor="#99FF99"><font size="-2">JAM</font></td>
+      <td bgcolor="#99FF99"><font size="-2">S/D</font></td>
+    </tr>
+    <?php 
+	
+		$sql=mysql_query(" SELECT 
+	*
+FROM
+	`tbl_produksi` a
+
+WHERE
+	".$tgl.$shift." ORDER BY a.`no_mesin` ASC LIMIT $hal, $row");
+   if($hal>0){
+   $no=$hal+1;}else
+   {$no=1;}
+   
+   $c=0;
+    while($rowd=mysql_fetch_array($sql)){
+		 $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
+	  		  ?>
+      <tr bgcolor="<?php echo $bgcolor;?>">
+      <td><div align="center"><font size="-2"><?php echo $no;?></font></div></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['no_mesin'];?></font></div></td>
+      <td>&nbsp;</td>
+      <td><font size="-2"><b title="<?php echo $rowd['langganan'];?>"><?php echo substr($rowd['langganan'],0,10)."..";?></b></font></td>
+      <td><font size="-2"><?php echo $rowd['no_order']; ?></font></td>
+      <td><font size="-2"><b title="<?php echo $rowd['jenis_kain'];?>"><?php echo substr($rowd['jenis_kain'],0,10)."..";?></b></font></td>
+      <td><font size="-2"><b title="<?php echo $rowd['warna']; ?>"><?php echo substr($rowd['warna'],0,10).".."; ?></b></font></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['k_w']; ?></font></div></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['lot']; ?></font></div></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['rol']; ?></font></div></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['qty']; ?></font></div></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td><font size="-2"><?php echo $rowd['proses']; ?></font></td>
+      <td><font size="-2"><?php echo $rowd['perbaikan']; ?></font></td>
+      <td><div align="center"><font size="-2"><?php echo $rowd['k_r'];?></font></div></td>
+      <td>&nbsp;</td>
+      <td><div align="center"><?php echo $rowd['jam_in']; ?></div></td>
+      <td><div align="center"><?php echo $rowd['jam_out'];?></div></td>
+      <td>&nbsp;</td>
+      <td><div align="center"><?php echo $rowd['poin'];?></div></td>
+      <td><div align="center"><?php echo $rowd['stop_l'];?></div></td>
+      <td><div align="center"><?php echo $rowd['stop_r'];?></div></td>
+      <td>&nbsp;</td>
+      <td><div align="center"><?php echo $rowd['kd_stop'];?></div></td>
+      <td><div align="center"><?php echo $rowd['shift'];?></div></td>
+      <td><input type="button" name="hapus" id="hapus" value="Hapus" onClick="confirmDelete('?p=hapus-report&id=<?php echo $rowd[id];?>&tgl1=<?php echo $tglawal;?>&tgl2=<?php echo $tglakhir;?>&shift=<?php echo $shft;?>');"/></td>
+    </tr>
+     <?php 
+	 
+	 $no++;} ?>
+    <tr>
+       <td colspan="6" bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+       <td bgcolor="#99FF99">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="6" bgcolor="#99FF99"><strong>Jumlah Data : <?php echo $jml; ?>
+  </strong></td>
+      <th bgcolor="#99FF99">Total</th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <th bgcolor="#99FF99"><?php echo $totcones;?></th>
+      <th bgcolor="#99FF99"><?php echo $totqty;?></th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <th bgcolor="#99FF99">&nbsp;</th>
+      <th bgcolor="#99FF99">&nbsp;</th>
+      <th bgcolor="#99FF99">&nbsp;</th>
+      <th bgcolor="#99FF99"><?php echo $totberat;?></th>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+      <td bgcolor="#99FF99">&nbsp;</td>
+    </tr>
+  </table>
+    <div align="right">Halaman Ke :
+    <?php
+	for ($h = 1; $h <= $max; $h++) {
+		$list[$h] = $row * $h - $row;
+		echo " <a href='?p=reports&shift=$shft&tgl1=$tglawal&tgl2=$tglakhir&hal=$list[$h]'>$h</a> ";
+	}
+	?>
+  </div>
+  
+</form>
+</body>
+</html>
