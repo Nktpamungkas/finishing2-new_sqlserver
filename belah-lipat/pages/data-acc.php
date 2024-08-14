@@ -14,7 +14,7 @@ include("../../koneksi.php");
 <?php
 if(isset($_POST['btnHapus'])){
 		$hapusSql = "DELETE FROM tbl_staff WHERE id='$_POST[id]'";
-		mysqli_query($con,$hapusSql) or die ("Gagal hapus".mysqli_error());
+		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiHapus'>";
@@ -25,7 +25,7 @@ if(isset($_POST['btnSimpan'])){
 	$simpanSql = "INSERT INTO tbl_staff SET 
 	`nama`='$nama',
 	`jabatan`='$jabatan'";
-		mysqli_query($con,$simpanSql) or die ("Gagal Simpan".mysqli_error());
+		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiSimpan'>";
@@ -37,7 +37,7 @@ if(isset($_POST['btnUbah'])){
 	`nama`='$nama',
 	`jabatan`='$jabatan'
 	WHERE `id`='$_POST[id]'";
-		mysqli_query($con,$simpanSql) or die ("Gagal Ubah".mysqli_error());
+		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiUbah'>";
@@ -51,9 +51,9 @@ if(isset($_POST['btnUbah'])){
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=mysqli_query($con,"SELECT * FROM tbl_staff WHERE nama='$_GET[nama]' LIMIT 1");
-	$rt=mysqli_fetch_array($qtampil);
-	$rc=mysqli_num_rows($qtampil);
+    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM tbl_staff WHERE nama='$_GET[nama]' LIMIT 1");
+	$rt=sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_BOTH)); 
+	$rc=sqlsrv_num_rows($qtampil);
 	?>
   <tr>
     <td width="21%" scope="row">Nama</td>
@@ -83,9 +83,9 @@ if(isset($_POST['btnUbah'])){
     <th>Jabatan</th>
     </tr>
   <?php 
-  $qry=mysqli_query($con,"SELECT * FROM tbl_staff ORDER BY id ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM tbl_staff ORDER BY id ASC");
   $no=1;
-  while($r=mysqli_fetch_array($qry))
+  while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_BOTH)) 
   {
     $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
   <tr bgcolor="<?php echo $bgcolor;?>">
