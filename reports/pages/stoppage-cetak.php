@@ -11,10 +11,10 @@ include ('../../koneksi.php');
     $mc=$_POST['jnsmesin'];
 	$no_mc=$_POST['nama_mesin'];
 if($tglakhir != "" and $tglawal != "")
-		{$tgl=" DATE_FORMAT(a.`tgl_update`,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";}else{$tgl=" ";}
-		if($shft=="ALL"){$shift=" ";}else{$shift=" AND a.`shift`='$shft' ";}
-        if($mc!=""){$mesin=" AND a.`jns_mesin`='$mc' ";}else{$mesin=" ";}
-        if($no_mc!=""){$nomesin=" AND a.`no_mesin`='$no_mc' ";}else{$nomesin=" ";}
+		{$tgl=" CONVERT(DATE, a.tgl_update) BETWEEN '$tglawal' AND '$tglakhir' ";}else{$tgl=" ";}
+		if($shft=="ALL"){$shift=" ";}else{$shift=" AND a.shift='$shft' ";}
+        if($mc!=""){$mesin=" AND a.jns_mesin='$mc' ";}else{$mesin=" ";}
+        if($no_mc!=""){$nomesin=" AND a.no_mesin='$no_mc' ";}else{$nomesin=" ";}
 
 ?>
 <html>
@@ -109,33 +109,42 @@ border:hidden;
     <tbody>
 	<?php 
 	
-		$sql=mysqli_query($con," SELECT 
-	*
-FROM
-	`tbl_produksi` a
-
-WHERE
-	(not kd_stop='' or not kd_stop2='' or not kd_stop3='') AND ".$tgl.$shift.$mesin.$nomesin." ORDER BY a.`no_mesin` ASC");
+		$sql=sqlsrv_query($con, " SELECT 
+                                *
+                              FROM
+                                db_finishing.tbl_produksi a
+                              WHERE
+                                  (not kd_stop='' or not kd_stop2='' or not kd_stop3='') 
+                                AND ".$tgl.$shift.$mesin.$nomesin." 
+                              ORDER BY 
+                                a.no_mesin ASC");
   
    $no=1;
    
    $c=0;
    
-    while($rowd=mysqli_fetch_array($sql)){
+    while($rowd=sqlsrv_fetch_array($sql)){
 		   ?>
       <tr valign="top">
-      <td><div align="center"><?php echo $rowd['tgl_update'];?></div></td>
+      <td><div align="center"><?php echo $rowd['tgl_update']->format('Y-m-d');?></div></td>
       <td><div align="center"><?php if($rowd['shift2']=="1"){echo $rowd['stop_l'];}?></div></td>
       <td><div align="center"><?php if($rowd['shift2']=="1"){echo $rowd['stop_r'];} ?></div></td>
       <td><div align="center">
         <?php 
 		date_default_timezone_set('Asia/Jakarta');
-		$time1=strtotime($rowd['tgl_stop_l']." ".$rowd['stop_l']);
-		$time2=strtotime($rowd['tgl_stop_r']." ".$rowd['stop_r']);
+
+      if($rowd['tgl_stop_l'] != NULL && $rowd['tgl_stop_r'] != NULL) {
+
+        $stopL = trim($rowd['stop_l']) ?: '00:00';
+        $stopR = trim($rowd['stop_r']) ?: '00:00';
+
+        $time1=strtotime($rowd['tgl_stop_l']->format('Y-m-d') . ' ' . $stopL);
+        $time2=strtotime($rowd['tgl_stop_r']->format('Y-m-d') . ' ' . $stopR);
         $diff  = $time2 - $time1;
 
         $jam   = floor($diff / (60 * 60));
         $menit = $diff - $jam * (60 * 60);
+      }
         if($rowd['shift2']=="1"){echo  $jam .  ' jam ' . floor( $menit / 60 ) . ' menit';}
 		  ?>
       </div></td>
@@ -145,12 +154,18 @@ WHERE
       <td><div align="center">
         <?php 
 		date_default_timezone_set('Asia/Jakarta');
-		$time1=strtotime($rowd['tgl_stop_l']." ".$rowd['stop_l']);
-		$time2=strtotime($rowd['tgl_stop_r']." ".$rowd['stop_r']);
+      if($rowd['tgl_stop_l'] != NULL && $rowd['tgl_stop_r'] != NULL) {
+
+        $stopL = trim($rowd['stop_l']) ?: '00:00';
+        $stopR = trim($rowd['stop_r']) ?: '00:00';
+
+        $time1=strtotime($rowd['tgl_stop_l']->format('Y-m-d') . ' ' . $stopL);
+        $time2=strtotime($rowd['tgl_stop_r']->format('Y-m-d') . ' ' . $stopR);
         $diff  = $time2 - $time1;
 
         $jam   = floor($diff / (60 * 60));
         $menit = $diff - $jam * (60 * 60);
+      }
         if($rowd['shift2']=="2"){echo  $jam .  ' jam ' . floor( $menit / 60 ) . ' menit';}
 		  ?>
       </div></td>
@@ -160,12 +175,18 @@ WHERE
       <td><div align="center">
         <?php 
 		date_default_timezone_set('Asia/Jakarta');
-		$time1=strtotime($rowd['tgl_stop_l']." ".$rowd['stop_l']);
-		$time2=strtotime($rowd['tgl_stop_r']." ".$rowd['stop_r']);
+		if($rowd['tgl_stop_l'] != NULL && $rowd['tgl_stop_r'] != NULL) {
+
+        $stopL = trim($rowd['stop_l']) ?: '00:00';
+        $stopR = trim($rowd['stop_r']) ?: '00:00';
+
+        $time1=strtotime($rowd['tgl_stop_l']->format('Y-m-d') . ' ' . $stopL);
+        $time2=strtotime($rowd['tgl_stop_r']->format('Y-m-d') . ' ' . $stopR);
         $diff  = $time2 - $time1;
 
         $jam   = floor($diff / (60 * 60));
         $menit = $diff - $jam * (60 * 60);
+      }
         if($rowd['shift2']=="3"){echo  $jam .  ' jam ' . floor( $menit / 60 ) . ' menit';}
 		  ?>
       </div></td>

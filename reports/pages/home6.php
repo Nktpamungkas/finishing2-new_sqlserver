@@ -101,8 +101,8 @@ include('../koneksi.php');
         <td>:</td>
         <td><select name="nama_mesin" id="nama_mesin" onchange="myFunction();">
             <option value="">Pilih</option>
-            <?php $qry1 = mysqli_query($con, "SELECT no_mesin FROM tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
-            while ($r = mysqli_fetch_array($qry1)) {
+            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
+            while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
             ?>
               <option value="<?php echo $r['no_mesin']; ?>"><?php echo $r['no_mesin']; ?></option>
             <?php } ?>

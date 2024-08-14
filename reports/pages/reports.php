@@ -38,7 +38,7 @@
 
 <body onload="document.refresh();">
   <?php
-  ini_set("error_reporting", 1);
+  // ini_set("error_reporting", 1);
   session_start();
   include('../koneksi.php');
   $jenis_mesin_now = substr($_POST['nama_mesin'], 2,2);
@@ -67,25 +67,25 @@
         $mesin1 = $_GET['msn'];
       }
       if ($tglakhir != "" and $tglawal != "") {
-        $tgl = " DATE_FORMAT(a.`tgl_update`,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";
+        $tgl = " CONVERT(DATE, a.tgl_update) BETWEEN '$tglawal' AND '$tglakhir' ";
       } else {
         $tgl = " ";
       }
 //	  if ($tglakhir != "" and $tglawal != "" and $jamakhir != "" and $jamawal != "") {
-//        $tgl = " DATE_FORMAT(a.`tgl_buat`,'%Y-%m-%d %H:%i') BETWEEN '$tglawal $jamawal' AND '$tglakhir $jamakhir' ";
+//        $tgl = " DATE_FORMAT(a.tgl_buat,'%Y-%m-%d %H:%i') BETWEEN '$tglawal $jamawal' AND '$tglakhir $jamakhir' ";
 //      } else {
 //        $tgl = " ";
 //      }
       if ($shft == "ALL") {
         $shift = " ";
       } else {
-        $shift = " AND a.`shift`='$shft' ";
+        $shift = " AND a.shift='$shft' ";
       }
       $msn = str_replace("'", "''", $mesin1);
       if ($msn == "") {
         $mesin = " ";
       } else {
-        $mesin = " AND a.`no_mesin`='$msn' ";
+        $mesin = " AND a.no_mesin='$msn' ";
       }
     ?>
     <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='?p=home7'" class="art-button" />
@@ -305,16 +305,16 @@
         </thead>
         <tbody>
           <?php
-            $sql = mysqli_query($con, "SELECT 
-                                            *,a.`id` as `idp`, a.no_mesin AS no_mesin_now
+            $sql = sqlsrv_query($con, "SELECT 
+                                            *,a.id as idp, a.no_mesin AS no_mesin_now
                                           FROM
-                                            `tbl_produksi` a
-                                            LEFT JOIN `tbl_no_mesin` b ON a.no_mesin=b.no_mesin
+                                            db_finishing.tbl_produksi a
+                                            LEFT JOIN db_finishing.tbl_no_mesin b ON a.no_mesin=b.no_mesin
                                           WHERE
-                                             $tgl $shift $mesin ORDER BY a.`jam_in` ASC");
+                                             $tgl $shift $mesin ORDER BY a.jam_in ASC");
             $no = 1;
             $c = 0;
-            while ($rowd = mysqli_fetch_array($sql)) {
+            while ($rowd = sqlsrv_fetch_array($sql, SQLSRV_FETCH_ASSOC)) {
               $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
               // hitung hari dan jam	 
               // $awal  = strtotime($rowd['tgl_stop_l'] . ' ' . $rowd['stop_l']);
@@ -330,7 +330,7 @@
               </td>
               <td style="border:1px solid;vertical-align:middle;">
                 <div align="center">
-                  <font size="-2"><?php echo $rowd['tgl_update']; ?></font>
+                  <font size="-2"><?php echo $rowd['tgl_update']->format('Y-m-d'); ?></font>
                 </div>
               </td>
               <td style="border:1px solid;vertical-align:middle;">
@@ -625,15 +625,21 @@
                 <div align="center">
                   <font size="-2">
                     <?php
-                      $awal         = date_create($rowd['tgl_stop_l'] . ' ' . $rowd['stop_l']);
-                      $akhir        = date_create($rowd['tgl_stop_r'] . ' ' . $rowd['stop_r']);
-        
-                      $tmenit_stopmesin = date_diff($awal, $akhir);
-        
-                      $tmenit   = $tmenit_stopmesin->h . ' jam, ' . $tmenit_stopmesin->i . ' menit ';
-        
-                      $tjam  = round($diff / (60 * 60), 2);
-                      $hari  = round($tjam / 24, 2);
+                      if($rowd['tgl_stop_l'] != NULL && $rowd['tgl_stop_r'] != NULL) {
+
+                        $stopL = trim($rowd['stop_l']) ?: '00:00';
+                        $stopR = trim($rowd['stop_r']) ?: '00:00';
+
+                        $awal         = date_create($rowd['tgl_stop_l']->format('Y-m-d') . ' ' . $stopL);
+                        $akhir        = date_create($rowd['tgl_stop_r']->format('Y-m-d') . ' ' . $stopR);
+          
+                        $tmenit_stopmesin = date_diff($awal, $akhir);
+          
+                        $tmenit   = $tmenit_stopmesin->h . ' jam, ' . $tmenit_stopmesin->i . ' menit ';
+          
+                        // $tjam  = round($diff / (60 * 60), 2);
+                        // $hari  = round($tjam / 24, 2);
+                      }
                     ?>
                     <?php echo $tmenit; ?>
                   </font>
@@ -730,20 +736,20 @@
       $mesin1 = $_GET['msn'];
     }
     if ($tglakhir != "" and $tglawal != "") {
-      $tgl = " DATE_FORMAT(a.`tgl_update`,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";
+      $tgl = " DATE_FORMAT(a.tgl_update,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";
     } else {
       $tgl = " ";
     }
     if ($shft == "ALL") {
       $shift = " ";
     } else {
-      $shift = " AND a.`shift`='$shft' ";
+      $shift = " AND a.shift='$shft' ";
     }
     $msn = str_replace("'", "''", $mesin1);
     if ($msn == "") {
       $mesin = " ";
     } else {
-      $mesin = " AND a.`no_mesin`='$msn' ";
+      $mesin = " AND a.no_mesin='$msn' ";
     }
     ?>
     <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='index.php'" class="art-button" />
@@ -941,16 +947,16 @@
         </thead>
         <tbody>
           <?php
-            $sql = mysqli_query($con, " SELECT 
-                                              *,a.`id` as `idp` 
+            $sql = sqlsrv_query($con, " SELECT 
+                                              *,a.id as idp 
                                             FROM
-                                              `tbl_produksi` a
-                                              LEFT JOIN `tbl_no_mesin` b ON a.no_mesin=b.no_mesin
+                                              db_finishing.tbl_produksi a
+                                              LEFT JOIN db_finishing.tbl_no_mesin b ON a.no_mesin=b.no_mesin
                                             WHERE
-                                              $tgl $shift $mesin ORDER BY a.`jam_in` ASC");
+                                              $tgl $shift $mesin ORDER BY a.jam_in ASC");
             $no = 1;
             $c = 0;
-            while ($rowd = mysqli_fetch_array($sql)) {
+            while ($rowd = sqlsrv_fetch_array($sql)) {
               $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
               // hitung hari dan jam	 
               $awal  = strtotime($rowd['tgl_stop_l'] . ' ' . $rowd['stop_l']);
