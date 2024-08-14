@@ -7,15 +7,15 @@ include_once('koneksi.php');
 <?PHP
 if ($_POST) { //login user
   extract($_POST);
-  $username = mysqli_real_escape_string($con, $_POST['username']);
-  $password = mysqli_real_escape_string($con, $_POST['password']);
-  $level    =  mysqli_real_escape_string($con, $_POST['level']);
-  $sql = mysqli_query($con, "SELECT * FROM user_login WHERE user='$username' AND `PASSWORD`='$password' AND LEVEL = '$level' AND `status`='Aktif' LIMIT 1");
-  if (mysqli_num_rows($sql) > 0) {
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  $level = $_POST['level'];
+  $sql = sqlsrv_query($con, "SELECT TOP 1 * FROM db_finishing.user_login WHERE [user]='$username' AND [PASSWORD]='$password' AND [LEVEL] = '$level' AND [status]='Aktif'", array(), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
+  if (sqlsrv_num_rows($sql) > 0) {
     $_SESSION['usr'] = $username;
     $_SESSION['pass'] = $password;
     $_SESSION['lvl'] = $level;
-    $r = mysqli_fetch_array($sql);
+    $r = sqlsrv_fetch_array($sql);
     $_SESSION['sts'] = $r['status'];
     $_SESSION['start'] = time(); // Taking now logged in time.
     // Ending a session in 30 minutes from the starting time.
@@ -26,15 +26,16 @@ if ($_POST) { //login user
     echo "<script>alert('Login Failed!! $username');window.location='login.php';</script>";
   }
 } else
-if ($_GET['act'] == "logout") { //logout user
-  unset($_SESSION['usr']);
-  echo "<script>alert('You are Logged out!! Klik OK to redirect'); window.location='login.php';</script>";
-}
+  if ($_GET['act'] == "logout") { //logout user
+    unset($_SESSION['usr']);
+    echo "<script>alert('You are Logged out!! Klik OK to redirect'); window.location='login.php';</script>";
+  }
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 
-<head><!-- Created by Artisteer v4.3.0.60745 -->
+<head>
+  <!-- Created by Artisteer v4.3.0.60745 -->
   <meta charset="utf-8">
   <title>Login</title>
   <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no, width = device-width">
@@ -132,7 +133,8 @@ if ($_GET['act'] == "logout") { //logout user
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2" align="center"><input type="submit" name="login" id="login" value="LOGIN" class="art-button"></td>
+                      <td colspan="2" align="center"><input type="submit" name="login" id="login" value="LOGIN"
+                          class="art-button"></td>
                     </tr>
                   </table>
                 </form>
