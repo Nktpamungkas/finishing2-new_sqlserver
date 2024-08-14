@@ -12,38 +12,46 @@ include("../../koneksi.php");
 
 <body>
 <?php
-if(isset($_POST['btnHapus'])){
-		$hapusSql = "DELETE FROM tbl_mesin WHERE id='$_POST[id]'";
+
+if(isset($_POST['btnHapus']))
+  {
+		$hapusSql = "DELETE FROM db_finishing.[tbl_mesin]  WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiHapus'>";
 	}
-if(isset($_POST['btnSimpan'])){
+
+if(isset($_POST['btnSimpan']))
+  {
 		$mesin=str_replace("'","",$_POST['nama']);
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "INSERT INTO tbl_mesin SET 
-	[nama]='$mesin',
-	[jenis]='$_POST[jenis]',
-	[ket]='$ket'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $simpanSql = "INSERT INTO db_finishing.[tbl_mesin] SET 
+    [nama]='$mesin',
+    [jenis]='$_POST[jenis]',
+    [ket]='$ket'";
+    sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiSimpan'>";
 	}
-if(isset($_POST['btnUbah'])){
-		$mesin=str_replace("'","",$_POST['nama']);
-		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "UPDATE tbl_mesin SET 
-	`nama`='$mesin',
-	`jenis`='$_POST[jenis]',
-	`ket`='$ket'
-	WHERE `id`='$_POST[id]'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
-		
-		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiUbah'>";
-	}
+
+if(isset($_POST['btnUbah']))
+  {
+    $mesin=str_replace("'","",$_POST['nama']);
+    $ket=str_replace("'","",$_POST['ket']);
+    $simpanSql = "UPDATE tbl_mesin SET 
+    [nama]='$mesin',
+    [jenis]='$_POST[jenis]',
+    [ket]='$ket'
+    WHERE `id`='$_POST[id]'";
+    sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
+    
+    // Refresh form
+    echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiUbah'>";
+  }
+
 	?>
 <form id="form1" name="form1" method="post" action=""  enctype="multipart/form-data">
 <table width="100%" border="0">
@@ -53,7 +61,7 @@ if(isset($_POST['btnUbah'])){
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM tbl_mesin WHERE nama='$_GET[nama]' LIMIT 1");
+    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]' LIMIT 1");
 
   $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
   $rc = sqlsrv_num_rows($qtampil);

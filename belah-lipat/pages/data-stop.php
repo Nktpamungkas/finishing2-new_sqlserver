@@ -13,7 +13,7 @@ include("../../koneksi.php");
 <body>
 <?php
 if(isset($_POST['btnHapus'])){
-		$hapusSql = "DELETE FROM tbl_stop_mesin WHERE id='$_POST[id]'";
+		$hapusSql = "DELETE FROM db_finishing.[tbl_stop_mesin] WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
@@ -22,9 +22,9 @@ if(isset($_POST['btnHapus'])){
 if(isset($_POST['btnSimpan'])){
 		$kode=$_POST['kode'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "INSERT INTO tbl_stop_mesin SET 
-	`kode`='$kode',
-	`ket`='$ket'";
+	$simpanSql = "INSERT INTO db_finishing.[tbl_stop_mesin] SET 
+	[kode]='$kode',
+	[ket]='$ket'";
 		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
 		
 		// Refresh form
@@ -33,10 +33,10 @@ if(isset($_POST['btnSimpan'])){
 if(isset($_POST['btnUbah'])){
 		$kode=$_POST['kode'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "UPDATE tbl_stop_mesin SET 
-	`kode`='$kode',
-	`ket`='$ket'
-	WHERE `id`='$_POST[id]'";
+	$simpanSql = "UPDATE db_finishing.[tbl_stop_mesin] SET 
+	[kode]='$kode',
+	[ket]='$ket'
+	WHERE [id]='$_POST[id]'";
 		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
 		
 		// Refresh form
@@ -51,7 +51,9 @@ if(isset($_POST['btnUbah'])){
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM tbl_stop_mesin WHERE kode='$_GET[kode]' LIMIT 1");
+    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_stop_mesin] 
+    WHERE kode='$_GET[kode]' OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY");
+
   $rt=sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_BOTH)
 	$rc=sqlsrv_num_rows($qtampil);
 	?>
@@ -83,7 +85,7 @@ if(isset($_POST['btnUbah'])){
     <th>Keterangan</th>
     </tr>
   <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM tbl_stop_mesin ORDER BY id ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
   $no=1;
   while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_BOTH)) 
   {
