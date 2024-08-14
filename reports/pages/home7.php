@@ -23,8 +23,8 @@ include('../koneksi.php');
         window.location.href = "?p=home4";
       } else if (lprn == "Detail Proses") {
         window.location.href = "?p=home5";
-      }else if (lprn == "Produksi Finishing NOW"){
-        window.location.href = "?p=home7";
+      } else if (lprn == "Stoppage Mesin") {
+        window.location.href = "?p=home6";
       }
     }
 
