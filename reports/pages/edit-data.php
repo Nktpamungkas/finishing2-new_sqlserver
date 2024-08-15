@@ -1,6 +1,26 @@
 <?php /*if( !isset($_SESSION['usr']) || !isset($_SESSION['pass'])){
 echo "<script>window.location='../login.php';</script>"; 
 }*/
+
+function cek($value) {
+    if($value == NULL || $value == "") {
+        return NULL;
+    }
+
+    if($value instanceof DateTime) {
+        if($value->format('Y-m-d') != '1900-01-01') {
+            return $value->format('Y-m-d');
+        } else {
+            return '';
+        }
+    }
+
+    if($value == '1900-01-01') {
+        return NULL;
+    }
+
+    return $value;
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -60,11 +80,11 @@ echo "<script>window.location='../login.php';</script>";
 
 <body>
     <?php
-    ini_set("error_reporting", 1);
+    // ini_set("error_reporting", 1);
     session_start();
     include("../../koneksi.php");
-    $sql = mysqli_query($con, "SELECT * FROM tbl_produksi WHERE id='$_GET[id]'");
-    $rw = mysqli_fetch_array($sql);
+    $sql = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE id='$_GET[id]'");
+    $rw = sqlsrv_fetch_array($sql);
     if (isset($_POST['btnUbah'])) {
         $shift                  = $_POST['shift'];
         $shift2                 = $_POST['shift2'];
@@ -136,69 +156,150 @@ echo "<script>window.location='../login.php';</script>";
         $jmlKonsen5             = $_POST['jmlKonsen5'];
         $jmlKonsen6             = $_POST['jmlKonsen6'];
         $jmlKonsen7             = $_POST['jmlKonsen7'];
-        $simpanSql      = "UPDATE tbl_produksi SET 
-                                    `shift`='$shift',
-                                    `shift2`='$shift2',
-                                    `kondisi_kain`='$kain',
-                                    `panjang`='$qty2',
-                                    `panjang_h`='$qty3',
-                                    `no_gerobak`='$gerobak',
-                                    `no_mesin`='$mesin',
-                                    `lot`='$lot',
-                                    `rol`='$rol',
-                                    `qty`='$qty',
-                                    `proses`='$proses',
-                                    `jam_in`='$jam_in',
-                                    `jam_out`='$jam_out',
-                                    `tgl_proses_in`='$tgl_proses_in',
-                                    `tgl_proses_out`='$tgl_proses_out',
-                                    `stop_l`='$mulai',
-                                    `stop_l2`='$mulai2',
-                                    `stop_l3`='$mulai3',
-                                    `stop_r`='$selesai',
-                                    `stop_r2`='$selesai2',
-                                    `stop_r3`='$selesai3',
-                                    `tgl_stop_l`='$tgl_stop_m',
-                                    `tgl_stop_l2`='$tgl_stop_m2',
-                                    `tgl_stop_l3`='$tgl_stop_m3',
-                                    `tgl_stop_r`='$tgl_stop_s',
-                                    `tgl_stop_r2`='$tgl_stop_s2',
-                                    `tgl_stop_r3`='$tgl_stop_s3',
-                                    `kd_stop`='$kd',
-                                    `kd_stop2`='$kd2',
-                                    `kd_stop3`='$kd3',
-                                    `acc_staff`='$acc_kain',
-                                    `catatan`='$catatan',
-                                    `suhu`='$suhu',
-                                    `speed`='$speed',
-                                    `omt`='$omt',
-                                    `vmt`='$vmt',
-                                    `t_vmt`='$vmt_time',
-                                    `buka_rantai`='$buka',
-                                    `overfeed`='$overfeed',
-                                    `lebar_h`='$hlebar',
-                                    `gramasi_h`='$hgramasi',
-                                    `ph_larut`='$phlarutan',
-                                    `chemical_1`='$chemical1',
-                                    `chemical_2`='$chemical2',
-                                    `chemical_3`='$chemical3',
-                                    `chemical_4`='$chemical4',
-                                    `chemical_5`='$chemical5',
-                                    `chemical_6`='$chemical6',
-                                    `chemical_7`='$chemical7',
-                                    `konsen_1`='$jmlKonsen1',
-                                    `konsen_2`='$jmlKonsen2',
-                                    `konsen_3`='$jmlKonsen3',
-                                    `konsen_4`='$jmlKonsen4',
-                                    `konsen_5`='$jmlKonsen5',
-                                    `konsen_6`='$jmlKonsen6',
-                                    `konsen_7`='$jmlKonsen7',
-                                    `tgl_update`='$tgl'
-                                WHERE `id`='$_GET[id]'";
-        mysqli_query($con, $simpanSql) or die("Gagal Ubah" . mysqli_error());
 
-        // Refresh form
-        echo "<meta http-equiv='refresh' content='0; url=?p=edit-data&id=$_GET[id]&status=Data Sudah Diubah'>";
+        try{
+            $simpanSql      = "UPDATE db_finishing.tbl_produksi SET 
+                                        shift = ?,
+                                        shift2 = ?,
+                                        kondisi_kain = ?,
+                                        panjang = ?,
+                                        panjang_h = ?,
+                                        no_gerobak = ?,
+                                        no_mesin = ?,
+                                        lot = ?,
+                                        rol = ?,
+                                        qty = ?,
+                                        proses = ?,
+                                        jam_in = ?,
+                                        jam_out = ?,
+                                        tgl_proses_in = ?,
+                                        tgl_proses_out = ?,
+                                        stop_l = ?,
+                                        stop_l2 = ?,
+                                        stop_l3 = ?,
+                                        stop_r = ?,
+                                        stop_r2 = ?,
+                                        stop_r3 = ?,
+                                        tgl_stop_l = ?,
+                                        tgl_stop_l2 = ?,
+                                        tgl_stop_l3 = ?,
+                                        tgl_stop_r = ?,
+                                        tgl_stop_r2 = ?,
+                                        tgl_stop_r3 = ?,
+                                        kd_stop = ?,
+                                        kd_stop2 = ?,
+                                        kd_stop3 = ?,
+                                        acc_staff = ?,
+                                        catatan = ?,
+                                        suhu = ?,
+                                        speed = ?,
+                                        omt = ?,
+                                        vmt = ?,
+                                        t_vmt = ?,
+                                        buka_rantai = ?,
+                                        overfeed = ?,
+                                        lebar_h = ?,
+                                        gramasi_h = ?,
+                                        ph_larut = ?,
+                                        chemical_1 = ?,
+                                        chemical_2 = ?,
+                                        chemical_3 = ?,
+                                        chemical_4 = ?,
+                                        chemical_5 = ?,
+                                        chemical_6 = ?,
+                                        chemical_7 = ?,
+                                        konsen_1 = ?,
+                                        konsen_2 = ?,
+                                        konsen_3 = ?,
+                                        konsen_4 = ?,
+                                        konsen_5 = ?,
+                                        konsen_6 = ?,
+                                        konsen_7 = ?,
+                                        tgl_update = ?
+                                    WHERE id = ? ";
+
+            $params = [
+                cek($shift),
+                cek($shift2),
+                cek($kain),
+                cek($qty2),
+                cek($qty3),
+                cek($gerobak),
+                cek($mesin),
+                cek($lot),
+                cek($rol),
+                cek($qty),
+                cek($proses),
+                cek($jam_in),
+                cek($jam_out),
+                cek($tgl_proses_in),
+                cek($tgl_proses_out),
+                cek($mulai),
+                cek($mulai2),
+                cek($mulai3),
+                cek($selesai),
+                cek($selesai2),
+                cek($selesai3),
+                cek($tgl_stop_m),
+                cek($tgl_stop_m2),
+                cek($tgl_stop_m3),
+                cek($tgl_stop_s),
+                cek($tgl_stop_s2),
+                cek($tgl_stop_s3),
+                cek($kd),
+                cek($kd2),
+                cek($kd3),
+                cek($acc_kain),
+                cek($catatan),
+                cek($suhu),
+                cek($speed),
+                cek($omt),
+                cek($vmt),
+                cek($vmt_time),
+                cek($buka),
+                cek($overfeed),
+                cek($hlebar),
+                cek($hgramasi),
+                cek($phlarutan),
+                cek($chemical1),
+                cek($chemical2),
+                cek($chemical3),
+                cek($chemical4),
+                cek($chemical5),
+                cek($chemical6),
+                cek($chemical7),
+                cek($jmlKonsen1),
+                cek($jmlKonsen2),
+                cek($jmlKonsen3),
+                cek($jmlKonsen4),
+                cek($jmlKonsen5),
+                cek($jmlKonsen6),
+                cek($jmlKonsen7),
+                cek($tgl),
+                $_GET['id']
+            ];
+
+            echo '<pre>';
+            print_r($params);
+            echo '</pre>';
+
+            $stmt = $pdo->prepare($simpanSql);
+
+            // sqlsrv_query($con, $simpanSql, $data) or die("Gagal Ubah" . var_dump(sqlsrv_errors()));
+
+            
+            if (!$stmt->execute($params)) {
+                // Handle error
+                echo "Error: ";
+                print_r($stmt->errorInfo());
+                exit();
+            }
+            // echo "Data successfully inserted!";
+            // Refresh form
+            echo "<meta http-equiv='refresh' content='0; url=?p=edit-data&id=$_GET[id]&status=Data Sudah Diubah'>";
+        } catch (PDOException $e) {
+            echo "xError: " . $e->getMessage();
+        }
     }
     ?>
     <form id="form1" name="form1" method="post" action="">
@@ -282,7 +383,7 @@ echo "<script>window.location='../login.php';</script>";
                     </td>
                     <td>:</td>
                     <td colspan="2">
-                        <input name="tgl" type="text" id="tgl" value="<?= $rw['tgl_update']; ?>"
+                        <input name="tgl" type="text" id="tgl" value="<?= $rw['tgl_update']->format('Y-m-d'); ?>"
                         onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl);return false;" size="10" placeholder="0000-00-00" required="required">
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
@@ -302,8 +403,8 @@ echo "<script>window.location='../login.php';</script>";
                     <td colspan="2"><select name="proses" id="proses" required>
                         <option value="">Pilih</option>
                         <?php
-                            $qry1 = mysqli_query($con, "SELECT proses,jns,ket FROM tbl_proses ORDER BY ket ASC");
-                            while ($r = mysqli_fetch_array($qry1)) {
+                            $qry1 = sqlsrv_query($con, "SELECT proses,jns,ket FROM db_finishing.tbl_proses ORDER BY ket ASC");
+                            while ($r = sqlsrv_fetch_array($qry1)) {
                         ?>
                             <option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($rw['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
                                                                                                     echo "SELECTED";
@@ -580,7 +681,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                                 this.value = time + '';
                             }" value="<?php echo $rw['jam_in'] ?>" size="5" maxlength="5" required>
-                        <input name="tgl_proses_m" type="text" id="tgl_proses_m" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_m);return false;" size="10" placeholder="0000-00-00" value="<?php echo $rw['tgl_proses_in']; ?>" required />
+                        <input name="tgl_proses_m" type="text" id="tgl_proses_m" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_m);return false;" size="10" placeholder="0000-00-00" value="<?php echo cek($rw['tgl_proses_in']); ?>" required />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_m);return false;">
                         <img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal2" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
@@ -596,7 +697,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                             this.value = time + '';
                             }" value="<?php echo $rw['jam_out'] ?>" size="5" maxlength="5" required>
-                        <input name="tgl_proses_k" type="text" id="tgl_proses_k" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_k);return false;" value="<?php echo $rw['tgl_proses_out']; ?>" size="10" required />
+                        <input name="tgl_proses_k" type="text" id="tgl_proses_k" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_k);return false;" value="<?php echo cek($rw['tgl_proses_out']); ?>" size="10" required />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_proses_k);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal3" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                 </tr>
@@ -613,7 +714,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                                 this.value = time + '';
                             }" value="<?php echo $rw['stop_l'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_m" type="text" id="tgl_stop_m" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m);return false;" value="<?php echo $rw['tgl_stop_l']; ?>" size="10" />
+                        <input name="tgl_stop_m" type="text" id="tgl_stop_m" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m);return false;" value="<?php echo cek($rw['tgl_stop_l']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal4" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td>
@@ -628,7 +729,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                             this.value = time + '';
                             }" value="<?php echo $rw['stop_r'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_s" type="text" id="tgl_stop_s" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s);return false;" value="<?php echo $rw['tgl_stop_r']; ?>" size="10" />
+                        <input name="tgl_stop_s" type="text" id="tgl_stop_s" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s);return false;" value="<?php echo cek($rw['tgl_stop_r']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal5" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td width="24%">
@@ -636,8 +737,8 @@ echo "<script>window.location='../login.php';</script>";
                         <select name="kd_stop" id="kd_stop">
                             <option value="">Pilih</option>
                             <?php
-                                $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-                                while ($r = mysqli_fetch_array($qry1)) {
+                                $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.tbl_stop_mesin ORDER BY id ASC");
+                                while ($r = sqlsrv_fetch_array($qry1)) {
                             ?>
                             <option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop'] == $r['kode']) { echo "SELECTED"; } ?>><?php echo $r['kode']; ?></option>
                             <?php } ?>
@@ -658,7 +759,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                                 this.value = time + '';
                             }" value="<?php echo $rw['stop_l2'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_m2" type="text" id="tgl_stop_m2" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m2);return false;" value="<?php echo $rw['tgl_stop_l2']; ?>" size="10" />
+                        <input name="tgl_stop_m2" type="text" id="tgl_stop_m2" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m2);return false;" value="<?php echo cek($rw['tgl_stop_l2']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m2);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal6" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td>
@@ -673,7 +774,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                                 this.value = time + '';
                             }" value="<?php echo $rw['stop_r2'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_s2" type="text" id="tgl_stop_s2" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s2);return false;" value="<?php echo $rw['tgl_stop_r2']; ?>" size="10" />
+                        <input name="tgl_stop_s2" type="text" id="tgl_stop_s2" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s2);return false;" value="<?php echo cek($rw['tgl_stop_r2']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s2);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal7" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td>
@@ -681,8 +782,8 @@ echo "<script>window.location='../login.php';</script>";
                             <select name="kd_stop2" id="kd_stop2">
                                 <option value="">Pilih</option>
                                 <?php
-                                $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-                                while ($r = mysqli_fetch_array($qry1)) {
+                                $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.tbl_stop_mesin ORDER BY id ASC");
+                                while ($r = sqlsrv_fetch_array($qry1)) {
                                 ?>
                                 <option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop2'] == $r['kode']) {
                                                                             echo "SELECTED";
@@ -708,7 +809,7 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                                 this.value = time + '';
                             }" value="<?php echo $rw['stop_l3'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_m3" type="text" id="tgl_stop_m3" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m3);return false;" value="<?php echo $rw['tgl_stop_l3']; ?>" size="10" />
+                        <input name="tgl_stop_m3" type="text" id="tgl_stop_m3" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m3);return false;" value="<?php echo cek($rw['tgl_stop_l3']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_m3);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal8" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td>
@@ -723,15 +824,15 @@ echo "<script>window.location='../login.php';</script>";
                             } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
                             this.value = time + '';
                             }" value="<?php echo $rw['stop_r3'] ?>" size="5" maxlength="5" />
-                        <input name="tgl_stop_s3" type="text" id="tgl_stop_s3" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s3);return false;" value="<?php echo $rw['tgl_stop_r3']; ?>" size="10" />
+                        <input name="tgl_stop_s3" type="text" id="tgl_stop_s3" placeholder="0000-00-00" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s3);return false;" value="<?php echo cek($rw['tgl_stop_r3']); ?>" size="10" />
                         <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.tgl_stop_s3);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal9" style="border:none" align="absmiddle" border="0" /></a>
                     </td>
                     <td>
                         <h4>Kode3:
                         <select name="kd_stop3" id="kd_stop3">
                             <option value="">Pilih</option>
-                            <?php $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-                            while ($r = mysqli_fetch_array($qry1)) {
+                            <?php $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.tbl_stop_mesin ORDER BY id ASC");
+                            while ($r = sqlsrv_fetch_array($qry1)) {
                             ?>
                             <option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop3'] == $r['kode']) {
                                                                         echo "SELECTED";
@@ -755,8 +856,8 @@ echo "<script>window.location='../login.php';</script>";
                     <td colspan="2">
                         <select name="acc_kain" id="acc_kain" required>
                             <option value="">Pilih</option>
-                            <?php $qryacc = mysqli_query($con, "SELECT nama FROM tbl_staff ORDER BY nama ASC");
-                            while ($racc = mysqli_fetch_array($qryacc)) {
+                            <?php $qryacc = sqlsrv_query($con, "SELECT nama FROM db_finishing.tbl_staff ORDER BY nama ASC");
+                            while ($racc = sqlsrv_fetch_array($qryacc)) {
                             ?>
                                 <option value="<?php echo $racc['nama']; ?>" <?php if ($racc['nama'] == $rw['acc_staff']) {
                                                                                 echo "SELECTED";
