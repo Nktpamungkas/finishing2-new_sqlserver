@@ -58,15 +58,18 @@
 		ini_set("error_reporting", 1);
 		session_start();
 		include('../koneksi.php');
+
 		function nourut()
 		{
 			include('../koneksi.php');
 			$format = date("ymd");
+
 			$sql = sqlsrv_query($con, "SELECT nokk FROM db_finishing.[tbl_produksi]
 			WHERE LEFT(nokk, 6)  like '%" . $format . "%'
 			ORDER BY nokk DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY") or die(sqlsrv_errors());
 
 			$d = sqlsrv_num_rows($sql);
+
 			if ($d > 0) {
 				$r = sqlsrv_fetch_array($sql);
 				$d = $r['nokk'];
@@ -84,7 +87,9 @@
 			$nipbr = $format . $Nol . $Urut;
 			return $nipbr;
 		}
+
 		$nou = nourut();
+
 		if ($_REQUEST['kk'] != '') {
 			$idkk = "";
 		} else {
@@ -152,6 +157,7 @@
 			}
 		}
 	?>
+
 	<?php
 		if (isset($_POST['btnSimpan']) and $_POST['shift'] == $rw['shift'] and $_POST['shift2'] == $rw['shift2'] and $_POST['proses'] == $rw['proses']) {
 			$shift = $_POST['shift'];
@@ -505,7 +511,9 @@
 					</td>
 					<td width="1%">:</td>
 					<td>
-						<select style="width: 50%" id="typekk" name="typekk" onchange="window.location='?typekk='+this.value" required>
+						<select style="width: 50%" id="typekk" name="typekk" 
+						onchange="window.location='?typekk='+this.value" required>
+
 							<option value="" disabled selected>-Pilih Tipe Kartu Kerja-</option>
 							<option value="KKLama" <?php if ($_GET['typekk'] == "KKLama") {
 														echo "SELECTED";
@@ -525,10 +533,13 @@
 					</td>
 					<td width="1%">:</td>
 					<td width="26%">
-						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
+						<input name="nokk" type="text" id="nokk" size="17" 
+						onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" />
+						
+						<input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
 
 						<?php if ($_GET['typekk'] == 'NOW') { ?>
-							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+this.value" required>
+							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
 								$sql_ITXVIEWKK_demand  = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
@@ -540,7 +551,7 @@
 								<?php endwhile; ?>
 							</select>
 						<?php }elseif($_GET['typekk'] == 'SCHEDULE'){ ?>
-                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+this.value" required>
+                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
                                     $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
@@ -578,7 +589,7 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+document.getElementById(demand).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
+						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
 							<option value="">Pilih</option>
 							<?php
 								$qry1 = db2_exec($conn_db2, "SELECT 

@@ -160,25 +160,44 @@
                         $row_kkmasuk    = sqlsrv_fetch_array($q_kkmasuk);
                         include_once("../now.php");
                     }else{
-						$q_kkmasuk		= sqlsrv_query($con, "SELECT
-																	*
-																FROM
-																	db_finishing.[tbl_schedule_new] a
-																WHERE
-																	NOT EXISTS (
-																			SELECT 1
-																			FROM
-																					db_finishing..[tbl_produksi] b
-																			WHERE
-																					b.nokk = a.nokk 
-																					AND b.demandno = a.nodemand 
-																					AND b.nama_mesin = a.operation
-																					AND b.no_mesin = a.no_mesin
-																	) 
-																	AND NOT a.nourut = 0 AND NOT group_shift IS NULL
-																	AND nokk = '$idkk' $anddemand 
-																ORDER BY
-																	CONCAT(SUBSTR(TRIM(a.no_mesin), -5,2), SUBSTR(TRIM(a.no_mesin), -2)) ASC, a.nourut ASC");
+						// Query Asli di mysql nya
+						// $q_kkmasuk		= sqlsrv_query($con, "SELECT
+						// 											*
+						// 										FROM
+						// 											db_finishing.[tbl_schedule_new] a
+						// 										WHERE
+						// 											NOT EXISTS (
+						// 													SELECT 1
+						// 													FROM
+						// 															db_finishing..[tbl_produksi] b
+						// 													WHERE
+						// 															b.nokk = a.nokk 
+						// 															AND b.demandno = a.nodemand 
+						// 															AND b.nama_mesin = a.operation
+						// 															AND b.no_mesin = a.no_mesin
+						// 											) 
+						// 											AND NOT a.nourut = 0 AND NOT group_shift IS NULL
+						// 											AND nokk = '$idkk' $anddemand 
+						// 										ORDER BY
+						// 											CONCAT(SUBSTR(TRIM(a.no_mesin), -5,2), SUBSTR(TRIM(a.no_mesin), -2)) ASC, a.nourut ASC");
+
+						$q_kkmasuk		= sqlsrv_query($con, " SELECT *
+											FROM db_finishing.[tbl_schedule_new] a
+											WHERE NOT EXISTS (
+													SELECT 1
+													FROM db_finishing.[tbl_produksi] b
+													WHERE b.nokk = a.nokk 
+													AND b.demandno = a.nodemand 
+													AND b.nama_mesin = a.operation
+													AND b.no_mesin = a.no_mesin
+												) 
+											AND a.nourut <> 0 
+											AND a.group_shift IS NOT NULL
+											AND a.nokk =  '$idkk' $anddemand
+											ORDER BY CONCAT(SUBSTRING(TRIM(a.no_mesin), LEN(TRIM(a.no_mesin)) - 4, 2), 
+															SUBSTRING(TRIM(a.no_mesin), LEN(TRIM(a.no_mesin)) - 1, 2)) ASC, 
+													a.nourut ASC");
+
 						$row_kkmasuk	= sqlsrv_fetch_array($q_kkmasuk);
 						include_once("../now.php");
 					}
@@ -560,10 +579,10 @@
 					</td>
 					<td width="1%">:</td>
 					<td width="26%">
-						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
+						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
 
 						<?php if ($_GET['typekk'] == 'NOW') { ?>
-							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+this.value" required>
+							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
 								$sql_ITXVIEWKK_demand  = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
@@ -575,7 +594,7 @@
 								<?php endwhile; ?>
 							</select>
 						<?php }elseif($_GET['typekk'] == 'SCHEDULE'){ ?>
-                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+this.value" required>
+                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
                                     $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] WHERE nokk = '$idkk'");
@@ -613,7 +632,7 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById(typekk).value+'&idkk='+document.getElementById(nokk).value+'&demand='+document.getElementById(demand).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
+						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
 							<option value="">Pilih</option>
 							<?php
 								$qry1 = sqlsrv_query($con, "SELECT 
