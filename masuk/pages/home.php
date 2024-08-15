@@ -4,168 +4,168 @@ if (empty($_SESSION['usr'])) {
 }
 ?>
 <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Home</title>
-    <script>
-    function roundToTwo(num) {
-        return +(Math.round(num + "e+2") + "e-2");
-    }
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Home</title>
+	<script>
+		function roundToTwo(num) {
+			return +(Math.round(num + "e+2") + "e-2");
+		}
 
-    function jumlah() {
-        var lebar = document.forms['form1']['lebar'].value;
-        var berat = document.forms['form1']['gramasi'].value;
-        var netto = document.forms['form1']['qty'].value;
-        var x, yard;
-        x = ((parseInt(lebar)) * parseInt(berat)) / 43.056;
-        x1 = (1000 / x);
-        yard = x1 * parseFloat(netto);
-        document.form1.qty2.value = roundToTwo(yard).toFixed(2);
+		function jumlah() {
+			var lebar = document.forms['form1']['lebar'].value;
+			var berat = document.forms['form1']['gramasi'].value;
+			var netto = document.forms['form1']['qty'].value;
+			var x, yard;
+			x = ((parseInt(lebar)) * parseInt(berat)) / 43.056;
+			x1 = (1000 / x);
+			yard = x1 * parseFloat(netto);
+			document.form1.qty2.value = roundToTwo(yard).toFixed(2);
 
-    }
+		}
 
-    function jumlah1() {
-        var lebar1 = document.forms['form1']['h_lebar'].value;
-        var berat1 = document.forms['form1']['h_gramasi'].value;
-        var netto1 = document.forms['form1']['qty'].value;
-        var x1, yard1;
-        x1 = ((parseInt(lebar1)) * parseInt(berat1)) / 43.056;
-        x2 = (1000 / x1);
-        yard1 = x2 * parseFloat(netto1);
-        document.form1.qty3.value = roundToTwo(yard1).toFixed(2);
+		function jumlah1() {
+			var lebar1 = document.forms['form1']['h_lebar'].value;
+			var berat1 = document.forms['form1']['h_gramasi'].value;
+			var netto1 = document.forms['form1']['qty'].value;
+			var x1, yard1;
+			x1 = ((parseInt(lebar1)) * parseInt(berat1)) / 43.056;
+			x2 = (1000 / x1);
+			yard1 = x2 * parseFloat(netto1);
+			document.form1.qty3.value = roundToTwo(yard1).toFixed(2);
 
-    }
+		}
 
-    $(document).ready(function() {
-        $('#proses_in').change(function() {
-            var jam_proses_in = document.getElementById('proses_in').value;
-            if (jam_proses_in.substring(0, 2) >= 24) {
-                alert("Waktu pada MULAI PROSES tidak boleh melebihi batas 1 hari.");
-            }
-        });
+		$(document).ready(function () {
+			$('#proses_in').change(function () {
+				var jam_proses_in = document.getElementById('proses_in').value;
+				if (jam_proses_in.substring(0, 2) >= 24) {
+					alert("Waktu pada MULAI PROSES tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_mulai').change(function() {
-            var jam_stop_mulai = document.getElementById('stop_mulai').value;
-            if (jam_stop_mulai.substring(0, 2) >= 24) {
-                alert("Waktu pada MULAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_mulai').change(function () {
+				var jam_stop_mulai = document.getElementById('stop_mulai').value;
+				if (jam_stop_mulai.substring(0, 2) >= 24) {
+					alert("Waktu pada MULAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_mulai2').change(function() {
-            var jam_stop_mulai2 = document.getElementById('stop_mulai2').value;
-            if (jam_stop_mulai2.substring(0, 2) >= 24) {
-                alert("Waktu pada MULAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_mulai2').change(function () {
+				var jam_stop_mulai2 = document.getElementById('stop_mulai2').value;
+				if (jam_stop_mulai2.substring(0, 2) >= 24) {
+					alert("Waktu pada MULAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_mulai3').change(function() {
-            var jam_stop_mulai3 = document.getElementById('stop_mulai3').value;
-            if (jam_stop_mulai3.substring(0, 2) >= 24) {
-                alert("Waktu pada MULAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_mulai3').change(function () {
+				var jam_stop_mulai3 = document.getElementById('stop_mulai3').value;
+				if (jam_stop_mulai3.substring(0, 2) >= 24) {
+					alert("Waktu pada MULAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
 
-        $('#proses_out').change(function() {
-            var jam_proses_out = document.getElementById('proses_out').value;
-            if (jam_proses_out.substring(0, 2) >= 24) {
-                alert("Waktu pada SELESAI PROSES tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#proses_out').change(function () {
+				var jam_proses_out = document.getElementById('proses_out').value;
+				if (jam_proses_out.substring(0, 2) >= 24) {
+					alert("Waktu pada SELESAI PROSES tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_selesai').change(function() {
-            var jam_stop_selesai = document.getElementById('stop_selesai').value;
-            if (jam_stop_selesai.substring(0, 2) >= 24) {
-                alert("Waktu pada SELESAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_selesai').change(function () {
+				var jam_stop_selesai = document.getElementById('stop_selesai').value;
+				if (jam_stop_selesai.substring(0, 2) >= 24) {
+					alert("Waktu pada SELESAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_selesai2').change(function() {
-            var jam_stop_selesai2 = document.getElementById('stop_selesai2').value;
-            if (jam_stop_selesai2.substring(0, 2) >= 24) {
-                alert("Waktu pada SELESAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_selesai2').change(function () {
+				var jam_stop_selesai2 = document.getElementById('stop_selesai2').value;
+				if (jam_stop_selesai2.substring(0, 2) >= 24) {
+					alert("Waktu pada SELESAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-        $('#stop_selesai3').change(function() {
-            var jam_stop_selesai3 = document.getElementById('stop_selesai3').value;
-            if (jam_stop_selesai3.substring(0, 2) >= 24) {
-                alert("Waktu pada SELESAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
-            }
-        });
+			$('#stop_selesai3').change(function () {
+				var jam_stop_selesai3 = document.getElementById('stop_selesai3').value;
+				if (jam_stop_selesai3.substring(0, 2) >= 24) {
+					alert("Waktu pada SELESAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
+				}
+			});
 
-    });
-    </script>
-    <style>
-    fieldset {
-        width: 80%;
-        border: 4px solid #C0BBBB;
-        display: inline-block;
-        font-size: 14px;
-        padding: 1em 2em;
-    }
+		});
+	</script>
+	<style>
+		fieldset {
+			width: 80%;
+			border: 4px solid #C0BBBB;
+			display: inline-block;
+			font-size: 14px;
+			padding: 1em 2em;
+		}
 
-    legend {
-        background: #355FE7;
-        /* Green */
-        color: #FFFFFF;
-        /* White */
-        margin-bottom: 10px;
-        padding: 0.5em 1em;
-    }
-    </style>
-    <style>
-    /* CSS untuk modal */
-    .modal {
-        display: none;
-        /* Sembunyikan modal secara default */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Latar belakang semi-transparan */
-    }
+		legend {
+			background: #355FE7;
+			/* Green */
+			color: #FFFFFF;
+			/* White */
+			margin-bottom: 10px;
+			padding: 0.5em 1em;
+		}
+	</style>
+	<style>
+		/* CSS untuk modal */
+		.modal {
+			display: none;
+			/* Sembunyikan modal secara default */
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+			/* Latar belakang semi-transparan */
+		}
 
-    /* CSS untuk konten modal */
-    .modal-content {
-        background-color: #FFE4E4;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        /* Lebar konten modal sebelum menyesuaikan */
-        max-width: 100%;
-        /* Maksimum lebar konten modal */
-        overflow-x: auto;
-        /* Scroll horizontal jika konten melebihi lebar modal */
-    }
+		/* CSS untuk konten modal */
+		.modal-content {
+			background-color: #FFE4E4;
+			margin: 15% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			/* Lebar konten modal sebelum menyesuaikan */
+			max-width: 100%;
+			/* Maksimum lebar konten modal */
+			overflow-x: auto;
+			/* Scroll horizontal jika konten melebihi lebar modal */
+		}
 
-    /* CSS untuk tombol close */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+		/* CSS untuk tombol close */
+		.close {
+			color: #aaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    </style>
+		.close:hover,
+		.close:focus {
+			color: black;
+			text-decoration: none;
+			cursor: pointer;
+		}
+	</style>
 </head>
 
 <body>
-    <?php
+	<?php
 	// ini_set("error_reporting", 1);
 	session_start();
 	include('../koneksi.php');
@@ -203,6 +203,8 @@ if (empty($_SESSION['usr'])) {
 	} else {
 		$idkk = $_GET['idkk'];
 	}
+
+	// var_dump($_REQUEST['kk']);
 	if ($_GET['typekk'] == "KKLama") {
 		echo "<script>
 						swal({
@@ -211,14 +213,25 @@ if (empty($_SESSION['usr'])) {
 							type: 'success',
 						}).then((result) => {
 							if (result.value) {
-								window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+								window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 							}
 						});
 					</script>";
 	} elseif ($_GET['typekk'] == "NOW" or $_GET['operation']) {
-		echo 'kosong';
-		var_dump($idkk);
-		if ($idkk != "") {
+		// var_dump($_GET['operation']);
+		$demandno = $_GET['demand'];
+		$operation = $_GET['operation'];
+		if ($demandno = null or $demandno = '') {
+			$demandno = '';
+		} else {
+			$demandno = $_GET['demand'];
+		}
+		if ($operation = '' or $operation = null) {
+			$operation = '';
+		} else {
+			$operation = $_GET['operation'];
+		}
+		if ($idkk != null) {
 			$q_kkproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$idkk' AND demandno = '$_GET[demand]' AND nama_mesin = '$_GET[operation]'");
 			$row_kkproses = sqlsrv_fetch_array($q_kkproses, SQLSRV_FETCH_ASSOC);
 
@@ -236,7 +249,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+										window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -248,7 +261,7 @@ if (empty($_SESSION['usr'])) {
 								type: 'warning',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+									window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
@@ -260,7 +273,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+										window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -269,7 +282,7 @@ if (empty($_SESSION['usr'])) {
 		}
 	}
 	?>
-    <?php
+	<?php
 	if (isset($_POST['btnSimpan'])) {
 		$creationdatetime = date('Y-m-d H:i:s');
 		$jenis_kain = addslashes($_POST['jenis_kain']);
@@ -288,7 +301,7 @@ if (empty($_SESSION['usr'])) {
 								type: 'warning',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+									window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
@@ -303,7 +316,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+										window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -367,178 +380,77 @@ if (empty($_SESSION['usr'])) {
 								type: 'success',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
+									window.location.href = 'http://localhost/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
 		}
 	}
 	?>
-    <!-- <button onclick="openModal()">Buka Modal</button> -->
-    <!-- Modal -->
-    <!-- <div id="myModal" class="modal">
+	<script>
+		// Fungsi untuk membuka modal
+		function openModal() {
+			document.getElementById("myModal").style.display = "block";
+		}
 
-		Konten modal
-		<div class="modal-content">
-			<span class="close" onclick="closeModal()">&times;</span>
-			<center><h2>Data 2 hari tidak bergerak</h2></center>
-			<div class="row">
-			<table width="100%" border="1" id="datatables" class="display">
-				<thead>
+		// Fungsi untuk menutup modal
+		function closeModal() {
+			document.getElementById("myModal").style.display = "none";
+		}
+	</script>
+
+	<!-- Script untuk memanggil fungsi openModal() -->
+	<script>
+		// Fungsi untuk membuka modal
+		function openModal() {
+			document.getElementById("myModal").style.display = "block";
+		}
+
+		// Memanggil fungsi openModal() saat halaman selesai dimuat
+		window.onload = openModal;
+	</script>
+	<form id="form1" name="form1" method="post" action="">
+		<?php if ($_SESSION['usr'] == 'husni'): ?>
+			<input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'"
+				class="art-button green">
+		<?php else: ?>
+			<fieldset>
+				<legend>Data KK MASUK yang akan di atur didalam schedule </legend>
+				<table width="100%" border="0">
 					<tr>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NAMA MESIN</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">OPERATION</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO KK</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO DEMAND</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LANGGANAN</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">BUYER</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO ORDER</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LEBAR x GRAMASI</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO WARNA</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">WARNA</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LOT</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">ROL</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">QTY</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">PROSES</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">CATATAN</th>
-						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">CREATION DATE TIME</th>
+						<th colspan="7" scope="row">
+							<font color="#FF0000"><?php echo $_GET['status']; ?></font>
+						</th>
 					</tr>
-				</thead>
-				<tbody>
-					<?php
-					// Hitung tanggal dua hari kebelakang dari hari ini
-					$dateTwoDaysAgo = date('Y-m-d', strtotime('-3 days'));
-					$dateTwoDaysNow = date('Y-m-d');
-					echo $dateTwoDaysAgo;
-					echo $dateTwoDaysNow;
-					$q_tblmasuk = sqlsrv_query($con, "SELECT 
-																	* 
-																FROM 
-																	db_finishing.tbl_masuk a 
-																WHERE
-																	NOT EXISTS (
-																			SELECT 1
-																			FROM
-																				db_finishing.tbl_schedule_new b
-																			WHERE
-																				b.nokk = a.nokk 
-																				AND b.nodemand = a.nodemand 
-																				AND b.operation = a.operation
-																	)
-																	AND NOT EXISTS (
-																			SELECT 1
-																			FROM
-																				db_finishing.tbl_produksi c
-																			WHERE
-																				c.nokk = a.nokk 
-																				AND c.demandno = a.nodemand 
-																				AND c.nama_mesin = a.operation
-																	) AND a.status = 'KK MASUK' 
-																	AND a.creationdatetime BETWEEN '2024-04-10' AND '$dateTwoDaysAgo'
-																ORDER BY a.id ASC");
-					$totalQty = 0;
-					$totalRoll = 0;
-					?>
-					<?php while ($row_tblmasuk = sqlsrv_fetch_array($q_tblmasuk)): ?>
-						<tr>
-							<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['nama_mesin'] ?></td>
-							<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['operation'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?= TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nokk'] ?></a></td>
-							<td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_tblmasuk['nodemand']; ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nodemand'] ?></a></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_order'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lebar'] ?> x <?= $row_tblmasuk['gramasi'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_warna'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['warna'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lot'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['roll'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['proses'] ?></td>
-							<td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_tblmasuk['catatan'] ?></td>
-							<td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['personil'] ?><br><?= $row_tblmasuk['creationdatetime'] ?></td>
-							<?php $totalQty += $row_tblmasuk['qty_order']; ?>
-							<?php $totalRoll += $row_tblmasuk['roll']; ?>
-						</tr>
-					<?php endwhile; ?>
-				</tbody>
-				<tfoot>
 					<tr>
-						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;" colspan="11">TOTAL</td>
-						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= $totalRoll; ?></td>
-						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= number_format($totalQty, 2); ?></td>
-						<td style="border:1px solid;vertical-align:middle; text-align: center;" colspan="5"></td>
-					</tr>
-				</tfoot>
-			</table>
-			</div>
-		</div>
-	</div> -->
-
-    <script>
-    // Fungsi untuk membuka modal
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
-    }
-
-    // Fungsi untuk menutup modal
-    function closeModal() {
-        document.getElementById("myModal").style.display = "none";
-    }
-    </script>
-
-    <!-- Script untuk memanggil fungsi openModal() -->
-    <script>
-    // Fungsi untuk membuka modal
-    function openModal() {
-        document.getElementById("myModal").style.display = "block";
-    }
-
-    // Memanggil fungsi openModal() saat halaman selesai dimuat
-    window.onload = openModal;
-    </script>
-    <form id="form1" name="form1" method="post" action="">
-        <?php if ($_SESSION['usr'] == 'husni'): ?>
-        <input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'"
-            class="art-button green">
-        <?php else: ?>
-        <fieldset>
-            <legend>Data KK MASUK yang akan di atur didalam schedule </legend>
-            <table width="100%" border="0">
-                <tr>
-                    <th colspan="7" scope="row">
-                        <font color="#FF0000"><?php echo $_GET['status']; ?></font>
-                    </th>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>Pilih Asal Kartu Kerja</h4>
-                    </td>
-                    <td width="1%">:</td>
-                    <td>
-                        <select style="width: 50%" id="typekk" name="typekk"
-                            onchange="window.location='?typekk='+this.value" required>
-                            <option value="" disabled selected>-Pilih Tipe Kartu Kerja-</option>
-                            <option value="KKLama" <?php if ($_GET['typekk'] == "KKLama") {
+						<td scope="row">
+							<h4>Pilih Asal Kartu Kerja</h4>
+						</td>
+						<td width="1%">:</td>
+						<td>
+							<select style="width: 50%" id="typekk" name="typekk"
+								onchange="window.location='?typekk='+this.value" required>
+								<option value="" disabled selected>-Pilih Tipe Kartu Kerja-</option>
+								<option value="KKLama" <?php if ($_GET['typekk'] == "KKLama") {
 									echo "SELECTED";
 								} ?>>KK Lama
-                            </option>
-                            <option value="NOW" <?php if ($_GET['typekk'] == "NOW") {
+								</option>
+								<option value="NOW" <?php if ($_GET['typekk'] == "NOW") {
 									echo "SELECTED";
 								} ?>>KK NOW
-                            </option>
-                            </select=>
-                    </td>
-                    <td>
-                        <h4>Operation</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <select name="operation"
-                            onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+document.getElementById(`demand`).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
-                            required="required">
-                            <option value="">Pilih</option>
-                            <?php
+								</option>
+								</select=>
+						</td>
+						<td>
+							<h4>Operation</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<select name="operation"
+								onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+document.getElementById(`demand`).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
+								required="required">
+								<option value="">Pilih</option>
+								<?php
 								$qry1 = db2_exec($conn_db2, "SELECT
 																	p.PRODUCTIONORDERCODE,
 																	p.STEPNUMBER AS STEPNUMBER,
@@ -610,87 +522,87 @@ if (empty($_SESSION['usr'])) {
 																ORDER BY p.STEPNUMBER ASC");
 								while ($r = db2_fetch_assoc($qry1)) {
 									?>
-                            <option value="<?= $r['OPERATIONCODE']; ?>" <?php if ($_GET['operation'] == $r['OPERATIONCODE']) {
+									<option value="<?= $r['OPERATIONCODE']; ?>" <?php if ($_GET['operation'] == $r['OPERATIONCODE']) {
 										  echo "SELECTED";
 									  } ?>>
-                                <?= $r['OPERATIONCODE']; ?> - <?= $r['LONGDESCRIPTION']; ?> (STATUS NOW :
-                                <?= $r['STATUS_OPERATION']; ?>)
-                            </option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="13%" scope="row">
-                        <h4>Nokk</h4>
-                    </td>
-                    <td width="1%">:</td>
-                    <td width="26%">
-                        <input name="nokk" type="text" id="nokk" size="17"
-                            onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+this.value"
-                            value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>"
-                            name="id" />
+										<?= $r['OPERATIONCODE']; ?> - <?= $r['LONGDESCRIPTION']; ?> (STATUS NOW :
+										<?= $r['STATUS_OPERATION']; ?>)
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td width="13%" scope="row">
+							<h4>Nokk</h4>
+						</td>
+						<td width="1%">:</td>
+						<td width="26%">
+							<input name="nokk" type="text" id="nokk" size="17"
+								onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+this.value"
+								value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>"
+								name="id" />
 
-                        <?php if ($_GET['typekk'] == 'NOW') { ?>
-                        <select style="width: 40%" name="demand" id="demand"
-                            onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+this.value"
-                            required>
-                            <option value="" disabled selected>Pilih Nomor Demand</option>
-                            <?php
+							<?php if ($_GET['typekk'] == 'NOW') { ?>
+								<select style="width: 40%" name="demand" id="demand"
+									onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+this.value"
+									required>
+									<option value="" disabled selected>Pilih Nomor Demand</option>
+									<?php
 									$sql_ITXVIEWKK_demand = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
 									while ($r_demand = db2_fetch_assoc($sql_ITXVIEWKK_demand)):
 										?>
-                            <option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
+										<option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
 											  echo 'SELECTED';
 										  } ?>><?= $r_demand['DEMAND']; ?></option>
-                            <?php endwhile; ?>
-                        </select>
-                        <?php } else { ?>
-                        <input name="demand" id="demand" type="text" placeholder="Nomor Demand">
-                        <?php } ?>
-                    </td>
-                    <td>
-                        <h4>Proses</h4>
-                    </td>
-                    <td>:</td>
-                    <td colspan="2">
-                        <select name="proses" id="proses" required>
-                            <option value="">Pilih</option>
-                            <?php
+									<?php endwhile; ?>
+								</select>
+							<?php } else { ?>
+								<input name="demand" id="demand" type="text" placeholder="Nomor Demand">
+							<?php } ?>
+						</td>
+						<td>
+							<h4>Proses</h4>
+						</td>
+						<td>:</td>
+						<td colspan="2">
+							<select name="proses" id="proses" required>
+								<option value="">Pilih</option>
+								<?php
 								$qry1 = sqlsrv_query($con, "SELECT proses,jns,ket FROM db_finishing.tbl_proses ORDER BY ket, id ASC");
 								while ($r = sqlsrv_fetch_array($qry1)) {
 									?>
-                            <option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($rw['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
+									<option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($rw['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
 												 echo "SELECTED";
 											 } ?>><?= $r['ket'] ?> - <?= $r['proses'] . " (" . $r['jns'] . ")"; ?></option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>Langganan/Buyer</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $langganan_buyer = $dt_pelanggan_buyer['PELANGGAN'] . '/' . $dt_pelanggan_buyer['BUYER']; ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td scope="row">
+							<h4>Langganan/Buyer</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $langganan_buyer = $dt_pelanggan_buyer['PELANGGAN'] . '/' . $dt_pelanggan_buyer['BUYER']; ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$langganan_buyer = $ssr1['partnername'] . "/" . $ssr2['partnername'];
 								} else {
 									$langganan_buyer = $rw['langganan'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="buyer" type="text" id="buyer" size="45" value="<?= $langganan_buyer; ?>">
-                    </td>
+							<?php endif; ?>
+							<input name="buyer" type="text" id="buyer" size="45" value="<?= $langganan_buyer; ?>">
+						</td>
 
-                    <td><strong>Nama Mesin</strong></td>
-                    <td>:</td>
-                    <td>
-                        <select name="nama_mesin" required="required">
-                            <option value="">Pilih</option>
-                            <?php
+						<td><strong>Nama Mesin</strong></td>
+						<td>:</td>
+						<td>
+							<select name="nama_mesin" required="required">
+								<option value="">Pilih</option>
+								<?php
 								$q_mesin = db2_exec($conn_db2, "SELECT
 																	p.WORKCENTERCODE,
 																	CASE
@@ -742,208 +654,208 @@ if (empty($_SESSION['usr'])) {
 																AND w.OPERATIONCODE = '$_GET[operation]'");
 								while ($r = db2_fetch_assoc($qry1)) {
 									?>
-                            <option value="<?php echo $r['WORKCENTERCODE']; ?>" SELECTED>
-                                <?php echo $r['WORKCENTERCODE']; ?> - <?php echo $r['LONGDESCRIPTION']; ?>
-                            </option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>No. Order</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $no_order = $dt_ITXVIEWKK['PROJECTCODE']; ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+									<option value="<?php echo $r['WORKCENTERCODE']; ?>" SELECTED>
+										<?php echo $r['WORKCENTERCODE']; ?> - <?php echo $r['LONGDESCRIPTION']; ?>
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td scope="row">
+							<h4>No. Order</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $no_order = $dt_ITXVIEWKK['PROJECTCODE']; ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$no_order = $ssr['documentno'];
 								} else {
 									$no_order = $rw['no_order'];
 								} ?>
-                        <?php endif; ?>
-                        <input type="text" name="no_order" id="no_order" value="<?= $no_order; ?>" />
-                    </td>
-                    <td scope="row">
-                        <h4>Personil</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <input type="text" name="personil" value="<?= $_SESSION['usr']; ?>" required readonly
-                            style="background-color: #BBBBBB;">
-                    </td>
-                </tr>
-                <td scope="row">
-                    <h4>Tgl Delivery</h4>
-                </td>
-                <td>:</td>
-                <td>
-                    <input type="date" name="tgl_delivery" value="<?= $dt_ITXVIEWKK['DELIVERYDATE']; ?>" />
-                </td>
+							<?php endif; ?>
+							<input type="text" name="no_order" id="no_order" value="<?= $no_order; ?>" />
+						</td>
+						<td scope="row">
+							<h4>Personil</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<input type="text" name="personil" value="<?= $_SESSION['usr']; ?>" required readonly
+								style="background-color: #BBBBBB;">
+						</td>
+					</tr>
+					<td scope="row">
+						<h4>Tgl Delivery</h4>
+					</td>
+					<td>:</td>
+					<td>
+						<input type="date" name="tgl_delivery" value="<?= $dt_ITXVIEWKK['DELIVERYDATE']; ?>" />
+					</td>
 
-                <td scope="row">
-                    <h4>Roll</h4>
-                </td>
-                <td>:</td>
-                <td><input name="rol" type="text" id="rol" size="3" placeholder="0" pattern="[0-9]{1,}"
-                        value="<?= $dt_roll['ROLL']; ?>" /></td>
-                </tr>
-                <tr>
-                    <td valign="top" scope="row">
-                        <h4>Jenis Kain</h4>
-                    </td>
-                    <td valign="top">:</td>
-                    <td>
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $jk = $dt_ITXVIEWKK['ITEMDESCRIPTION']; ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+					<td scope="row">
+						<h4>Roll</h4>
+					</td>
+					<td>:</td>
+					<td><input name="rol" type="text" id="rol" size="3" placeholder="0" pattern="[0-9]{1,}"
+							value="<?= $dt_roll['ROLL']; ?>" /></td>
+					</tr>
+					<tr>
+						<td valign="top" scope="row">
+							<h4>Jenis Kain</h4>
+						</td>
+						<td valign="top">:</td>
+						<td>
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $jk = $dt_ITXVIEWKK['ITEMDESCRIPTION']; ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$jk = $ssr['productcode'] . " / " . $ssr['description'];
 								} else {
 									$jk = $rw['jenis_kain'];
 								} ?>
-                        <?php endif; ?>
-                        <textarea name="jenis_kain" cols="35" id="jenis_kain"><?= $jk; ?></textarea>
-                    </td>
-                    <td valign="top">
-                        <h4>Catatan</h4>
-                    </td>
-                    <td valign="top">:</td>
-                    <td colspan="2" valign="top">
-                        <textarea name="catatan" cols="35" id="catatan"><?php echo $rw['catatan']; ?></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>No. Warna</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $nomor_warna = $dt_ITXVIEWKK['NO_WARNA']; ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+							<?php endif; ?>
+							<textarea name="jenis_kain" cols="35" id="jenis_kain"><?= $jk; ?></textarea>
+						</td>
+						<td valign="top">
+							<h4>Catatan</h4>
+						</td>
+						<td valign="top">:</td>
+						<td colspan="2" valign="top">
+							<textarea name="catatan" cols="35" id="catatan"><?php echo $rw['catatan']; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td scope="row">
+							<h4>No. Warna</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $nomor_warna = $dt_ITXVIEWKK['NO_WARNA']; ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$nomor_warna = $ssr['colorno'];
 								} else {
 									$nomor_warna = $rw['no_warna'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="no_warna" type="text" id="no_warna" size="35" value="<?= $nomor_warna; ?>" />
-                    </td>
+							<?php endif; ?>
+							<input name="no_warna" type="text" id="no_warna" size="35" value="<?= $nomor_warna; ?>" />
+						</td>
 
-                    <td width="14%"><strong>Quantity (Kg)</strong></td>
-                    <td width="1%">:</td>
-                    <td colspan="2">
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $berat = $dt_qtyorder['QTY_ORDER']; ?>
-                        <?php else: ?>
-                        <?php if ($cLot > 0) {
+						<td width="14%"><strong>Quantity (Kg)</strong></td>
+						<td width="1%">:</td>
+						<td colspan="2">
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $berat = $dt_qtyorder['QTY_ORDER']; ?>
+							<?php else: ?>
+								<?php if ($cLot > 0) {
 									$berat = round($sLot['Weight'], 2);
 								} else if ($rc > 0) {
 									$berat = round($rw['qty'], 2);
 								} else if ($rcAdm > 0) {
 									$berat = $rwAdm['qty'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="qty" type="text" id="qty" size="5" value="<?= $berat; ?>" placeholder="0.00" />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<strong>Gramasi</strong>:
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $nlebar = floor($dt_lg['LEBAR']); ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+							<?php endif; ?>
+							<input name="qty" type="text" id="qty" size="5" value="<?= $berat; ?>" placeholder="0.00" />
+							&nbsp;&nbsp;&nbsp;&nbsp;<strong>Gramasi</strong>:
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $nlebar = floor($dt_lg['LEBAR']); ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$nlebar = round($ssr['cuttablewidth'], 2);
 								} else if ($rcAdm > 0) {
 									$nlebar = $rwAdm['lebar'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="lebar" type="text" id="lebar" size="6" value="<?= $nlebar; ?>" placeholder="0" />
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $ngramasi = floor($dt_lg['GRAMASI']) ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+							<?php endif; ?>
+							<input name="lebar" type="text" id="lebar" size="6" value="<?= $nlebar; ?>" placeholder="0" />
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $ngramasi = floor($dt_lg['GRAMASI']) ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$ngramasi = round($ssr['weight'], 2);
 								} else if ($rcAdm > 0) {
 									$ngramasi = $rwAdm['gramasi'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="gramasi" type="text" id="gramasi" size="6" value="<?= $ngramasi; ?>"
-                            placeholder="0" />
-                    </td>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>Warna</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <?php if ($_GET['typekk'] == "NOW"): ?>
-                        <?php $nama_warna = $dt_warna['WARNA']; ?>
-                        <?php else: ?>
-                        <?php if ($cek > 0) {
+							<?php endif; ?>
+							<input name="gramasi" type="text" id="gramasi" size="6" value="<?= $ngramasi; ?>"
+								placeholder="0" />
+						</td>
+					</tr>
+					<tr>
+						<td scope="row">
+							<h4>Warna</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<?php if ($_GET['typekk'] == "NOW"): ?>
+								<?php $nama_warna = $dt_warna['WARNA']; ?>
+							<?php else: ?>
+								<?php if ($cek > 0) {
 									$nama_warna = $ssr['color'];
 								} else {
 									$nama_warna = $rw['warna'];
 								} ?>
-                        <?php endif; ?>
-                        <input name="warna" type="text" id="warna" size="35" value="<?= $nama_warna; ?>" />
-                    </td>
-                    <td width="14%"><strong>Panjang (Yard)</strong></td>
-                    <td>:</td>
-                    <td colspan="2"><input name="qty2" type="text" id="qty2" size="8"
-                            value="<?= $dt_qtyorder['QTY_ORDER_YARD']; ?><?php echo $rw['panjang']; ?>"
-                            placeholder="0.00" onfocus="jumlah();" /></td>
-                </tr>
-                <tr>
-                    <td scope="row">
-                        <h4>Lot</h4>
-                    </td>
-                    <td>:</td>
-                    <td><input name="lot" type="text" id="lot" size="5" value="<?= $dt_ITXVIEWKK['LOT']; ?>" /></td>
+							<?php endif; ?>
+							<input name="warna" type="text" id="warna" size="35" value="<?= $nama_warna; ?>" />
+						</td>
+						<td width="14%"><strong>Panjang (Yard)</strong></td>
+						<td>:</td>
+						<td colspan="2"><input name="qty2" type="text" id="qty2" size="8"
+								value="<?= $dt_qtyorder['QTY_ORDER_YARD']; ?><?php echo $rw['panjang']; ?>"
+								placeholder="0.00" onfocus="jumlah();" /></td>
+					</tr>
+					<tr>
+						<td scope="row">
+							<h4>Lot</h4>
+						</td>
+						<td>:</td>
+						<td><input name="lot" type="text" id="lot" size="5" value="<?= $dt_ITXVIEWKK['LOT']; ?>" /></td>
 
-                    <td>
-                        <h4>Proses BC</h4>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        <select name="prosesbc" id="prosesbc">
-                            <option value="">Pilih</option>
-                            <?php
+						<td>
+							<h4>Proses BC</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<select name="prosesbc" id="prosesbc">
+								<option value="">Pilih</option>
+								<?php
 								// Mengambil data dari tabel tbl_no_mesin
 								$qry = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_mesinbc ORDER BY no_mesin ASC");
 								while ($row = sqlsrv_fetch_array($qry)) {
 									?>
-                            <option value="<?php echo $row['no_mesin']; ?>" <?php if ($rw['no_mesin'] == $row['no_mesin']) {
+									<option value="<?php echo $row['no_mesin']; ?>" <?php if ($rw['no_mesin'] == $row['no_mesin']) {
 										   echo "SELECTED";
 									   } ?>>
-                                <?php echo $row['no_mesin']; ?>
-                            </option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-        <fieldset>
-            <legend>KETENTUAN INPUT KK MASUK</legend>
-            <li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b>, maka data tersebut
-                tidak dapat disimpan atau dimasukkan ke dalam sistem.</li>
-            <li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b> <span
-                    style="color: red;">sudah di susun schedule</span>, maka data tersebut tidak dapat disimpan atau
-                dimasukkan ke dalam sistem.</li>
-            <li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b> <span
-                    style="color: red;">sudah di proses</span>, maka data tersebut tidak dapat disimpan atau dimasukkan
-                ke dalam sistem.</li>
-        </fieldset>
-        <br><br>
-        <input type="submit" name="btnSimpan" id="btnSimpan" value="Simpan" class="art-button" />
-        <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'"
-            class="art-button" />
-        <input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'"
-            class="art-button green">
-        <?php endif; ?>
-    </form>
+										<?php echo $row['no_mesin']; ?>
+									</option>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset>
+				<legend>KETENTUAN INPUT KK MASUK</legend>
+				<li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b>, maka data tersebut
+					tidak dapat disimpan atau dimasukkan ke dalam sistem.</li>
+				<li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b> <span
+						style="color: red;">sudah di susun schedule</span>, maka data tersebut tidak dapat disimpan atau
+					dimasukkan ke dalam sistem.</li>
+				<li>Jika terdapat kesamaan antara <b>nomor kartu kerja, nomor demand, dan operation</b> <span
+						style="color: red;">sudah di proses</span>, maka data tersebut tidak dapat disimpan atau dimasukkan
+					ke dalam sistem.</li>
+			</fieldset>
+			<br><br>
+			<input type="submit" name="btnSimpan" id="btnSimpan" value="Simpan" class="art-button" />
+			<input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'"
+				class="art-button" />
+			<input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'"
+				class="art-button green">
+		<?php endif; ?>
+	</form>
 </body>
 
 </html>
