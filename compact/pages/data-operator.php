@@ -45,6 +45,30 @@ if(isset($_POST['btnUbah'])){
 		echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiUbah'>";
 	}
 	?>
+    <?php
+   
+    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    $recordsPerPage = 10;
+    
+    $offset = ($page - 1) * $recordsPerPage;
+
+    $nama = isset($_GET['nama']) ? $_GET['nama'] : '';
+    $sql = "SELECT TOP 1 * FROM db_finishing.tbl_staff WHERE nama = ?";
+    $params = array($nama);
+    $qtampil = sqlsrv_query($con, $sql, $params);
+    $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
+    $rc = sqlsrv_num_rows($qtampil);
+
+    $sqlTable = "SELECT * FROM db_finishing.tbl_staff ORDER BY id ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    $paramsTable = array($offset, $recordsPerPage);
+    $qry = sqlsrv_query($con, $sqlTable, $paramsTable);
+
+    $totalRecordsQuery = "SELECT COUNT(*) as total FROM db_finishing.tbl_staff";
+    $totalRecordsResult = sqlsrv_query($con, $totalRecordsQuery);
+    $totalRecords = sqlsrv_fetch_array($totalRecordsResult)['total'];
+    $totalPages = ceil($totalRecords / $recordsPerPage);
+    ?>
+
     <form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
         <table width="100%" border="0">
             <tr>
@@ -52,39 +76,38 @@ if(isset($_POST['btnUbah'])){
             </tr>
             <tr>
                 <td colspan="3" align="center" scope="row">
-                    <font color="#FF0000"><?php echo $_GET['status'];?></font>
+                    <font color="#FF0000"><?php echo isset($_GET['status']) ? $_GET['status'] : ''; ?></font>
                 </td>
             </tr>
-            <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.tbl_staff WHERE nama='$_GET[nama]' LIMIT 1");
-	$rt=sqlsrv_fetch_array($qtampil);
-	$rc=sqlsrv_num_rows($qtampil);
-	?>
+
             <tr>
                 <td width="21%" scope="row">Nama</td>
                 <td width="1%">:</td>
                 <td width="78%"><label for="nama"></label>
                     <input type="text" name="nama" id="nama"
                         onchange="window.location='data-operator.php?nama='+this.value"
-                        value="<?php echo $_GET['nama'];?>" required="required" />
-                    <input type="hidden" name="id" value="<?php echo $rt['id'];?>" />
+                        value="<?php echo htmlspecialchars($nama); ?>" required="required" />
+                    <input type="hidden" name="id" value="<?php echo isset($rt['id']) ? $rt['id'] : ''; ?>" />
                 </td>
             </tr>
             <tr>
                 <td valign="top" scope="row">Jabatan</td>
                 <td valign="top">:</td>
                 <td><label for="jabatan"></label>
-                    <input name="jabatan" type="text" id="jabatan" value="<?php echo $rt['jabatan']; ?>" size="45" />
+                    <input name="jabatan" type="text" id="jabatan"
+                        value="<?php echo isset($rt['jabatan']) ? $rt['jabatan'] : ''; ?>" size="45" />
                 </td>
             </tr>
             <tr>
-                <th colspan="3" scope="row"><?php if($rc==0){?><input type="submit" name="btnSimpan" id="btnSimpan"
-                        value="Simpan" /><?php }else{ ?>
+                <th colspan="3" scope="row"><?php if ($rc == 0) { ?>
+                    <input type="submit" name="btnSimpan" id="btnSimpan" value="Simpan" /><?php } else { ?>
                     <input type="submit" name="btnUbah" id="btnUbah" value="Ubah" />
                     <input type="submit" name="btnHapus" id="btnHapus" value="Hapus" /><?php } ?>
                     <input type="button" name="tutup" id="tutup" value="Tutup" onclick="window.close();" />
                 </th>
             </tr>
         </table>
+
         <h3>Data Detail Operator</h3>
         <table width="100%" border="0">
             <tr bgcolor="#0099CC">
@@ -92,18 +115,20 @@ if(isset($_POST['btnUbah'])){
                 <th bgcolor="#0099CC">Nama</th>
                 <th>Jabatan</th>
             </tr>
-            <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.tbl_staff ORDER BY id ASC");
-  $no=1;
-  while($r=sqlsrv_fetch_array($qry))
-  {
-    $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
-            <tr bgcolor="<?php echo $bgcolor;?>">
-                <td align="center" scope="row"><?php echo $no;?></td>
-                <td align="center"><?php echo $r['nama'];?></td>
-                <td><?php echo $r['jabatan'];?></td>
+            <?php
+            $no = $offset + 1;
+            $c = 0; 
+            
+            while ($r = sqlsrv_fetch_array($qry)) {
+                $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
+                ?>
+            <tr bgcolor="<?php echo $bgcolor; ?>">
+                <td align="center" scope="row"><?php echo $no; ?></td>
+                <td align="center"><?php echo $r['nama']; ?></td>
+                <td><?php echo $r['jabatan']; ?></td>
             </tr>
-            <?php $no++;} ?>
+            <?php $no++;
+            } ?>
             <tr bgcolor="#0099CC">
                 <td scope="row">&nbsp;</td>
                 <td>&nbsp;</td>
@@ -111,7 +136,21 @@ if(isset($_POST['btnUbah'])){
             </tr>
         </table>
 
+        <div align="center">
+            <?php if ($page > 1) { ?>
+            <a href="?page=<?php echo $page - 1; ?>">Prev</a>
+            <?php } ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+            <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            <?php } ?>
+
+            <?php if ($page < $totalPages) { ?>
+            <a href="?page=<?php echo $page + 1; ?>">Next</a>
+            <?php } ?>
+        </div>
     </form>
+
 </body>
 
 </html>

@@ -57,10 +57,19 @@ include("../../koneksi.php");
           <font color="#FF0000"><?php echo $_GET['status']; ?></font>
         </td>
       </tr>
-      <?php $qtampil = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_proses WHERE proses='$_GET[proses]' AND jns='$_GET[jns]' LIMIT 1");
-      $rt = sqlsrv_fetch_array($qtampil);
-      $rc = sqlsrv_num_rows($qtampil);
+      <?php
+      $proses = isset($_GET['proses']) ? $_GET['proses'] : '';
+      $jns = isset($_GET['jns']) ? $_GET['jns'] : '';
+
+      $sql = "SELECT TOP 1 * FROM db_finishing.tbl_proses WHERE proses = ? AND jns = ?";
+      $params = array($proses, $jns);
+
+      $qtampil = sqlsrv_query($con, $sql, $params);
+
+      $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
+      $rc = ($rt) ? 1 : 0;
       ?>
+
       <tr>
         <td width="21%" scope="row">Proses</td>
         <td width="1%">:</td>
