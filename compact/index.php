@@ -11,7 +11,8 @@ $page    = strtolower($page);
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 
-<head><!-- Created by Artisteer v4.3.0.60745 -->
+<head>
+    <!-- Created by Artisteer v4.3.0.60745 -->
     <meta charset="utf-8">
     <title>Compact</title>
     <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no, width = device-width">
@@ -30,47 +31,47 @@ $page    = strtolower($page);
 
 
     <style>
-        .art-content .art-postcontent-0 .layout-item-0 {
-            margin-bottom: 10px;
-        }
+    .art-content .art-postcontent-0 .layout-item-0 {
+        margin-bottom: 10px;
+    }
 
-        .art-content .art-postcontent-0 .layout-item-1 {
-            border-top-style: solid;
-            border-right-style: solid;
-            border-bottom-style: solid;
-            border-left-style: solid;
-            border-width: 0px;
-            border-color: #D1DBE0;
-            color: #FFFFFF;
-            background: #1F5C98;
-            border-spacing: 0px 10px;
-            border-collapse: separate;
-        }
+    .art-content .art-postcontent-0 .layout-item-1 {
+        border-top-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-left-style: solid;
+        border-width: 0px;
+        border-color: #D1DBE0;
+        color: #FFFFFF;
+        background: #1F5C98;
+        border-spacing: 0px 10px;
+        border-collapse: separate;
+    }
 
-        .art-content .art-postcontent-0 .layout-item-2 {
-            border-right-style: Dotted;
-            border-right-width: 1px;
-            border-right-color: #4991DA;
-            color: #FFFFFF;
-            padding-right: 30px;
-            padding-left: 30px;
-        }
+    .art-content .art-postcontent-0 .layout-item-2 {
+        border-right-style: Dotted;
+        border-right-width: 1px;
+        border-right-color: #4991DA;
+        color: #FFFFFF;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
 
-        .art-content .art-postcontent-0 .layout-item-3 {
-            color: #FFFFFF;
-            padding-right: 30px;
-            padding-left: 30px;
-        }
+    .art-content .art-postcontent-0 .layout-item-3 {
+        color: #FFFFFF;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
 
-        .ie7 .art-post .art-layout-cell {
-            border: none !important;
-            padding: 0 !important;
-        }
+    .ie7 .art-post .art-layout-cell {
+        border: none !important;
+        padding: 0 !important;
+    }
 
-        .ie6 .art-post .art-layout-cell {
-            border: none !important;
-            padding: 0 !important;
-        }
+    .ie6 .art-post .art-layout-cell {
+        border: none !important;
+        padding: 0 !important;
+    }
     </style>
 </head>
 
@@ -81,14 +82,14 @@ $page    = strtolower($page);
                 <ul class="art-hmenu">
                     <li><a href="../index.php">Main</a></li>
                     <?php if ($_SESSION['lvl'] != "Operator") { ?>
-                        <li><a href="../masuk/?typekk=NOW">Masuk</a></li>
+                    <li><a href="../masuk/?typekk=NOW">Masuk</a></li>
                     <?php } ?>
                     <!-- <li><a href="../stenter/?typekk=NOW">Stenter</a></li>
                     <li><a href="index.php?typekk=NOW" class="active">Compact</a></li>
                     <li><a href="../belah-lipat/?typekk=NOW">Belah &amp; Lipat</a></li>
                     <li><a href="../oven/?typekk=NOW">Oven</a></li>
                     <li><a href="../steamer/?typekk=NOW">Steamer</a></li> -->
-                    
+
                     <li><a href="../stenter/?typekk=SCHEDULE">Stenter</a></li>
                     <li><a href="index.php?typekk=SCHEDULE" class="active">Compact</a></li>
                     <li><a href="../belah-lipat/?typekk=NOW">Belah Cuci</a></li>
@@ -96,13 +97,13 @@ $page    = strtolower($page);
                     <li><a href="../oven/?typekk=SCHEDULE">Oven</a></li>
                     <li><a href="../steamer/?typekk=SCHEDULE">Steamer</a></li>
                     <?php if ($_SESSION['lvl'] != "Operator") { ?>
-                        <li><a href="../keluar/">Keluar</a></li>
+                    <li><a href="../keluar/">Keluar</a></li>
                     <?php } ?>
                     <li><a href="../reports/">Reports</a></li>
                     <?php if (!isset($_SESSION['usr']) || !isset($_SESSION['pass'])) { ?>
-                        <li><a href="../login.php">Log In</a></li>
+                    <li><a href="../login.php">Log In</a></li>
                     <?php } else { ?>
-                        <li><a href="../login.php?act=logout">Log Out</a></li>
+                    <li><a href="../login.php?act=logout">Log Out</a></li>
                     <?php } ?>
                 </ul>
             </div>
@@ -156,7 +157,9 @@ $page    = strtolower($page);
         </footer>
 
     </div>
-    <iframe width=174 height=189 name="gToday:normal:../calender/agenda.js" id="gToday:normal:../calender/agenda.js" src="../calender/ipopeng.htm" scrolling="no" frameborder="0" style="visibility:visible; z-index:999; position:absolute; top:-500px; left:-500px;">
+    <iframe width=174 height=189 name="gToday:normal:../calender/agenda.js" id="gToday:normal:../calender/agenda.js"
+        src="../calender/ipopeng.htm" scrolling="no" frameborder="0"
+        style="visibility:visible; z-index:999; position:absolute; top:-500px; left:-500px;">
     </iframe>
 
 </body>
