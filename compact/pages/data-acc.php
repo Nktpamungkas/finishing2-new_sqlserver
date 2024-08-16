@@ -56,7 +56,7 @@ include("../../koneksi.php");
                 </td>
             </tr>
             <?php $qtampil = sqlsrv_query($con, "SELECT TOP 1 FROM db_finishing.tbl_staff WHERE nama='$_GET[nama]'", array(), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
-            $rt = sqlsrv_fetch_array($qtampil);
+            $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
             $rc = sqlsrv_num_rows($qtampil);
             ?>
             <tr>
