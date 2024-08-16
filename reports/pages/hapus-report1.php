@@ -20,7 +20,7 @@ $page	= strtolower($page);
 </head>
 <body>
 <?php 
-	$sqlhapus=mysqli_query($con,"DELETE FROM tbl_produksi WHERE id='$_GET[id]'") or die("Query Gagal");
+	$sqlhapus=sqlsrv_query($con,"DELETE FROM db_finishing.tbl_produksi WHERE id='$_GET[id]'") or die("Query Gagal");
 	if($sqlhapus){
 	  echo "<script>alert('Berhasil dihapus');window.location.href='?p=reports&tgl1=$_GET[tgl1]&tgl2=$_GET[tgl2]&shift=$_GET[shift]&msn=$_GET[msn]';</script>";
 	}

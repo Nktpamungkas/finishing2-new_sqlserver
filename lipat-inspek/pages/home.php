@@ -52,6 +52,7 @@
 		}
 	</style>
 </head>
+			
 
 <body>
 	<?php
@@ -62,10 +63,13 @@
 		{
 			include('../koneksi.php');
 			$format = date("ymd");
-			$sql = mysqli_query($con, "SELECT nokk FROM tbl_produksi WHERE substr(nokk,1,6) like '%" . $format . "%' ORDER BY nokk DESC LIMIT 1 ") or die(mysqli_error());
-			$d = mysqli_num_rows($sql);
+			$sql = sqlsrv_query($con, "SELECT nokk FROM db_finishing.[tbl_produksi]
+			WHERE LEFT(nokk, 6)  like '%" . $format . "%'
+			ORDER BY nokk DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY") or die(sqlsrv_errors());
+
+			$d = sqlsrv_num_rows($sql);
 			if ($d > 0) {
-				$r = mysqli_fetch_array($sql);
+				$r = sqlsrv_fetch_array($sql);
 				$d = $r['nokk'];
 				$str = substr($d, 6, 2);
 				$Urut = (int)$str;
@@ -113,8 +117,10 @@
                     $anddemand = "";
                 }
                 // CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
-				$q_cekshedule    = mysqli_query($con, "SELECT * FROM tbl_schedule_new WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
-				$row_cekschedule = mysqli_fetch_assoc($q_cekshedule);
+				$q_cekshedule    = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
+				WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
+
+				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule);
 				if(empty($row_cekschedule['nourut']) AND $_GET['demand']){
 					echo     "<script>
 								swal({
@@ -146,34 +152,53 @@
                         $andoperation   = "";
                     }
                     if($_GET['kklanjutan']){
-                        $q_kkmasuk      = mysqli_query($con, "SELECT
+                        $q_kkmasuk      = sqlsrv_query($con, "SELECT
                                                                     *
                                                                 FROM
-                                                                    `tbl_schedule_new` a
+                                                                    db_finishing.[tbl_schedule_new] a
                                                                 WHERE nokk = '$idkk' $anddemand $andoperation");
-                        $row_kkmasuk    = mysqli_fetch_assoc($q_kkmasuk);
+                        $row_kkmasuk    = sqlsrv_fetch_array($q_kkmasuk);
                         include_once("../now.php");
                     }else{
-						$q_kkmasuk		= mysqli_query($con, "SELECT
-																	*
-																FROM
-																	`tbl_schedule_new` a
-																WHERE
-																	NOT EXISTS (
-																			SELECT 1
-																			FROM
-																					`tbl_produksi` b
-																			WHERE
-																					b.nokk = a.nokk 
-																					AND b.demandno = a.nodemand 
-																					AND b.nama_mesin = a.operation
-																					AND b.no_mesin = a.no_mesin
-																	) 
-																	AND NOT a.nourut = 0 AND NOT group_shift IS NULL
-																	AND nokk = '$idkk' $anddemand 
-																ORDER BY
-																	CONCAT(SUBSTR(TRIM(a.no_mesin), -5,2), SUBSTR(TRIM(a.no_mesin), -2)) ASC, a.nourut ASC");
-						$row_kkmasuk	= mysqli_fetch_assoc($q_kkmasuk);
+						// Query Asli di mysql nya
+						// $q_kkmasuk		= sqlsrv_query($con, "SELECT
+						// 											*
+						// 										FROM
+						// 											db_finishing.[tbl_schedule_new] a
+						// 										WHERE
+						// 											NOT EXISTS (
+						// 													SELECT 1
+						// 													FROM
+						// 															db_finishing..[tbl_produksi] b
+						// 													WHERE
+						// 															b.nokk = a.nokk 
+						// 															AND b.demandno = a.nodemand 
+						// 															AND b.nama_mesin = a.operation
+						// 															AND b.no_mesin = a.no_mesin
+						// 											) 
+						// 											AND NOT a.nourut = 0 AND NOT group_shift IS NULL
+						// 											AND nokk = '$idkk' $anddemand 
+						// 										ORDER BY
+						// 											CONCAT(SUBSTR(TRIM(a.no_mesin), -5,2), SUBSTR(TRIM(a.no_mesin), -2)) ASC, a.nourut ASC");
+
+						$q_kkmasuk		= sqlsrv_query($con, " SELECT *
+											FROM db_finishing.[tbl_schedule_new] a
+											WHERE NOT EXISTS (
+													SELECT 1
+													FROM db_finishing.[tbl_produksi] b
+													WHERE b.nokk = a.nokk 
+													AND b.demandno = a.nodemand 
+													AND b.nama_mesin = a.operation
+													AND b.no_mesin = a.no_mesin
+												) 
+											AND a.nourut <> 0 
+											AND a.group_shift IS NOT NULL
+											AND a.nokk =  '$idkk' $anddemand
+											ORDER BY CONCAT(SUBSTRING(TRIM(a.no_mesin), LEN(TRIM(a.no_mesin)) - 4, 2), 
+															SUBSTRING(TRIM(a.no_mesin), LEN(TRIM(a.no_mesin)) - 1, 2)) ASC, 
+													a.nourut ASC");
+
+						$row_kkmasuk	= sqlsrv_fetch_array($q_kkmasuk);
 						include_once("../now.php");
 					}
 				}
@@ -257,73 +282,74 @@
 			$jmlKonsen3 = $_POST['jmlKonsen3'];
 			$jmlKonsen4 = $_POST['jmlKonsen4'];
 			$jmlKonsen5 = $_POST['jmlKonsen5'];
-			$simpanSql = "UPDATE tbl_produksi SET 
-					`shift`='$shift',
-					`shift2`='$shift2',
-					`buyer`='$buyer',
-					`no_item`='$item',
-					`no_warna`='$nowarna',
-					`jenis_bahan`='$bahan',
-					`kondisi_kain`='$kain',
-					`panjang`='$qty2',
-					`panjang_h`='$qty3',
-					`no_gerobak`='$gerobak',
-					`no_mesin`='$mesin',
-					`nama_mesin`='$nmmesin',
-					`langganan`='$langganan',
-					`no_order`='$order',
-					`jenis_kain`='$jenis_kain',
-					`warna`='$warna',
-					`lot`='$lot',
-					`rol`='$rol',
-					`qty`='$qty',
-					`proses`='$proses',
-					`jam_in`='$jam_in',
-					`jam_out`='$jam_out',
-					`tgl_proses_in`='$tgl_proses_in',
-					`tgl_proses_out`='$tgl_proses_out',
-					`stop_l`='$mulai',
-					`stop_l2`='$mulai2',
-					`stop_l3`='$mulai3',
-					`stop_r`='$selesai',
-					`stop_r2`='$selesai2',
-					`stop_r3`='$selesai3',
-					`tgl_stop_l`='$tgl_stop_m',
-					`tgl_stop_l2`='$tgl_stop_m2',
-					`tgl_stop_l3`='$tgl_stop_m3',
-					`tgl_stop_r`='$tgl_stop_s',
-					`tgl_stop_r2`='$tgl_stop_s2',
-					`tgl_stop_r3`='$tgl_stop_s3',
-					`kd_stop`='$kd',
-					`kd_stop2`='$kd2',
-					`kd_stop3`='$kd3',
-					`acc_staff`='$acc_kain',
-					`catatan`='$catatan',
-					`suhu`='$suhu',
-					`speed`='$speed',
-					`omt`='$omt',
-					`vmt`='$vmt',
-					`t_vmt`='$vmt_time',
-					`buka_rantai`='$buka',
-					`overfeed`='$overfeed',
-					`lebar`='$lebar',
-					`gramasi`='$gramasi',
-					`lebar_h`='$hlebar',
-					`gramasi_h`='$hgramasi',
-					`ph_larut`='$phlarutan',
-					`chemical_1`='$chemical1',
-					`chemical_2`='$chemical2',
-					`chemical_3`='$chemical3',
-					`chemical_4`='$chemical4',
-					`chemical_5`='$chemical5',
-					`konsen_1`='$jmlKonsen1',
-					`konsen_2`='$jmlKonsen2',
-					`konsen_3`='$jmlKonsen3',
-					`konsen_4`='$jmlKonsen4',
-					`konsen_5`='$jmlKonsen5',
-					`tgl_update`='$tgl'
-					WHERE `id`='$_POST[id]'";
-			mysqli_query($con, $simpanSql) or die("Gagal Ubah" . mysqli_error());
+
+			$simpanSql = "UPDATE db_finishing.[tbl_produksi] SET 
+					shift='$shift',
+					shift2='$shift2',
+					buyer='$buyer',
+					no_item='$item',
+					no_warna='$nowarna',
+					jenis_bahan='$bahan',
+					kondisi_kain='$kain',
+					panjang='$qty2',
+					panjang_h='$qty3',
+					no_gerobak='$gerobak',
+					no_mesin='$mesin',
+					nama_mesin='$nmmesin',
+					langganan='$langganan',
+					no_order='$order',
+					jenis_kain='$jenis_kain',
+					warna='$warna',
+					lot='$lot',
+					rol='$rol',
+					qty='$qty',
+					proses='$proses',
+					jam_in='$jam_in',
+					jam_out='$jam_out',
+					tgl_proses_in='$tgl_proses_in',
+					tgl_proses_out='$tgl_proses_out',
+					stop_l='$mulai',
+					stop_l2='$mulai2',
+					stop_l3='$mulai3',
+					stop_r='$selesai',
+					stop_r2='$selesai2',
+					stop_r3='$selesai3',
+					tgl_stop_l='$tgl_stop_m',
+					tgl_stop_l2='$tgl_stop_m2',
+					tgl_stop_l3='$tgl_stop_m3',
+					tgl_stop_r='$tgl_stop_s',
+					tgl_stop_r2='$tgl_stop_s2',
+					tgl_stop_r3='$tgl_stop_s3',
+					kd_stop='$kd',
+					kd_stop2='$kd2',
+					kd_stop3='$kd3',
+					acc_staff='$acc_kain',
+					catatan='$catatan',
+					suhu='$suhu',
+					speed='$speed',
+					omt='$omt',
+					vmt='$vmt',
+					t_vmt='$vmt_time',
+					buka_rantai='$buka',
+					overfeed='$overfeed',
+					lebar='$lebar',
+					gramasi='$gramasi',
+					lebar_h='$hlebar',
+					gramasi_h='$hgramasi',
+					ph_larut='$phlarutan',
+					chemical_1='$chemical1',
+					chemical_2='$chemical2',
+					chemical_3='$chemical3',
+					chemical_4='$chemical4',
+					chemical_5='$chemical5',
+					konsen_1='$jmlKonsen1',
+					konsen_2='$jmlKonsen2',
+					konsen_3='$jmlKonsen3',
+					konsen_4='$jmlKonsen4',
+					konsen_5='$jmlKonsen5',
+					tgl_update='$tgl'
+					WHERE id='$_POST[id]'";
+			sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
 
 			// Refresh form
 			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
@@ -411,82 +437,82 @@
 			$jmlKonsen4 = $_POST['jmlKonsen4'];
 			$jmlKonsen5 = $_POST['jmlKonsen5'];
 
-			$simpanSql = "INSERT INTO tbl_produksi SET 
-					`nokk`='$nokk',
-					`demandno`='$demand',
-					`shift`='$shift',
-					`shift2`='$shift2',
-					`buyer`='$buyer',
-					`no_item`='$item',
-					`no_warna`='$nowarna',
-					`jenis_bahan`='$bahan',
-					`kondisi_kain`='$kain',
-					`panjang`='$qty2',
-					`panjang_h`='$qty3',
-					`no_gerobak`='$gerobak',
-					`no_mesin`='$mesin',
-					`nama_mesin`='$nmmesin',
-					`langganan`='$langganan',
-					`no_order`='$order',
-					`jenis_kain`='$jenis_kain',
-					`warna`='$warna',
-					`lot`='$lot',
-					`rol`='$rol',
-					`qty`='$qty',
-					`proses`='$proses',
-					`jam_in`='$jam_in',
-					`jam_out`='$jam_out',
-					`tgl_proses_in`='$tgl_proses_in',
-					`tgl_proses_out`='$tgl_proses_out',
-					`stop_l`='$mulai',
-					`stop_l2`='$mulai2',
-					`stop_l3`='$mulai3',
-					`stop_r`='$selesai',
-					`stop_r2`='$selesai2',
-					`stop_r3`='$selesai3',
-					`tgl_stop_l`='$tgl_stop_m',
-					`tgl_stop_l2`='$tgl_stop_m2',
-					`tgl_stop_l3`='$tgl_stop_m3',
-					`tgl_stop_r`='$tgl_stop_s',
-					`tgl_stop_r2`='$tgl_stop_s2',
-					`tgl_stop_r3`='$tgl_stop_s3',
-					`kd_stop`='$kd',
-					`kd_stop2`='$kd2',
-					`kd_stop3`='$kd3',
-					`tgl_buat`=now(),
-					`tgl_pro`=now(),
-					`acc_staff`='$acc_kain',
-					`catatan`='$catatan',
-					`suhu`='$suhu',
-					`speed`='$speed',
-					`omt`='$omt',
-					`vmt`='$vmt',
-					`t_vmt`='$vmt_time',
-					`buka_rantai`='$buka',
-					`overfeed`='$overfeed',
-					`lebar`='$lebar',
-					`gramasi`='$gramasi',
-					`lebar_h`='$hlebar',
-					`gramasi_h`='$hgramasi',
-					`ph_larut`='$phlarutan',
-					`chemical_1`='$chemical1',
-					`chemical_2`='$chemical2',
-					`chemical_3`='$chemical3',
-					`chemical_4`='$chemical4',
-					`chemical_5`='$chemical5',
-					`konsen_1`='$jmlKonsen1',
-					`konsen_2`='$jmlKonsen2',
-					`konsen_3`='$jmlKonsen3',
-					`konsen_4`='$jmlKonsen4',
-					`konsen_5`='$jmlKonsen5',
-					`jns_mesin`='$jnsmesin',
-					`tgl_update`='$tgl'";
-			mysqli_query($con, $simpanSql) or die("Gagal Simpan" . mysqli_error());
+			$simpanSql = "INSERT INTO db_finishing.[tbl_produksi] SET 
+					nokk='$nokk',
+					demandno='$demand',
+					shift='$shift',
+					shift2='$shift2',
+					buyer='$buyer',
+					no_item='$item',
+					no_warna='$nowarna',
+					jenis_bahan='$bahan',
+					kondisi_kain='$kain',
+					panjang='$qty2',
+					panjang_h='$qty3',
+					no_gerobak='$gerobak',
+					no_mesin='$mesin',
+					nama_mesin='$nmmesin',
+					langganan='$langganan',
+					no_order='$order',
+					jenis_kain='$jenis_kain',
+					warna='$warna',
+					lot='$lot',
+					rol='$rol',
+					qty='$qty',
+					proses='$proses',
+					jam_in='$jam_in',
+					jam_out='$jam_out',
+					tgl_proses_in='$tgl_proses_in',
+					tgl_proses_out='$tgl_proses_out',
+					stop_l='$mulai',
+					stop_l2='$mulai2',
+					stop_l3='$mulai3',
+					stop_r='$selesai',
+					stop_r2='$selesai2',
+					stop_r3='$selesai3',
+					tgl_stop_l='$tgl_stop_m',
+					tgl_stop_l2='$tgl_stop_m2',
+					tgl_stop_l3='$tgl_stop_m3',
+					tgl_stop_r='$tgl_stop_s',
+					tgl_stop_r2='$tgl_stop_s2',
+					tgl_stop_r3='$tgl_stop_s3',
+					kd_stop='$kd',
+					kd_stop2='$kd2',
+					kd_stop3='$kd3',
+					tgl_buat=now(),
+					tgl_pro=now(),
+					acc_staff='$acc_kain',
+					catatan='$catatan',
+					suhu='$suhu',
+					speed='$speed',
+					omt='$omt',
+					vmt='$vmt',
+					t_vmt='$vmt_time',
+					buka_rantai='$buka',
+					overfeed='$overfeed',
+					lebar='$lebar',
+					gramasi='$gramasi',
+					lebar_h='$hlebar',
+					gramasi_h='$hgramasi',
+					ph_larut='$phlarutan',
+					chemical_1='$chemical1',
+					chemical_2='$chemical2',
+					chemical_3='$chemical3',
+					chemical_4='$chemical4',
+					chemical_5='$chemical5',
+					konsen_1='$jmlKonsen1',
+					konsen_2='$jmlKonsen2',
+					konsen_3='$jmlKonsen3',
+					konsen_4='$jmlKonsen4',
+					konsen_5='$jmlKonsen5',
+					jns_mesin='$jnsmesin',
+					tgl_update='$tgl'";
+			sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
 			//Simpan ke schedule
 			$posisi = strpos($langganan, "/");
 			$cus = substr($langganan, 0, $posisi);
 			$byr = substr($langganan, ($posisi + 1), 100);
-			$sqlData = mysqli_query($con, "INSERT INTO tbl_schedule SET
+			$sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.[tbl_schedule] SET
 				nokk='$nokk',
 				nodemand='$demand',
 				langganan='$cus',
@@ -553,10 +579,10 @@
 					</td>
 					<td width="1%">:</td>
 					<td width="26%">
-						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
+						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
 
 						<?php if ($_GET['typekk'] == 'NOW') { ?>
-							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+this.value" required>
+							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
 								$sql_ITXVIEWKK_demand  = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
@@ -568,16 +594,17 @@
 								<?php endwhile; ?>
 							</select>
 						<?php }elseif($_GET['typekk'] == 'SCHEDULE'){ ?>
-                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+this.value" required>
+                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
-                                    $sql_ITXVIEWKK_demand  = mysqli_query($con, "SELECT * FROM `tbl_schedule_new` WHERE nokk = '$idkk'");
-									while ($r_demand = mysqli_fetch_array($sql_ITXVIEWKK_demand)) :
+                                    $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] WHERE nokk = '$idkk'");
+									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
                                 ?>
                                     <?php
                                         // CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
-                                        $cek_proses   = mysqli_query($con, "SELECT COUNT(*) AS jml FROM tbl_produksi WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
-                                        $data_proses  = mysqli_fetch_assoc($cek_proses);
+                                        $cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.[tbl_produksi] 
+										WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
+                                        $data_proses  = sqlsrv_fetch_array($cek_proses);
                                     ?>
                                     <?php if(empty($data_proses['jml'])) : ?>
 										<option value="<?= $r_demand['nodemand']; ?>" <?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>><?= $r_demand['nodemand']; ?></option>
@@ -605,18 +632,18 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&demand='+document.getElementById(`demand`).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
+						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
 							<option value="">Pilih</option>
 							<?php
-								$qry1 = mysqli_query($con, "SELECT 
+								$qry1 = sqlsrv_query($con, "SELECT 
 															* 
 															FROM 
-																`tbl_schedule_new` a
+																db_finishing.[tbl_schedule_new] a
 																WHERE
 																NOT EXISTS (
 																			SELECT 1
 																			FROM
-																				tbl_produksi c
+																				db_finishing.[tbl_produksi] c
 																			WHERE
 																				c.nokk = a.nokk 
 																				AND c.demandno = a.nodemand 
@@ -634,7 +661,7 @@
 										$if_operation   = "$row_kkmasuk[operation]";
 									}
 								}
-								while ($r = mysqli_fetch_array($qry1)) {
+								while ($r = sqlsrv_fetch_array($qry1)) {
 							?>
 								<?php 
 									$q_desc_op 	= db2_exec($conn_db2, "SELECT * FROM OPERATION WHERE OPERATIONGROUPCODE = 'FIN' AND CODE = '$r[operation]'");
@@ -764,8 +791,8 @@
 					<td>:</td>
 					<td colspan="2"><select name="proses" id="proses" required>
 							<option value="">Pilih</option>
-							<?php $qry1 = mysqli_query($con, "SELECT proses,jns FROM tbl_proses WHERE ket='lipat' ORDER BY proses ASC");
-							while ($r = mysqli_fetch_array($qry1)) {
+							<?php $qry1 = sqlsrv_query($con, "SELECT proses,jns FROM db_finishing.[tbl_proses] WHERE ket='lipat' ORDER BY proses ASC");
+							while ($r = sqlsrv_fetch_array($qry1)) {
 							?>
 								<option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($row_kkmasuk['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
 																									echo "SELECTED";
@@ -1069,8 +1096,8 @@
 						<h4>Kode1:
 							<select name="kd_stop" id="kd_stop">
 								<option value="">Pilih</option>
-								<?php $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-								while ($r = mysqli_fetch_array($qry1)) {
+								<?php $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
+								while ($r = sqlsrv_fetch_array($qry1)) {
 								?>
 									<option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop'] == $r['kode']) {
 																					echo "SELECTED";
@@ -1116,8 +1143,8 @@
 						<h4>Kode2:
 							<select name="kd_stop2" id="kd_stop2">
 								<option value="">Pilih</option>
-								<?php $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-								while ($r = mysqli_fetch_array($qry1)) {
+								<?php $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
+								while ($r = sqlsrv_fetch_array($qry1)) {
 								?>
 									<option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop'] == $r['kode']) {
 																					echo "SELECTED";
@@ -1163,8 +1190,8 @@
 						<h4>Kode3:
 							<select name="kd_stop3" id="kd_stop3">
 								<option value="">Pilih</option>
-								<?php $qry1 = mysqli_query($con, "SELECT kode FROM tbl_stop_mesin ORDER BY id ASC");
-								while ($r = mysqli_fetch_array($qry1)) {
+								<?php $qry1 = sqlsrv_query($con, "SELECT kode FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
+								while ($r = sqlsrv_fetch_array($qry1)) {
 								?>
 									<option value="<?php echo $r['kode']; ?>" <?php if ($rw['kd_stop'] == $r['kode']) {
 																					echo "SELECTED";
@@ -1189,8 +1216,8 @@
 					<td>:</td>
 					<td><select name="acc_kain" id="acc_kain" required>
 							<option value="">Pilih</option>
-							<?php $qryacc = mysqli_query($con, "SELECT nama FROM tbl_staff ORDER BY id ASC");
-							while ($racc = mysqli_fetch_array($qryacc)) {
+							<?php $qryacc = sqlsrv_query($con, "SELECT nama FROM db_finishing.[tbl_staff] ORDER BY id ASC");
+							while ($racc = sqlsrv_fetch_array($qryacc)) {
 							?>
 								<option value="<?php echo $racc['nama']; ?>" <?php if ($racc['nama'] == $rw['acc_staff']) {
 																					echo "SELECTED";

@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php
 include('../koneksi.php');
@@ -12,64 +13,64 @@ include('../koneksi.php');
     <script src="../js/jquery.js" type="text/javascript"></script>
     <script src="../js/jquery.dataTables.js" type="text/javascript"></script>
     <script>
-        $(document).ready(function() {
-            $('#datatables').dataTable({
-                "sScrollY": "500px",
-                "sScrollX": "100%",
-                "bScrollCollapse": false,
-                "bPaginate": false,
-                "bJQueryUI": true,
-                "bSort": false // Menonaktifkan sort
-            });
-        })
+    $(document).ready(function() {
+        $('#datatables').dataTable({
+            "sScrollY": "500px",
+            "sScrollX": "100%",
+            "bScrollCollapse": false,
+            "bPaginate": false,
+            "bJQueryUI": true,
+            "bSort": false // Menonaktifkan sort
+        });
+    })
 
-        $(document).ready(function() {
-            $('#datatables_rangkuman').dataTable({
-                "sScrollY": "100px",
-                "sScrollX": "100%",
-                "bScrollCollapse": false,
-                "bPaginate": false,
-                "bJQueryUI": true,
-                "bSort": false
-            });
-        })
+    $(document).ready(function() {
+        $('#datatables_rangkuman').dataTable({
+            "sScrollY": "100px",
+            "sScrollX": "100%",
+            "bScrollCollapse": false,
+            "bPaginate": false,
+            "bJQueryUI": true,
+            "bSort": false
+        });
+    })
     </script>
 </head>
 <style>
-    .button {
-        display: inline-block;
-        padding: 5px 10px;
-        background-color: #007bff;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-    }
+.button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
 </style>
 
 <style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 20%;
-    }
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+}
 
-    .modal-content button {
-        margin-right: 10px;
-    }
+.modal-content button {
+    margin-right: 10px;
+}
 </style>
 
 <body>
@@ -96,16 +97,17 @@ include('../koneksi.php');
                             <select name="nama_mesin" class="form-control select2">
                                 <option value="-" disabled selected>-nama mesin-</option>
                                 <?php
-                                $q_mesin    = mysqli_query($con, "SELECT
+                                $q_mesin    = sqlsrv_query($con, "SELECT
                                                                             DISTINCT
                                                                             nama_mesin
                                                                         FROM
-                                                                            `tbl_masuk`");
+                                                                            db_finishing.tbl_masuk");
                                 ?>
-                                <?php while ($row_mesin = mysqli_fetch_array($q_mesin)) : ?>
-                                    <option value="<?= $row_mesin['nama_mesin']; ?>" <?php if ($row_mesin['nama_mesin'] == $_POST['nama_mesin']) {
+                                <?php while ($row_mesin = sqlsrv_fetch_array($q_mesin)) : ?>
+                                <option value="<?= $row_mesin['nama_mesin']; ?>" <?php if ($row_mesin['nama_mesin'] == $_POST['nama_mesin']) {
                                                                                             echo 'SELECTED';
-                                                                                        } ?>><?= $row_mesin['nama_mesin']; ?></option>
+                                                                                        } ?>>
+                                    <?= $row_mesin['nama_mesin']; ?></option>
                                 <?php endwhile; ?>
                             </select>
                         </td>
@@ -113,19 +115,31 @@ include('../koneksi.php');
                     <tr valign="middle">
                         <td width="127"><strong>Tanggal Awal</strong></td>
                         <td width="3">:</td>
-                        <td width="280"><input name="awal" type="text" id="awal" value="<?= $_POST['awal'] ?>" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.awal);return false;" size="14" /><a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.awal);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal" style="border:none" align="absmiddle" border="0" /></a></td>
+                        <td width="280"><input name="awal" type="text" id="awal" value="<?= $_POST['awal'] ?>"
+                                onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.awal);return false;"
+                                size="14" /><a href="javascript:void(0)"
+                                onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.awal);return false;"><img
+                                    src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25"
+                                    id="popcal" style="border:none" align="absmiddle" border="0" /></a></td>
                     </tr>
                     <tr>
                         <td><strong>Tanggal Akhir</strong></td>
                         <td>:</td>
-                        <td width="280"><input name="akhir" type="text" id="akhir" value="<?= $_POST['akhir'] ?>" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;" size="14" /><a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal" style="border:none" align="absmiddle" border="0" /></a></td>
+                        <td width="280"><input name="akhir" type="text" id="akhir" value="<?= $_POST['akhir'] ?>"
+                                onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;"
+                                size="14" /><a href="javascript:void(0)"
+                                onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;"><img
+                                    src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25"
+                                    id="popcal" style="border:none" align="absmiddle" border="0" /></a></td>
                     </tr>
                     <tr>
                         <td colspan="3">
                             <input type="submit" name="button" id="button" value="Cari data" class="art-button">
                             <?php if (isset($_POST['button'])) : ?>
-                                <input type="button" name="batal" value="Reset" onclick="window.location.href='index.php?p=LihatData'" class="art-button">
-                                <a href="pages/ExportData.php?nama_mesin=<?= $_POST['nama_mesin'] ?>&awal=<?= $_POST['awal'] ?>&akhir=<?= $_POST['akhir']; ?>" class="art-button">Cetak Ke Excel</a>
+                            <input type="button" name="batal" value="Reset"
+                                onclick="window.location.href='index.php?p=LihatData'" class="art-button">
+                            <a href="pages/ExportData.php?nama_mesin=<?= $_POST['nama_mesin'] ?>&awal=<?= $_POST['awal'] ?>&akhir=<?= $_POST['akhir']; ?>"
+                                class="art-button">Cetak Ke Excel</a>
 
                             <?php endif; ?>
                         </td>
@@ -143,17 +157,17 @@ include('../koneksi.php');
                     </thead>
                     <tbody>
                         <?php
-                        $q_rangkuman    = mysqli_query($con, "SELECT
+                        $q_rangkuman    = sqlsrv_query($con, "SELECT
                                                                         a.nama_mesin,
                                                                         COUNT(a.nokk) AS jml_kk,
                                                                         SUM(a.qty_order) AS bruto
                                                                     FROM
-                                                                        `tbl_masuk` a
+                                                                        db_finishing.tbl_masuk a
                                                                     WHERE
                                                                         NOT EXISTS (
                                                                                 SELECT 1
                                                                                 FROM
-                                                                                    `tbl_schedule_new` b
+                                                                                    db_finishing.tbl_schedule_new b
                                                                                 WHERE
                                                                                     b.nokk = a.nokk 
                                                                                     AND b.nodemand = a.nodemand 
@@ -162,7 +176,7 @@ include('../koneksi.php');
                                                                         AND NOT EXISTS (
                                                                                 SELECT 1
                                                                                 FROM
-                                                                                    `tbl_produksi` c
+                                                                                    db_finishing.tbl_produksi c
                                                                                 WHERE
                                                                                     c.nokk = a.nokk 
                                                                                     AND c.demandno = a.nodemand 
@@ -175,19 +189,25 @@ include('../koneksi.php');
                         $sum_totalkk = 0;
                         $sum_totalQty = 0;
                         ?>
-                        <?php while ($row_rangkuman  = mysqli_fetch_array($q_rangkuman)) : ?>
-                            <?php $sum_totalkk += $row_rangkuman['jml_kk']; ?>
-                            <?php $sum_totalQty += $row_rangkuman['bruto']; ?>
-                            <tr>
-                                <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_rangkuman['nama_mesin']; ?></td>
-                                <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_rangkuman['jml_kk']; ?></td>
-                                <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= number_format($row_rangkuman['bruto'], 2); ?></td>
-                            </tr>
+                        <?php while ($row_rangkuman  = sqlsrv_fetch_array($q_rangkuman)) : ?>
+                        <?php $sum_totalkk += $row_rangkuman['jml_kk']; ?>
+                        <?php $sum_totalQty += $row_rangkuman['bruto']; ?>
+                        <tr>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= $row_rangkuman['nama_mesin']; ?></td>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= $row_rangkuman['jml_kk']; ?></td>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= number_format($row_rangkuman['bruto'], 2); ?></td>
+                        </tr>
                         <?php endwhile; ?>
                     <tfoot>
-                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">TOTAL</td>
-                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= $sum_totalkk; ?></td>
-                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= number_format($sum_totalQty, 2); ?></td>
+                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">TOTAL
+                        </td>
+                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">
+                            <?= $sum_totalkk; ?></td>
+                        <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">
+                            <?= number_format($sum_totalQty, 2); ?></td>
                     </tfoot>
                     </tbody>
                 </table>
@@ -230,20 +250,20 @@ include('../koneksi.php');
             }
 
             if ($_POST['awal']) {
-                $where_tgl  = "AND substr(a.creationdatetime, 1, 10) BETWEEN '$_POST[awal]' AND '$_POST[akhir]'";
+                $where_tgl  = "AND a.creationdatetime BETWEEN '$_POST[awal]' AND '$_POST[akhir]'";
             } else {
                 $where_tgl  = "";
             }
 
-            $q_tblmasuk     = mysqli_query($con, "SELECT 
+            $q_tblmasuk     = sqlsrv_query($con, "SELECT 
                                                             * 
                                                         FROM 
-                                                            tbl_masuk a 
+                                                            db_finishing.tbl_masuk a 
                                                         WHERE
                                                             NOT EXISTS (
                                                                     SELECT 1
                                                                     FROM
-                                                                        `tbl_schedule_new` b
+                                                                        db_finishing.tbl_schedule_new b
                                                                     WHERE
                                                                         b.nokk = a.nokk 
                                                                         AND b.nodemand = a.nodemand 
@@ -252,7 +272,7 @@ include('../koneksi.php');
                                                             AND NOT EXISTS (
                                                                     SELECT 1
                                                                     FROM
-                                                                        `tbl_produksi` c
+                                                                        db_finishing.tbl_produksi c
                                                                     WHERE
                                                                         c.nokk = a.nokk 
                                                                         AND c.demandno = a.nodemand 
@@ -263,8 +283,8 @@ include('../koneksi.php');
             $totalQty = 0;
             $totalRoll = 0;
             ?>
-            <?php while ($row_tblmasuk  = mysqli_fetch_array($q_tblmasuk)) : ?>
-                <?php
+            <?php while ($row_tblmasuk  = sqlsrv_fetch_array($q_tblmasuk)) : ?>
+            <?php
                 $q_cekposisikk      = db2_exec($conn_db2, "SELECT
                                                             p.PRODUCTIONORDERCODE,
                                                             p.STEPNUMBER AS STEPNUMBER,
@@ -341,49 +361,67 @@ include('../koneksi.php');
                                                         FETCH FIRST 1 ROWS ONLY");
                 $row_cekposisikk    = db2_fetch_assoc($q_cekposisikk);
                 ?>
-                <tr>
-                    <td style="border:1px solid;vertical-align:middle; text-align: center;">
-                        <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
-                        <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
-                        <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
-                    </td>
-                    <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['nama_mesin'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['prosesbc'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['proses'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_tblmasuk['catatan'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['personil'] ?><br><?= $row_tblmasuk['creationdatetime'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;">
-                        <?php if ($_SESSION['usr'] != 'husni') : ?>
-                            <?php if ($_SESSION['usr'] == 'suharna' or $_SESSION['usr'] == 'wilson' or $_SESSION['usr'] == 'widodo' or $_SESSION['usr'] == 'dit' or $_SESSION['usr'] == 'husni.kamani' or $_SESSION['usr'] == 'dyo') : ?>
-                                <a href="?p=edit-data&id=<?= $row_tblmasuk['id']; ?>&typekk=NOW" class="button" target="_blank">Edit</a>
-                            <?php endif; ?>
-                            <button class="button" style="background-color: #ff004c; color: #ffffff;" onclick="showConfirmation(<?= $row_tblmasuk['id'] ?>);">Hapus</button>
-                        <?php endif; ?>
-                    </td>
-                    <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['operation'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?= TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nokk'] ?></a></td>
-                    <td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_tblmasuk['nodemand']; ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nodemand'] ?></a></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_order'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['jenis_kain'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lebar'] ?> x <?= $row_tblmasuk['gramasi'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_warna'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['warna'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lot'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['roll'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order'] ?></td>
-                    <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order_yd'] ?></td>
-                    <?php $totalQty += $row_tblmasuk['qty_order']; ?>
-                    <?php $totalRoll += $row_tblmasuk['roll']; ?>
-                </tr>
+            <tr>
+                <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                    <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
+                    <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
+                    <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
+                </td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                    <?= $row_tblmasuk['nama_mesin'] ?></td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['prosesbc'] ?>
+                </td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['proses'] ?></td>
+                <td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_tblmasuk['catatan'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;">
+                    <?= $row_tblmasuk['personil'] ?><br><?php if($row_tblmasuk['creationdatetime']!=null or $row_tblmasuk['creationdatetime'] != ''){
+                        echo $row_tblmasuk['creationdatetime']->format('Y-m-d H:i:s');
+                    }else{
+                        echo '';
+                    } ?></td>
+                <td style="border:1px solid;vertical-align:middle;">
+                    <?php if ($_SESSION['usr'] != 'husni') : ?>
+                    <?php if ($_SESSION['usr'] == 'suharna' or $_SESSION['usr'] == 'wilson' or $_SESSION['usr'] == 'widodo' or $_SESSION['usr'] == 'dit' or $_SESSION['usr'] == 'husni.kamani' or $_SESSION['usr'] == 'dyo') : ?>
+                    <a href="?p=edit-data&id=<?= $row_tblmasuk['id']; ?>&typekk=NOW" class="button"
+                        target="_blank">Edit</a>
+                    <?php endif; ?>
+                    <button class="button" style="background-color: #ff004c; color: #ffffff;"
+                        onclick="showConfirmation(<?= $row_tblmasuk['id'] ?>);">Hapus</button>
+                    <?php endif; ?>
+                </td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                    <?= $row_tblmasuk['operation'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK"
+                        href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?= TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nokk'] ?></a>
+                </td>
+                <td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK"
+                        href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_tblmasuk['nodemand']; ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nodemand'] ?></a>
+                </td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_order'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['jenis_kain'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lebar'] ?> x
+                    <?= $row_tblmasuk['gramasi'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_warna'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['warna'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lot'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['roll'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order'] ?></td>
+                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order_yd'] ?></td>
+                <?php $totalQty += $row_tblmasuk['qty_order']; ?>
+                <?php $totalRoll += $row_tblmasuk['roll']; ?>
+            </tr>
             <?php endwhile; ?>
         </tbody>
         <tfoot>
             <tr>
-                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;" colspan="19">TOTAL</td>
-                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= $totalRoll; ?></td>
-                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= number_format($totalQty, 2); ?></td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;" colspan="19">
+                    TOTAL</td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">
+                    <?= $totalRoll; ?></td>
+                <td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;">
+                    <?= number_format($totalQty, 2); ?></td>
                 <!-- <td style="border:1px solid;vertical-align:middle; text-align: center;" colspan="5"></td> -->
             </tr>
         </tfoot>
@@ -396,46 +434,47 @@ include('../koneksi.php');
         </div>
     </div>
     <script>
-        function showConfirmation(id) {
-            document.getElementById('confirmation-modal').style.display = 'block';
-            document.getElementById('confirm-delete-button').setAttribute('data-id', id);
-        }
+    function showConfirmation(id) {
+        document.getElementById('confirmation-modal').style.display = 'block';
+        document.getElementById('confirm-delete-button').setAttribute('data-id', id);
+    }
 
-        function closeModal() {
-            document.getElementById('confirmation-modal').style.display = 'none';
-        }
+    function closeModal() {
+        document.getElementById('confirmation-modal').style.display = 'none';
+    }
 
-        document.getElementById('confirm-delete-button').addEventListener('click', function() {
-            var id = this.getAttribute('data-id');
-            confirmDelete(id);
+    document.getElementById('confirm-delete-button').addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        confirmDelete(id);
+    });
+
+    function confirmDelete(id) {
+        $.ajax({
+            url: '?p=delete_kkmasuk',
+            type: 'POST',
+            data: {
+                id: id
+            },
+            success: function(response) {
+                // Tampilkan pesan sukses atau gagal
+                swal({
+                    title: 'Data deleted successfully.',
+                    text: 'Klik Ok untuk input data kembali',
+                    type: 'warning',
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href =
+                            'http://localhost/finishing2-new_sqlserver/masuk/index.php?p=LihatData';
+                    }
+                });
+                closeModal();
+            },
+            error: function(xhr, status, error) {
+                // Tampilkan pesan kesalahan jika terjadi error
+                alert('Failed to delete item. Please try again later.');
+            }
         });
-
-        function confirmDelete(id) {
-            $.ajax({
-                url: '?p=delete_kkmasuk',
-                type: 'POST',
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    // Tampilkan pesan sukses atau gagal
-                    swal({
-                        title: 'Data deleted successfully.',
-                        text: 'Klik Ok untuk input data kembali',
-                        type: 'warning',
-                    }).then((result) => {
-                        if (result.value) {
-                            window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/index.php?p=LihatData';
-                        }
-                    });
-                    closeModal();
-                },
-                error: function(xhr, status, error) {
-                    // Tampilkan pesan kesalahan jika terjadi error
-                    alert('Failed to delete item. Please try again later.');
-                }
-            });
-        }
+    }
     </script>
 </body>
 

@@ -1,0 +1,100 @@
+<!-- <button onclick="openModal()">Buka Modal</button> -->
+	<!-- Modal -->
+	<!-- <div id="myModal" class="modal">
+
+		Konten modal
+		<div class="modal-content">
+			<span class="close" onclick="closeModal()">&times;</span>
+			<center><h2>Data 2 hari tidak bergerak</h2></center>
+			<div class="row">
+			<table width="100%" border="1" id="datatables" class="display">
+				<thead>
+					<tr>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NAMA MESIN</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">OPERATION</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO KK</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO DEMAND</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LANGGANAN</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">BUYER</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO ORDER</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LEBAR x GRAMASI</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO WARNA</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">WARNA</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LOT</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">ROL</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">QTY</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">PROSES</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">CATATAN</th>
+						<th style="border:1px solid;vertical-align:middle; font-weight: bold;">CREATION DATE TIME</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					// Hitung tanggal dua hari kebelakang dari hari ini
+					$dateTwoDaysAgo = date('Y-m-d', strtotime('-3 days'));
+					$dateTwoDaysNow = date('Y-m-d');
+					echo $dateTwoDaysAgo;
+					echo $dateTwoDaysNow;
+					$q_tblmasuk = sqlsrv_query($con, "SELECT 
+																	* 
+																FROM 
+																	db_finishing.tbl_masuk a 
+																WHERE
+																	NOT EXISTS (
+																			SELECT 1
+																			FROM
+																				db_finishing.tbl_schedule_new b
+																			WHERE
+																				b.nokk = a.nokk 
+																				AND b.nodemand = a.nodemand 
+																				AND b.operation = a.operation
+																	)
+																	AND NOT EXISTS (
+																			SELECT 1
+																			FROM
+																				db_finishing.tbl_produksi c
+																			WHERE
+																				c.nokk = a.nokk 
+																				AND c.demandno = a.nodemand 
+																				AND c.nama_mesin = a.operation
+																	) AND a.status = 'KK MASUK' 
+																	AND a.creationdatetime BETWEEN '2024-04-10' AND '$dateTwoDaysAgo'
+																ORDER BY a.id ASC");
+					$totalQty = 0;
+					$totalRoll = 0;
+					?>
+					<?php //while ($row_tblmasuk = sqlsrv_fetch_array($q_tblmasuk)): ?>
+						<tr>
+							<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= //$row_tblmasuk['nama_mesin'] ?></td>
+							<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= //$row_tblmasuk['operation'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?= TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nokk'] ?></a></td>
+							<td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_tblmasuk['nodemand']; ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nodemand'] ?></a></td>
+							<td style="border:1px solid;vertical-align:middle;"><?='' //$row_tblmasuk['langganan'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['buyer'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['no_order'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['lebar'] ?> x <?= //$row_tblmasuk['gramasi'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['no_warna'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['warna'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['lot'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['roll'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['qty_order'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['proses'] ?></td>
+							<td style="border:1px solid;vertical-align:middle; color:red;"><?= //$row_tblmasuk['catatan'] ?></td>
+							<td style="border:1px solid;vertical-align:middle;"><?= //$row_tblmasuk['personil'] ?><br><?= //$row_tblmasuk['creationdatetime'] ?></td>
+							<?php //$totalQty += $row_tblmasuk['qty_order']; ?>
+							<?php //$totalRoll += $row_tblmasuk['roll']; ?>
+						</tr>
+					<?php //endwhile; ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;" colspan="11">TOTAL</td>
+						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= $totalRoll; ?></td>
+						<td style="border:1px solid;vertical-align:middle; text-align: center; font-weight: bold;"><?= number_format($totalQty, 2); ?></td>
+						<td style="border:1px solid;vertical-align:middle; text-align: center;" colspan="5"></td>
+					</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+	</div> -->

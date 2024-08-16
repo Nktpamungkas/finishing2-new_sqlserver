@@ -13,7 +13,7 @@ include("../../koneksi.php");
 <body>
 <?php
 if(isset($_POST['btnHapus'])){
-		$hapusSql = "DELETE FROM tbl_proses WHERE id='$_POST[id]'";
+		$hapusSql = "DELETE FROM db_finishing.[tbl_proses] WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
@@ -23,10 +23,10 @@ if(isset($_POST['btnSimpan'])){
 		$proses=$_POST['proses'];
 	    $jns=$_POST['jns'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "INSERT INTO tbl_proses SET 
-	`proses`='$proses',
-	`jns`='$jns',
-	`ket`='$ket'";
+	$simpanSql = "INSERT INTO db_finishing.[tbl_proses] SET 
+	[proses]='$proses',
+	[jns]='$jns',
+	[ket]='$ket'";
 		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
 		
 		// Refresh form
@@ -35,10 +35,10 @@ if(isset($_POST['btnSimpan'])){
 if(isset($_POST['btnUbah'])){
 		$proses=$_POST['proses'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "UPDATE tbl_proses SET 
-	`proses`='$proses',
-	`ket`='$ket'
-	WHERE `id`='$_POST[id]'";
+	$simpanSql = "UPDATE db_finishing.[tbl_proses] SET 
+	[proses]='$proses',
+	[ket]='$ket'
+	WHERE [id]='$_POST[id]'";
 		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
 		
 		// Refresh form
@@ -53,7 +53,10 @@ if(isset($_POST['btnUbah'])){
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM tbl_proses WHERE proses='$_GET[proses]' AND jns='$_GET[jns]' LIMIT 1");
+    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_proses] 
+      WHERE proses='$_GET[proses]' AND
+      jns='$_GET[jns]' OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY");
+
 	$rt=sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_BOTH));
 	$rc=sqlsrv_num_rows($qtampil);
 	?>
@@ -96,7 +99,7 @@ if(isset($_POST['btnUbah'])){
     <th>Keterangan</th>
     </tr>
   <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM tbl_proses ORDER BY id ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_proses] ORDER BY id ASC");
   $no=1;
   while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_BOTH)) 
   {
