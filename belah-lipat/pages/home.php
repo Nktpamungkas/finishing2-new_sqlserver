@@ -1,43 +1,3 @@
-<?php
-	function insertIntoTable($conn, $table, $data) {
-		try {
-			// Get the column names from the keys of the associative array
-			$columns = array_keys($data);
-			// Create a comma-separated list of columns
-			$columnsList = implode(", ", $columns);
-			// Create a comma-separated list of placeholders (using ? for sqlsrv)
-			$placeholders = implode(", ", array_fill(0, count($columns), "?"));
-			
-			// Prepare the SQL statement
-			$sql = "INSERT INTO $table ($columnsList) VALUES ($placeholders)";
-			
-			// Extract values from the associative array
-			$values = array_values($data);
-	
-			// Prepare the statement
-			$stmt = sqlsrv_prepare($conn, $sql, $values);
-			
-			if ($stmt === false) {
-				// Handle prepare error
-				throw new Exception(print_r(sqlsrv_errors(), true));
-			}
-			
-			// Execute the statement
-			if (!sqlsrv_execute($stmt)) {
-				// Handle execution error
-				throw new Exception(print_r(sqlsrv_errors(), true));
-			}
-	
-			echo "Data inserted successfully!";
-			
-		} catch (Exception $e) {
-			// Handle the exception and echo the error message
-			echo "Error: " . $e->getMessage();
-		}
-	}
-
-?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -98,6 +58,7 @@
 		ini_set("error_reporting", 1);
 		session_start();
 		include('../koneksi.php');
+		include('../utils/query.php');
 
 		function nourut()
 		{
@@ -164,6 +125,7 @@
 				$q_cekshedule    = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
 				WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
 				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule);
+
 				if(empty($row_cekschedule['nourut']) AND $_GET['demand']){
 					echo     "<script>
 								swal({
@@ -199,451 +161,454 @@
 	?>
 
 	<?php
-		if (isset($_POST['btnSimpan']) and $_POST['shift'] == $rw['shift'] and $_POST['shift2'] == $rw['shift2'] and $_POST['proses'] == $rw['proses']) {
-			$shift = $_POST['shift'];
-			$shift2 = $_POST['shift2'];
-			$langganan = $_POST['buyer'];
-			$buyer = $_POST['kd_buyer'];
-			$order = $_POST['no_order'];
-			$item = $_POST['no_item'];
-			$jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
-			$kain = $_POST['kondisi_kain'];
-			$bahan = $_POST['jenis_bahan'];
-			$warna = str_replace("'", "''", $_POST['warna']);
-			$nowarna = $_POST['no_warna'];
-			$lot = $_POST['lot'];
-			$qty = $_POST['qty'];
-			$qty2 = $_POST['qty2'];
-			$qty3 = $_POST['qty3'];
-			$rol = $_POST['rol'];
-			$mesin = $_POST['no_mesin'];
-			$nmmesin = str_replace("'", "''", $_POST['nama_mesin']);
-			// $jnsmesin = strtolower(str_replace("'", "''", $_POST['nama_mesin']));
-			// $jnsmesin = $_POST['nama_mesin'];
-			if ($_POST['nama_mesin'] == "BLD1" or $_POST['nama_mesin'] == "BLP1" or $_POST['nama_mesin'] == "OPW1") {
-				$jnsmesin = 'belah';
-			} elseif ($_POST['nama_mesin'] == "LIP1") {
-				$jnsmesin = 'lipat';
+		if (isset($_POST['btnSimpan']) and $_POST['shift'] == $rw['shift'] and $_POST['shift2'] == $rw['shift2'] and $_POST['proses'] == $rw['proses']) 
+			{
+				$shift = $_POST['shift'];
+				$shift2 = $_POST['shift2'];
+				$langganan = $_POST['buyer'];
+				$buyer = $_POST['kd_buyer'];
+				$order = $_POST['no_order'];
+				$item = $_POST['no_item'];
+				$jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
+				$kain = $_POST['kondisi_kain'];
+				$bahan = $_POST['jenis_bahan'];
+				$warna = str_replace("'", "''", $_POST['warna']);
+				$nowarna = $_POST['no_warna'];
+				$lot = $_POST['lot'];
+				$qty = $_POST['qty'];
+				$qty2 = $_POST['qty2'];
+				$qty3 = $_POST['qty3'];
+				$rol = $_POST['rol'];
+				$mesin = $_POST['no_mesin'];
+				$nmmesin = str_replace("'", "''", $_POST['nama_mesin']);
+				// $jnsmesin = strtolower(str_replace("'", "''", $_POST['nama_mesin']));
+				// $jnsmesin = $_POST['nama_mesin'];
+				if ($_POST['nama_mesin'] == "BLD1" or $_POST['nama_mesin'] == "BLP1" or $_POST['nama_mesin'] == "OPW1") {
+					$jnsmesin = 'belah';
+				} elseif ($_POST['nama_mesin'] == "LIP1") {
+					$jnsmesin = 'lipat';
+				}
+				$proses = $_POST['proses'];
+				$gerobak = $_POST['no_gerobak'];
+				$jam_in = $_POST['proses_in'];
+				$jam_out = $_POST['proses_out'];
+				$proses_jam = $_POST['proses_jam'];
+				$proses_menit = $_POST['proses_menit'];
+				$tgl_proses_in = $_POST['tgl_proses_m'];
+				$tgl_proses_out = $_POST['tgl_proses_k'];
+				$mulai = $_POST['stop_mulai'];
+				$mulai2 = $_POST['stop_mulai2'];
+				$mulai3 = $_POST['stop_mulai3'];
+				$selesai = $_POST['stop_selesai'];
+				$selesai2 = $_POST['stop_selesai2'];
+				$selesai3 = $_POST['stop_selesai3'];
+				$stop_jam = $_POST['stop_jam'];
+				$stop_menit = $_POST['stop_menit'];
+				$tgl_stop_m = $_POST['tgl_stop_m'];
+				$tgl_stop_m2 = $_POST['tgl_stop_m2'];
+				$tgl_stop_m3 = $_POST['tgl_stop_m3'];
+				$tgl_stop_s = $_POST['tgl_stop_s'];
+				$tgl_stop_s2 = $_POST['tgl_stop_s2'];
+				$tgl_stop_s3 = $_POST['tgl_stop_s3'];
+				$kd = $_POST['kd_stop'];
+				$kd2 = $_POST['kd_stop2'];
+				$kd3 = $_POST['kd_stop3'];
+				$tgl = $_POST['tgl'];
+				$acc_kain = str_replace("'", "''", $_POST['acc_kain']);
+				$catatan = str_replace("'", "''", $_POST['catatan']);
+				$suhu = $_POST['suhu'];
+				$speed = $_POST['speed'];
+				$omt = $_POST['omt'];
+				$vmt = $_POST['vmt'];
+				$vmt_time = $_POST['vmt_time'];
+				$buka = $_POST['buka_rantai'];
+				$overfeed = $_POST['overfeed'];
+				$hlebar = $_POST['h_lebar'];
+				$hgramasi = $_POST['h_gramasi'];
+				$lebar = $_POST['lebar'];
+				$gramasi = $_POST['gramasi'];
+				$phlarutan = $_POST['pH_larutan'];
+				$chemical1 = $_POST['chemical_1'];
+				$chemical2 = $_POST['chemical_2'];
+				$chemical3 = $_POST['chemical_3'];
+				$chemical4 = $_POST['chemical_4'];
+				$chemical5 = $_POST['chemical_5'];
+				$jmlKonsen1 = $_POST['jmlKonsen1'];
+				$jmlKonsen2 = $_POST['jmlKonsen2'];
+				$jmlKonsen3 = $_POST['jmlKonsen3'];
+				$jmlKonsen4 = $_POST['jmlKonsen4'];
+				$jmlKonsen5 = $_POST['jmlKonsen5'];
+				$simpanSql = "UPDATE db_finishing.[tbl_produksi] SET 
+						shift='$shift',
+						shift2='$shift2',
+						buyer='$buyer',
+						no_item='$item',
+						no_warna='$nowarna',
+						jenis_bahan='$bahan',
+						kondisi_kain='$kain',
+						panjang='$qty2',
+						panjang_h='$qty3',
+						no_gerobak='$gerobak',
+						no_mesin='$mesin',
+						nama_mesin='$nmmesin',
+						langganan='$langganan',
+						no_order='$order',
+						jenis_kain='$jenis_kain',
+						warna='$warna',
+						lot='$lot',
+						rol='$rol',
+						qty='$qty',
+						proses='$proses',
+						jam_in='$jam_in',
+						jam_out='$jam_out',
+						tgl_proses_in='$tgl_proses_in',
+						tgl_proses_out='$tgl_proses_out',
+						stop_l='$mulai',
+						stop_l2='$mulai2',
+						stop_l3='$mulai3',
+						stop_r='$selesai',
+						stop_r2='$selesai2',
+						stop_r3='$selesai3',
+						tgl_stop_l='$tgl_stop_m',
+						tgl_stop_l2='$tgl_stop_m2',
+						tgl_stop_l3='$tgl_stop_m3',
+						tgl_stop_r='$tgl_stop_s',
+						tgl_stop_r2='$tgl_stop_s2',
+						tgl_stop_r3='$tgl_stop_s3',
+						kd_stop='$kd',
+						kd_stop2='$kd2',
+						kd_stop3='$kd3',
+						acc_staff='$acc_kain',
+						catatan='$catatan',
+						suhu='$suhu',
+						speed='$speed',
+						omt='$omt',
+						vmt='$vmt',
+						t_vmt='$vmt_time',
+						buka_rantai='$buka',
+						overfeed='$overfeed',
+						lebar='$lebar',
+						gramasi='$gramasi',
+						lebar_h='$hlebar',
+						gramasi_h='$hgramasi',
+						ph_larut='$phlarutan',
+						chemical_1='$chemical1',
+						chemical_2='$chemical2',
+						chemical_3='$chemical3',
+						chemical_4='$chemical4',
+						chemical_5='$chemical5',
+						konsen_1='$jmlKonsen1',
+						konsen_2='$jmlKonsen2',
+						konsen_3='$jmlKonsen3',
+						konsen_4='$jmlKonsen4',
+						konsen_5='$jmlKonsen5',
+						tgl_update='$tgl'
+						WHERE id='$_POST[id]'";
+				sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
+
+				// Refresh form
+				echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
+			} 
+		else if (isset($_POST['btnSimpan'])) 
+			{
+				if ($_POST['nokk'] != "") {
+					$nokk = $_POST['nokk'];
+					$idkk = $_POST['nokk'];
+				} else {
+					$nokk = $nou;
+					$idkk = $nou;
+				}
+				$shift = $_POST['shift'];
+				$demand = $_POST['demand'];
+				$shift2 = $_POST['shift2'];
+				$langganan = $_POST['buyer'];
+				$buyer = $_POST['kd_buyer'];
+				$order = $_POST['no_order'];
+				$item = $_POST['no_item'];
+				$jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
+				$kain = $_POST['kondisi_kain'];
+				$bahan = $_POST['jenis_bahan'];
+				$warna = str_replace("'", "''", $_POST['warna']);
+				$nowarna = $_POST['no_warna'];
+				$lot = $_POST['lot'];
+				$qty = $_POST['qty'];
+				$qty2 = $_POST['qty2'];
+				$qty3 = $_POST['qty3'];
+				$rol = $_POST['rol'];
+				$mesin = $_POST['no_mesin'];
+				$nmmesin = str_replace("'", "''", $_POST['nama_mesin']);
+				// $jnsmesin = strtolower(str_replace("'", "''", $_POST['nama_mesin']));
+				if ($_POST['nama_mesin'] == "BLD1" or $_POST['nama_mesin'] == "BLP1" or $_POST['nama_mesin'] == "OPW1") {
+					$jnsmesin = 'belah';
+				} elseif ($_POST['nama_mesin'] == "LIP1") {
+					$jnsmesin = 'lipat';
+				}
+				$proses = $_POST['proses'];
+				$gerobak = $_POST['no_gerobak'];
+				$jam_in = $_POST['proses_in'];
+				$jam_out = $_POST['proses_out'];
+				$proses_jam = $_POST['proses_jam'];
+				$proses_menit = $_POST['proses_menit'];
+				$tgl_proses_in = $_POST['tgl_proses_m'];
+				$tgl_proses_out = $_POST['tgl_proses_k'];
+				$mulai = $_POST['stop_mulai'];
+				$mulai2 = $_POST['stop_mulai2'];
+				$mulai3 = $_POST['stop_mulai3'];
+				$selesai = $_POST['stop_selesai'];
+				$selesai2 = $_POST['stop_selesai2'];
+				$selesai3 = $_POST['stop_selesai3'];
+				$stop_jam = $_POST['stop_jam'];
+				$stop_menit = $_POST['stop_menit'];
+				$tgl_stop_m = $_POST['tgl_stop_m'];
+				$tgl_stop_m2 = $_POST['tgl_stop_m2'];
+				$tgl_stop_m3 = $_POST['tgl_stop_m3'];
+				$tgl_stop_s = $_POST['tgl_stop_s'];
+				$tgl_stop_s2 = $_POST['tgl_stop_s2'];
+				$tgl_stop_s3 = $_POST['tgl_stop_s3'];
+				$kd = $_POST['kd_stop'];
+				$kd2 = $_POST['kd_stop2'];
+				$kd3 = $_POST['kd_stop3'];
+				$tgl = $_POST['tgl'];
+				$acc_kain = str_replace("'", "''", $_POST['acc_kain']);
+				$catatan = str_replace("'", "''", $_POST['catatan']);
+				$suhu = $_POST['suhu'];
+				$speed = $_POST['speed'];
+				$omt = $_POST['omt'];
+				$vmt = $_POST['vmt'];
+				$vmt_time = $_POST['vmt_time'];
+				$buka = $_POST['buka_rantai'];
+				$overfeed = $_POST['overfeed'];
+				$hlebar = $_POST['h_lebar'];
+				$hgramasi = $_POST['h_gramasi'];
+				$lebar = $_POST['lebar'];
+				$gramasi = $_POST['gramasi'];
+				$phlarutan = $_POST['pH_larutan'];
+				$chemical1 = $_POST['chemical_1'];
+				$chemical2 = $_POST['chemical_2'];
+				$chemical3 = $_POST['chemical_3'];
+				$chemical4 = $_POST['chemical_4'];
+				$chemical5 = $_POST['chemical_5'];
+				$jmlKonsen1 = $_POST['jmlKonsen1'];
+				$jmlKonsen2 = $_POST['jmlKonsen2'];
+				$jmlKonsen3 = $_POST['jmlKonsen3'];
+				$jmlKonsen4 = $_POST['jmlKonsen4'];
+				$jmlKonsen5 = $_POST['jmlKonsen5'];
+
+				// Insert data to table produksi
+				$dataInsertProduksi = [
+					'nokk' => (string) $nokk,
+					'demandno' => (string) $demand,
+					'shift' => (string) $shift,
+					'shift2' => (string) $shift2,
+					'buyer' => (string) $buyer,
+					'no_item' => (string) $item,
+					'no_warna' => (string) $nowarna,
+					'jenis_bahan' => (string) $bahan,
+					'kondisi_kain' => (string) $kain,
+					'panjang' => (float) $qty2,
+					'panjang_h' => (float) $qty3,
+					'no_gerobak' => (string) $gerobak,
+					'no_mesin' => (string) $mesin,
+					'nama_mesin' => (string) $nmmesin,
+					'langganan' => (string) $langganan,
+					'no_order' => (string) $order,
+					'jenis_kain' => (string) $jenis_kain,
+					'warna' => (string) $warna,
+					'lot' => (string) $lot,
+					'rol'=>(int) $rol,
+					'qty'=>(float) $qty,
+					'proses'=>(string) $proses,
+					'jam_in'=>(string) $jam_in,
+					'jam_out'=>(string) $jam_out,
+					'tgl_proses_in'=>(string) $tgl_proses_in,
+					'tgl_proses_out'=>(string) $tgl_proses_out,
+					'stop_l'=>(string)$mulai,
+					'stop_l2'=>(string)$mulai2,
+					'stop_l3'=>(string)$mulai3,
+					'stop_r'=>(string)$selesai,
+					'stop_r2'=>(string)$selesai2,
+					'stop_r3'=>(string)$selesai3,
+					'tgl_stop_l'=>(string)$tgl_stop_m,
+					'tgl_stop_l2'=>(string)$tgl_stop_m2,
+					'tgl_stop_l3'=>(string)$tgl_stop_m3,
+					'tgl_stop_r'=>(string)$tgl_stop_s,
+					'tgl_stop_r2'=>(string)$tgl_stop_s2,
+					'tgl_stop_r3'=>(string)$tgl_stop_s3,
+					'kd_stop'=>(string)$kd,
+					'kd_stop2'=>(string)$kd2,
+					'kd_stop3'=>(string)$kd3,
+					'tgl_buat'=>date('Y-m-d H:i:s'),
+					'tgl_pro'=>date('Y-m-d H:i:s'),
+					'acc_staff'=>(string)$acc_kain,
+					'catatan'=>(string)$catatan,
+					'suhu'=>(string)$suhu,
+					'speed'=>(string)$speed,
+					'omt'=>(string)$omt,
+					'vmt'=>(string)$vmt,
+					't_vmt'=>(string)$vmt_time,
+					'buka_rantai'=>(string)$buka,
+					'overfeed'=>(string)$overfeed,
+					'lebar'=>(int)$lebar,
+					'gramasi'=>(int)$gramasi,
+					'lebar_h'=>(int)$hlebar,
+					'gramasi_h'=>(int)$hgramasi,
+					'ph_larut'=>(string)$phlarutan,
+					'chemical_1'=>(string)$chemical1,
+					'chemical_2'=>(string)$chemical2,
+					'chemical_3'=>(string)$chemical3,
+					'chemical_4'=>(string)$chemical4,
+					'chemical_5'=>(string)$chemical5,
+					'konsen_1'=>(string)$jmlKonsen1,
+					'konsen_2'=>(string)$jmlKonsen2,
+					'konsen_3'=>(string)$jmlKonsen3,
+					'konsen_4'=>(string)$jmlKonsen4,
+					'konsen_5'=>(string)$jmlKonsen5,
+					'jns_mesin'=>(string)$jnsmesin,
+					'tgl_update'=>(string)$tgl
+				];
+
+				insertIntoTable($con, 'db_finishing.[tbl_produksi]', $dataInsertProduksi);
+				
+				// $simpanSql = "INSERT INTO db_finishing.[tbl_produksi] SET 
+				// 		nokk='$nokk',
+				// 		demandno='$demand',
+				// 		shift='$shift',
+				// 		shift2='$shift2',
+				// 		buyer='$buyer',
+				// 		no_item='$item',
+				// 		no_warna='$nowarna',
+				// 		jenis_bahan='$bahan',
+				// 		kondisi_kain='$kain',
+				// 		panjang='$qty2',
+				// 		panjang_h='$qty3',
+				// 		no_gerobak='$gerobak',
+				// 		no_mesin='$mesin',
+				// 		nama_mesin='$nmmesin',
+				// 		langganan='$langganan',
+				// 		no_order='$order',
+				// 		jenis_kain='$jenis_kain',
+				// 		warna='$warna',
+				// 		lot='$lot',
+				// 		rol='$rol',
+				// 		qty='$qty',
+				// 		proses='$proses',
+				// 		jam_in='$jam_in',
+				// 		jam_out='$jam_out',
+				// 		tgl_proses_in='$tgl_proses_in',
+				// 		tgl_proses_out='$tgl_proses_out',
+				// 		stop_l='$mulai',
+				// 		stop_l2='$mulai2',
+				// 		stop_l3='$mulai3',
+				// 		stop_r='$selesai',
+				// 		stop_r2='$selesai2',
+				// 		stop_r3='$selesai3',
+				// 		tgl_stop_l='$tgl_stop_m',
+				// 		tgl_stop_l2='$tgl_stop_m2',
+				// 		tgl_stop_l3='$tgl_stop_m3',
+				// 		tgl_stop_r='$tgl_stop_s',
+				// 		tgl_stop_r2='$tgl_stop_s2',
+				// 		tgl_stop_r3='$tgl_stop_s3',
+				// 		kd_stop='$kd',
+				// 		kd_stop2='$kd2',
+				// 		kd_stop3='$kd3',
+				// 		tgl_buat=getdate(),
+				// 		tgl_pro=getdate(),
+				// 		acc_staff='$acc_kain',
+				// 		catatan='$catatan',
+				// 		suhu='$suhu',
+				// 		speed='$speed',
+				// 		omt='$omt',
+				// 		vmt='$vmt',
+				// 		t_vmt='$vmt_time',
+				// 		buka_rantai='$buka',
+				// 		overfeed='$overfeed',
+				// 		lebar='$lebar',
+				// 		gramasi='$gramasi',
+				// 		lebar_h='$hlebar',
+				// 		gramasi_h='$hgramasi',
+				// 		ph_larut='$phlarutan',
+				// 		chemical_1='$chemical1',
+				// 		chemical_2='$chemical2',
+				// 		chemical_3='$chemical3',
+				// 		chemical_4='$chemical4',
+				// 		chemical_5='$chemical5',
+				// 		konsen_1='$jmlKonsen1',
+				// 		konsen_2='$jmlKonsen2',
+				// 		konsen_3='$jmlKonsen3',
+				// 		konsen_4='$jmlKonsen4',
+				// 		konsen_5='$jmlKonsen5',
+				// 		jns_mesin='$jnsmesin',
+				// 		tgl_update='$tgl'";
+
+				// sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
+
+				$posisi = strpos($langganan, "/");
+				$cus = substr($langganan, 0, $posisi);
+				$byr = substr($langganan, ($posisi + 1), 100);
+
+				// Insert data to table schedule
+				// $dataInsertSchedule = [
+				// 	'nokk'=>(string)$nokk,
+				// 	'nodemand'=>(string)$demand,
+				// 	'langganan'=>(string)$cus,
+				// 	'buyer'=>(string)$byr,
+				// 	'no_order'=>(string)$order,
+				// 	'no_hanger'=>(string)$item,
+				// 	'no_item'=>(string)$item,
+				// 	'jenis_kain'=>(string)$jenis_kain,
+				// 	'lebar'=>(int)$lebar,
+				// 	'gramasi'=>(int)$gramasi,
+				// 	'warna'=>(string)$warna,
+				// 	'no_warna'=>(string)$nowarna,
+				// 	'bruto'=>(float)$qty,
+				// 	'lot'=>(string)$lot,
+				// 	'rol'=>(int)$rol,
+				// 	'shift'=>(string)$shift,
+				// 	'g_shift'=>(string)$shift2,
+				// 	'no_mesin'=>(string)$mesin,
+				// 	'proses'=>(string)$proses,
+				// 	'revisi'=>(int)0,
+				// 	'tgl_masuk'=>(string)date('Y-m-d H:i:s'),
+				// 	'personil'=>(string)'Operator Fin',
+				// 	'target'=>(int)0,
+				// 	'catatan'=>(string)'data diinput dari finishing',
+				// 	'tgl_update'=>(string)date('Y-m-d H:i:s'),
+				// 	'tampil'=>(int)1
+				// ];
+
+				// insertIntoTable($con,'db_finishing.[tbl_schedule]',$dataInsertSchedule);
+
+				// $sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.[tbl_schedule] SET
+				// nokk='$nokk',
+				// nodemand='$demand',
+				// langganan='$cus',
+				// buyer='$byr',
+				// no_order='$order',
+				// no_hanger='$item',
+				// no_item='$item',
+				// jenis_kain='$jenis_kain',
+				// lebar='$lebar',
+				// gramasi='$gramasi',
+				// warna='$warna',
+				// no_warna='$nowarna',
+				// bruto='$qty',
+				// lot='$lot',
+				// rol='$rol',
+				// shift='$shift',
+				// g_shift='$shift2',
+				// no_mesin='$mesin',
+				// proses='$proses',
+				// revisi='0',
+				// tgl_masuk=now(),
+				// personil='Operator Fin',
+				// target='0',
+				// catatan='data diinput dari finishing',
+				// tgl_update=now(),
+				// tampil='1'");
+
+				// Refresh form
+				echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
 			}
-			$proses = $_POST['proses'];
-			$gerobak = $_POST['no_gerobak'];
-			$jam_in = $_POST['proses_in'];
-			$jam_out = $_POST['proses_out'];
-			$proses_jam = $_POST['proses_jam'];
-			$proses_menit = $_POST['proses_menit'];
-			$tgl_proses_in = $_POST['tgl_proses_m'];
-			$tgl_proses_out = $_POST['tgl_proses_k'];
-			$mulai = $_POST['stop_mulai'];
-			$mulai2 = $_POST['stop_mulai2'];
-			$mulai3 = $_POST['stop_mulai3'];
-			$selesai = $_POST['stop_selesai'];
-			$selesai2 = $_POST['stop_selesai2'];
-			$selesai3 = $_POST['stop_selesai3'];
-			$stop_jam = $_POST['stop_jam'];
-			$stop_menit = $_POST['stop_menit'];
-			$tgl_stop_m = $_POST['tgl_stop_m'];
-			$tgl_stop_m2 = $_POST['tgl_stop_m2'];
-			$tgl_stop_m3 = $_POST['tgl_stop_m3'];
-			$tgl_stop_s = $_POST['tgl_stop_s'];
-			$tgl_stop_s2 = $_POST['tgl_stop_s2'];
-			$tgl_stop_s3 = $_POST['tgl_stop_s3'];
-			$kd = $_POST['kd_stop'];
-			$kd2 = $_POST['kd_stop2'];
-			$kd3 = $_POST['kd_stop3'];
-			$tgl = $_POST['tgl'];
-			$acc_kain = str_replace("'", "''", $_POST['acc_kain']);
-			$catatan = str_replace("'", "''", $_POST['catatan']);
-			$suhu = $_POST['suhu'];
-			$speed = $_POST['speed'];
-			$omt = $_POST['omt'];
-			$vmt = $_POST['vmt'];
-			$vmt_time = $_POST['vmt_time'];
-			$buka = $_POST['buka_rantai'];
-			$overfeed = $_POST['overfeed'];
-			$hlebar = $_POST['h_lebar'];
-			$hgramasi = $_POST['h_gramasi'];
-			$lebar = $_POST['lebar'];
-			$gramasi = $_POST['gramasi'];
-			$phlarutan = $_POST['pH_larutan'];
-			$chemical1 = $_POST['chemical_1'];
-			$chemical2 = $_POST['chemical_2'];
-			$chemical3 = $_POST['chemical_3'];
-			$chemical4 = $_POST['chemical_4'];
-			$chemical5 = $_POST['chemical_5'];
-			$jmlKonsen1 = $_POST['jmlKonsen1'];
-			$jmlKonsen2 = $_POST['jmlKonsen2'];
-			$jmlKonsen3 = $_POST['jmlKonsen3'];
-			$jmlKonsen4 = $_POST['jmlKonsen4'];
-			$jmlKonsen5 = $_POST['jmlKonsen5'];
-			$simpanSql = "UPDATE db_finishing.[tbl_produksi] SET 
-					shift='$shift',
-					shift2='$shift2',
-					buyer='$buyer',
-					no_item='$item',
-					no_warna='$nowarna',
-					jenis_bahan='$bahan',
-					kondisi_kain='$kain',
-					panjang='$qty2',
-					panjang_h='$qty3',
-					no_gerobak='$gerobak',
-					no_mesin='$mesin',
-					nama_mesin='$nmmesin',
-					langganan='$langganan',
-					no_order='$order',
-					jenis_kain='$jenis_kain',
-					warna='$warna',
-					lot='$lot',
-					rol='$rol',
-					qty='$qty',
-					proses='$proses',
-					jam_in='$jam_in',
-					jam_out='$jam_out',
-					tgl_proses_in='$tgl_proses_in',
-					tgl_proses_out='$tgl_proses_out',
-					stop_l='$mulai',
-					stop_l2='$mulai2',
-					stop_l3='$mulai3',
-					stop_r='$selesai',
-					stop_r2='$selesai2',
-					stop_r3='$selesai3',
-					tgl_stop_l='$tgl_stop_m',
-					tgl_stop_l2='$tgl_stop_m2',
-					tgl_stop_l3='$tgl_stop_m3',
-					tgl_stop_r='$tgl_stop_s',
-					tgl_stop_r2='$tgl_stop_s2',
-					tgl_stop_r3='$tgl_stop_s3',
-					kd_stop='$kd',
-					kd_stop2='$kd2',
-					kd_stop3='$kd3',
-					acc_staff='$acc_kain',
-					catatan='$catatan',
-					suhu='$suhu',
-					speed='$speed',
-					omt='$omt',
-					vmt='$vmt',
-					t_vmt='$vmt_time',
-					buka_rantai='$buka',
-					overfeed='$overfeed',
-					lebar='$lebar',
-					gramasi='$gramasi',
-					lebar_h='$hlebar',
-					gramasi_h='$hgramasi',
-					ph_larut='$phlarutan',
-					chemical_1='$chemical1',
-					chemical_2='$chemical2',
-					chemical_3='$chemical3',
-					chemical_4='$chemical4',
-					chemical_5='$chemical5',
-					konsen_1='$jmlKonsen1',
-					konsen_2='$jmlKonsen2',
-					konsen_3='$jmlKonsen3',
-					konsen_4='$jmlKonsen4',
-					konsen_5='$jmlKonsen5',
-					tgl_update='$tgl'
-					WHERE id='$_POST[id]'";
-			sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
-
-			// Refresh form
-			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
-		} else if (isset($_POST['btnSimpan'])) {
-			if ($_POST['nokk'] != "") {
-				$nokk = $_POST['nokk'];
-				$idkk = $_POST['nokk'];
-			} else {
-				$nokk = $nou;
-				$idkk = $nou;
-			}
-			$shift = $_POST['shift'];
-			$demand = $_POST['demand'];
-			$shift2 = $_POST['shift2'];
-			$langganan = $_POST['buyer'];
-			$buyer = $_POST['kd_buyer'];
-			$order = $_POST['no_order'];
-			$item = $_POST['no_item'];
-			$jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
-			$kain = $_POST['kondisi_kain'];
-			$bahan = $_POST['jenis_bahan'];
-			$warna = str_replace("'", "''", $_POST['warna']);
-			$nowarna = $_POST['no_warna'];
-			$lot = $_POST['lot'];
-			$qty = $_POST['qty'];
-			$qty2 = $_POST['qty2'];
-			$qty3 = $_POST['qty3'];
-			$rol = $_POST['rol'];
-			$mesin = $_POST['no_mesin'];
-			$nmmesin = str_replace("'", "''", $_POST['nama_mesin']);
-			// $jnsmesin = strtolower(str_replace("'", "''", $_POST['nama_mesin']));
-			if ($_POST['nama_mesin'] == "BLD1" or $_POST['nama_mesin'] == "BLP1" or $_POST['nama_mesin'] == "OPW1") {
-				$jnsmesin = 'belah';
-			} elseif ($_POST['nama_mesin'] == "LIP1") {
-				$jnsmesin = 'lipat';
-			}
-			$proses = $_POST['proses'];
-			$gerobak = $_POST['no_gerobak'];
-			$jam_in = $_POST['proses_in'];
-			$jam_out = $_POST['proses_out'];
-			$proses_jam = $_POST['proses_jam'];
-			$proses_menit = $_POST['proses_menit'];
-			$tgl_proses_in = $_POST['tgl_proses_m'];
-			$tgl_proses_out = $_POST['tgl_proses_k'];
-			$mulai = $_POST['stop_mulai'];
-			$mulai2 = $_POST['stop_mulai2'];
-			$mulai3 = $_POST['stop_mulai3'];
-			$selesai = $_POST['stop_selesai'];
-			$selesai2 = $_POST['stop_selesai2'];
-			$selesai3 = $_POST['stop_selesai3'];
-			$stop_jam = $_POST['stop_jam'];
-			$stop_menit = $_POST['stop_menit'];
-			$tgl_stop_m = $_POST['tgl_stop_m'];
-			$tgl_stop_m2 = $_POST['tgl_stop_m2'];
-			$tgl_stop_m3 = $_POST['tgl_stop_m3'];
-			$tgl_stop_s = $_POST['tgl_stop_s'];
-			$tgl_stop_s2 = $_POST['tgl_stop_s2'];
-			$tgl_stop_s3 = $_POST['tgl_stop_s3'];
-			$kd = $_POST['kd_stop'];
-			$kd2 = $_POST['kd_stop2'];
-			$kd3 = $_POST['kd_stop3'];
-			$tgl = $_POST['tgl'];
-			$acc_kain = str_replace("'", "''", $_POST['acc_kain']);
-			$catatan = str_replace("'", "''", $_POST['catatan']);
-			$suhu = $_POST['suhu'];
-			$speed = $_POST['speed'];
-			$omt = $_POST['omt'];
-			$vmt = $_POST['vmt'];
-			$vmt_time = $_POST['vmt_time'];
-			$buka = $_POST['buka_rantai'];
-			$overfeed = $_POST['overfeed'];
-			$hlebar = $_POST['h_lebar'];
-			$hgramasi = $_POST['h_gramasi'];
-			$lebar = $_POST['lebar'];
-			$gramasi = $_POST['gramasi'];
-			$phlarutan = $_POST['pH_larutan'];
-			$chemical1 = $_POST['chemical_1'];
-			$chemical2 = $_POST['chemical_2'];
-			$chemical3 = $_POST['chemical_3'];
-			$chemical4 = $_POST['chemical_4'];
-			$chemical5 = $_POST['chemical_5'];
-			$jmlKonsen1 = $_POST['jmlKonsen1'];
-			$jmlKonsen2 = $_POST['jmlKonsen2'];
-			$jmlKonsen3 = $_POST['jmlKonsen3'];
-			$jmlKonsen4 = $_POST['jmlKonsen4'];
-			$jmlKonsen5 = $_POST['jmlKonsen5'];
-
-			// Insert data to table produksi
-			$dataInsertProduksi = [
-				'nokk' => (string) $nokk,
-				'demandno' => (string) $demand,
-				'shift' => (string) $shift,
-				'shift2' => (string) $shift2,
-				'buyer' => (string) $buyer,
-				'no_item' => (string) $item,
-				'no_warna' => (string) $nowarna,
-				'jenis_bahan' => (string) $bahan,
-				'kondisi_kain' => (string) $kain,
-				'panjang' => (float) $qty2,
-				'panjang_h' => (float) $qty3,
-				'no_gerobak' => (string) $gerobak,
-				'no_mesin' => (string) $mesin,
-				'nama_mesin' => (string) $nmmesin,
-				'langganan' => (string) $langganan,
-				'no_order' => (string) $order,
-				'jenis_kain' => (string) $jenis_kain,
-				'warna' => (string) $warna,
-				'lot' => (string) $lot,
-				'rol'=>(int) $rol,
-				'qty'=>(float) $qty,
-				'proses'=>(string) $proses,
-				'jam_in'=>(string) $jam_in,
-				'jam_out'=>(string) $jam_out,
-				'tgl_proses_in'=>(string) $tgl_proses_in,
-				'tgl_proses_out'=>(string) $tgl_proses_out,
-				'stop_l'=>(string)$mulai,
-				'stop_l2'=>(string)$mulai2,
-				'stop_l3'=>(string)$mulai3,
-				'stop_r'=>(string)$selesai,
-				'stop_r2'=>(string)$selesai2,
-				'stop_r3'=>(string)$selesai3,
-				'tgl_stop_l'=>(string)$tgl_stop_m,
-				'tgl_stop_l2'=>(string)$tgl_stop_m2,
-				'tgl_stop_l3'=>(string)$tgl_stop_m3,
-				'tgl_stop_r'=>(string)$tgl_stop_s,
-				'tgl_stop_r2'=>(string)$tgl_stop_s2,
-				'tgl_stop_r3'=>(string)$tgl_stop_s3,
-				'kd_stop'=>(string)$kd,
-				'kd_stop2'=>(string)$kd2,
-				'kd_stop3'=>(string)$kd3,
-				'tgl_buat'=>date('Y-m-d H:i:s'),
-				'tgl_pro'=>date('Y-m-d H:i:s'),
-				'acc_staff'=>(string)$acc_kain,
-				'catatan'=>(string)$catatan,
-				'suhu'=>(string)$suhu,
-				'speed'=>(string)$speed,
-				'omt'=>(string)$omt,
-				'vmt'=>(string)$vmt,
-				't_vmt'=>(string)$vmt_time,
-				'buka_rantai'=>(string)$buka,
-				'overfeed'=>(string)$overfeed,
-				'lebar'=>(int)$lebar,
-				'gramasi'=>(int)$gramasi,
-				'lebar_h'=>(int)$hlebar,
-				'gramasi_h'=>(int)$hgramasi,
-				'ph_larut'=>(string)$phlarutan,
-				'chemical_1'=>(string)$chemical1,
-				'chemical_2'=>(string)$chemical2,
-				'chemical_3'=>(string)$chemical3,
-				'chemical_4'=>(string)$chemical4,
-				'chemical_5'=>(string)$chemical5,
-				'konsen_1'=>(string)$jmlKonsen1,
-				'konsen_2'=>(string)$jmlKonsen2,
-				'konsen_3'=>(string)$jmlKonsen3,
-				'konsen_4'=>(string)$jmlKonsen4,
-				'konsen_5'=>(string)$jmlKonsen5,
-				'jns_mesin'=>(string)$jnsmesin,
-				'tgl_update'=>(string)$tgl
-			];
-
-			insertIntoTable($con, 'db_finishing.[tbl_produksi]', $dataInsertProduksi);
-			
-			// $simpanSql = "INSERT INTO db_finishing.[tbl_produksi] SET 
-			// 		nokk='$nokk',
-			// 		demandno='$demand',
-			// 		shift='$shift',
-			// 		shift2='$shift2',
-			// 		buyer='$buyer',
-			// 		no_item='$item',
-			// 		no_warna='$nowarna',
-			// 		jenis_bahan='$bahan',
-			// 		kondisi_kain='$kain',
-			// 		panjang='$qty2',
-			// 		panjang_h='$qty3',
-			// 		no_gerobak='$gerobak',
-			// 		no_mesin='$mesin',
-			// 		nama_mesin='$nmmesin',
-			// 		langganan='$langganan',
-			// 		no_order='$order',
-			// 		jenis_kain='$jenis_kain',
-			// 		warna='$warna',
-			// 		lot='$lot',
-			// 		rol='$rol',
-			// 		qty='$qty',
-			// 		proses='$proses',
-			// 		jam_in='$jam_in',
-			// 		jam_out='$jam_out',
-			// 		tgl_proses_in='$tgl_proses_in',
-			// 		tgl_proses_out='$tgl_proses_out',
-			// 		stop_l='$mulai',
-			// 		stop_l2='$mulai2',
-			// 		stop_l3='$mulai3',
-			// 		stop_r='$selesai',
-			// 		stop_r2='$selesai2',
-			// 		stop_r3='$selesai3',
-			// 		tgl_stop_l='$tgl_stop_m',
-			// 		tgl_stop_l2='$tgl_stop_m2',
-			// 		tgl_stop_l3='$tgl_stop_m3',
-			// 		tgl_stop_r='$tgl_stop_s',
-			// 		tgl_stop_r2='$tgl_stop_s2',
-			// 		tgl_stop_r3='$tgl_stop_s3',
-			// 		kd_stop='$kd',
-			// 		kd_stop2='$kd2',
-			// 		kd_stop3='$kd3',
-			// 		tgl_buat=getdate(),
-			// 		tgl_pro=getdate(),
-			// 		acc_staff='$acc_kain',
-			// 		catatan='$catatan',
-			// 		suhu='$suhu',
-			// 		speed='$speed',
-			// 		omt='$omt',
-			// 		vmt='$vmt',
-			// 		t_vmt='$vmt_time',
-			// 		buka_rantai='$buka',
-			// 		overfeed='$overfeed',
-			// 		lebar='$lebar',
-			// 		gramasi='$gramasi',
-			// 		lebar_h='$hlebar',
-			// 		gramasi_h='$hgramasi',
-			// 		ph_larut='$phlarutan',
-			// 		chemical_1='$chemical1',
-			// 		chemical_2='$chemical2',
-			// 		chemical_3='$chemical3',
-			// 		chemical_4='$chemical4',
-			// 		chemical_5='$chemical5',
-			// 		konsen_1='$jmlKonsen1',
-			// 		konsen_2='$jmlKonsen2',
-			// 		konsen_3='$jmlKonsen3',
-			// 		konsen_4='$jmlKonsen4',
-			// 		konsen_5='$jmlKonsen5',
-			// 		jns_mesin='$jnsmesin',
-			// 		tgl_update='$tgl'";
-
-			// sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
-
-			$posisi = strpos($langganan, "/");
-			$cus = substr($langganan, 0, $posisi);
-			$byr = substr($langganan, ($posisi + 1), 100);
-
-			// Insert data to table schedule
-			$dataInsertSchedule = [
-				'nokk'=>(string)$nokk,
-				'nodemand'=>(string)$demand,
-				'langganan'=>(string)$cus,
-				'buyer'=>(string)$byr,
-				'no_order'=>(string)$order,
-				'no_hanger'=>(string)$item,
-				'no_item'=>(string)$item,
-				'jenis_kain'=>(string)$jenis_kain,
-				'lebar'=>(int)$lebar,
-				'gramasi'=>(int)$gramasi,
-				'warna'=>(string)$warna,
-				'no_warna'=>(string)$nowarna,
-				'bruto'=>(float)$qty,
-				'lot'=>(string)$lot,
-				'rol'=>(int)$rol,
-				'shift'=>(string)$shift,
-				'g_shift'=>(string)$shift2,
-				'no_mesin'=>(string)$mesin,
-				'proses'=>(string)$proses,
-				'revisi'=>(int)0,
-				'tgl_masuk'=>(string)date('Y-m-d H:i:s'),
-				'personil'=>(string)'Operator Fin',
-				'target'=>(int)0,
-				'catatan'=>(string)'data diinput dari finishing',
-				'tgl_update'=>(string)date('Y-m-d H:i:s'),
-				'tampil'=>(int)1
-			];
-
-			insertIntoTable($con,'db_finishing.[tbl_schedule]',$dataInsertSchedule);
-
-			// $sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.[tbl_schedule] SET
-			// nokk='$nokk',
-			// nodemand='$demand',
-			// langganan='$cus',
-			// buyer='$byr',
-			// no_order='$order',
-			// no_hanger='$item',
-			// no_item='$item',
-			// jenis_kain='$jenis_kain',
-			// lebar='$lebar',
-			// gramasi='$gramasi',
-			// warna='$warna',
-			// no_warna='$nowarna',
-			// bruto='$qty',
-			// lot='$lot',
-			// rol='$rol',
-			// shift='$shift',
-			// g_shift='$shift2',
-			// no_mesin='$mesin',
-			// proses='$proses',
-			// revisi='0',
-			// tgl_masuk=now(),
-			// personil='Operator Fin',
-			// target='0',
-			// catatan='data diinput dari finishing',
-			// tgl_update=now(),
-			// tampil='1'");
-
-			// Refresh form
-			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
-		}
 	?>
 	<form id="form1" name="form1" method="post" action="">
 		<fieldset>

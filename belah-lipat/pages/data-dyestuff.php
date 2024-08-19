@@ -2,6 +2,8 @@
 ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
+include("../../utils/query.php");
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,6 +14,7 @@ include("../../koneksi.php");
 
 <body>
 <?php
+// No Button
 if(isset($_POST['btnHapus'])){
 		$hapusSql = "DELETE FROM db_finishing.[tbl_dyestuff] WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
@@ -19,17 +22,29 @@ if(isset($_POST['btnHapus'])){
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-dyestuff.php?status=Data Sudah DiHapus'>";
 	}
-if(isset($_POST['btnSimpan'])){
+
+if(isset($_POST['btnSimpan']))
+{
 		$kode=$_POST['kode'];
 		$ket=str_replace("'","",$_POST['ket']);
-    $simpanSql = "INSERT INTO db_finishing.[tbl_dyestuff] SET 
-    [kode]='$kode',
-    [ket]='$ket'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    // $simpanSql = "INSERT INTO db_finishing.[tbl_dyestuff] SET 
+    // [kode]='$kode',
+    // [ket]='$ket'";
+		// sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $dataInsert=[
+      'kode'=>(string) $kode,
+      'ket'=>(string) $ket
+    ];
+
+    insertIntoTable($con,'db_finishing.tbl_dyestuff',$dataInsert);
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-dyestuff.php?status=Data Sudah DiSimpan'>";
 	}
+
+//No Button
 if(isset($_POST['btnUbah'])){
 		$kode=$_POST['kode'];
 		$ket=str_replace("'","",$_POST['ket']);

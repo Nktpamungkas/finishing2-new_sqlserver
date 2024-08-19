@@ -2,6 +2,8 @@
 ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
+include("../../utils/query.php");
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,36 +14,51 @@ include("../../koneksi.php");
 
 <body>
 <?php
-if(isset($_POST['btnHapus'])){
+// No Button
+if(isset($_POST['btnHapus']))
+  {
 		$hapusSql = "DELETE FROM db_finishing.[tbl_staff] WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiHapus'>";
 	}
-if(isset($_POST['btnSimpan'])){
-		$nama=str_replace("'","",$_POST['nama']);
-		$jabatan=str_replace("'","",$_POST['jabatan']);
-	$simpanSql = "INSERT INTO db_finishing.[tbl_staff] SET 
-	[nama]='$nama',
-	[jabatan]='$jabatan'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
-		
-		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiSimpan'>";
-	}
-if(isset($_POST['btnUbah'])){
-		$nama=str_replace("'","",$_POST['nama']);
-		$jabatan=str_replace("'","",$_POST['jabatan']);
-	$simpanSql = "UPDATE db_finishing.[tbl_staff] SET 
-	[nama]='$nama',
-	[jabatan]='$jabatan'
-	WHERE [id]='$_POST[id]'";
 
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
-		
-		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiUbah'>";
+if(isset($_POST['btnSimpan']))
+  {
+		$nama=str_replace("'","",$_POST['nama']);
+		$jabatan=str_replace("'","",$_POST['jabatan']);
+
+    // $simpanSql = "INSERT INTO db_finishing.[tbl_staff] SET 
+    // [nama]='$nama',
+    // [jabatan]='$jabatan'";
+    //   sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $dataInsert=[
+      'nama'=>(string)$nama,
+      'jabatan'=>(string)$jabatan
+    ];
+    
+    insertIntoTable($con,'db_finishing.tbl_staff',$dataInsert);
+      
+      // Refresh form
+      echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiSimpan'>";
+	}
+
+//No Button
+if(isset($_POST['btnUbah']))
+  {
+		$nama=str_replace("'","",$_POST['nama']);
+		$jabatan=str_replace("'","",$_POST['jabatan']);
+    $simpanSql = "UPDATE db_finishing.[tbl_staff] SET 
+    [nama]='$nama',
+    [jabatan]='$jabatan'
+    WHERE [id]='$_POST[id]'";
+
+      sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
+      
+      // Refresh form
+      echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiUbah'>";
 	}
 	?>
 <form id="form1" name="form1" method="post" action=""  enctype="multipart/form-data">
