@@ -51,10 +51,10 @@ if(isset($_POST['btnUbah'])){
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_stop_mesin] 
-    WHERE kode='$_GET[kode]' OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY");
+    <?php $qtampil=sqlsrv_query($con,"SELECT TOP 1  * FROM db_finishing.[tbl_stop_mesin] 
+    WHERE kode='$_GET[kode]' ");
 
-  $rt=sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_BOTH)
+  $rt=sqlsrv_fetch_array($qtampil);
 	$rc=sqlsrv_num_rows($qtampil);
 	?>
   <tr>
@@ -87,7 +87,7 @@ if(isset($_POST['btnUbah'])){
   <?php 
   $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
   $no=1;
-  while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_BOTH)) 
+  while($r=sqlsrv_fetch_array($qry)) 
   {
     $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
   <tr bgcolor="<?php echo $bgcolor;?>">

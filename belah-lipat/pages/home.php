@@ -104,9 +104,9 @@
 			include('../koneksi.php');
 			$format = date("ymd");
 
-			$sql = sqlsrv_query($con, "SELECT nokk FROM db_finishing.[tbl_produksi]
+			$sql = sqlsrv_query($con, "SELECT TOP 1 nokk FROM db_finishing.[tbl_produksi]
 			WHERE LEFT(nokk, 6)  like '%" . $format . "%'
-			ORDER BY nokk DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY") or die(sqlsrv_errors());
+			ORDER BY nokk DESC") or die(sqlsrv_errors());
 
 			$d = sqlsrv_num_rows($sql);
 
@@ -189,8 +189,8 @@
 								});
 							</script>";
 				}else{
-					$q_kkmasuk		= sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
-					WHERE nokk = '$idkk' $anddemand ORDER BY id DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY");
+					$q_kkmasuk		= sqlsrv_query($con, "SELECT TOP 1 * FROM db_finishing.[tbl_schedule_new] 
+					WHERE nokk = '$idkk' $anddemand ORDER BY id");
 					$row_kkmasuk	= sqlsrv_fetch_array($q_kkmasuk);
 					include_once("../now.php");
 				}

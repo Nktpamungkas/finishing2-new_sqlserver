@@ -2,6 +2,44 @@
 ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
+
+function insertIntoTable($conn, $table, $data) {
+  try {
+    // Get the column names from the keys of the associative array
+    $columns = array_keys($data);
+    // Create a comma-separated list of columns
+    $columnsList = implode(", ", $columns);
+    // Create a comma-separated list of placeholders (using ? for sqlsrv)
+    $placeholders = implode(", ", array_fill(0, count($columns), "?"));
+    
+    // Prepare the SQL statement
+    $sql = "INSERT INTO $table ($columnsList) VALUES ($placeholders)";
+    
+    // Extract values from the associative array
+    $values = array_values($data);
+
+    // Prepare the statement
+    $stmt = sqlsrv_prepare($conn, $sql, $values);
+    
+    if ($stmt === false) {
+      // Handle prepare error
+      throw new Exception(print_r(sqlsrv_errors(), true));
+    }
+    
+    // Execute the statement
+    if (!sqlsrv_execute($stmt)) {
+      // Handle execution error
+      throw new Exception(print_r(sqlsrv_errors(), true));
+    }
+
+    echo "Data inserted successfully!";
+    
+  } catch (Exception $e) {
+    // Handle the exception and echo the error message
+    echo "Error: " . $e->getMessage();
+  }
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,7 +50,7 @@ include("../../koneksi.php");
 
 <body>
 <?php
-
+// Nothing Button
 if(isset($_POST['btnHapus']))
   {
 		$hapusSql = "DELETE FROM db_finishing.[tbl_mesin]  WHERE id='$_POST[id]'";
@@ -27,25 +65,37 @@ if(isset($_POST['btnSimpan']))
 		$mesin=str_replace("'","",$_POST['nama']);
 		$ket=str_replace("'","",$_POST['ket']);
 
-    $simpanSql = "INSERT INTO db_finishing.[tbl_mesin] SET 
-    [nama]='$mesin',
-    [jenis]='$_POST[jenis]',
-    [ket]='$ket'";
-    sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+    // $simpanSql = "INSERT INTO db_finishing.[tbl_mesin] SET 
+    // [nama]='$mesin',
+    // [jenis]='$_POST[jenis]',
+    // [ket]='$ket'";
+
+    // sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $dataInsertMesin=[
+      'nama'=>(string) $mesin,
+      'jenis'=>$_POST['jenis'],
+      'ket'=>(string) $ket
+    ];
+
+    insertIntoTable($con, 'db_finishing.[tbl_mesin]', $dataInsertMesin);
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiSimpan'>";
 	}
 
+  // Nothing Button
 if(isset($_POST['btnUbah']))
   {
     $mesin=str_replace("'","",$_POST['nama']);
     $ket=str_replace("'","",$_POST['ket']);
-    $simpanSql = "UPDATE tbl_mesin SET 
+
+    $simpanSql = "UPDATE db_finishing.tbl_mesin SET 
     [nama]='$mesin',
     [jenis]='$_POST[jenis]',
     [ket]='$ket'
-    WHERE `id`='$_POST[id]'";
+    WHERE [id]='$_POST[id]'";
+
     sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
     
     // Refresh form
@@ -61,9 +111,9 @@ if(isset($_POST['btnUbah']))
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]' LIMIT 1");
+    <?php $qtampil=sqlsrv_query($con,"SELECT TOP 1 * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]'");
 
-  $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
+  $rt = sqlsrv_fetch_array($qtampil);
   $rc = sqlsrv_num_rows($qtampil);
 
 	?>
@@ -107,9 +157,9 @@ if(isset($_POST['btnUbah']))
     <th>Keterangan</th>
     </tr>
   <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM tbl_mesin ORDER BY nama ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.tbl_mesin ORDER BY nama ASC");
   $no=1;
-  while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_ASSOC))
+  while($r=sqlsrv_fetch_array($qry))
   {
     $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
   <tr bgcolor="<?php echo $bgcolor;?>">
