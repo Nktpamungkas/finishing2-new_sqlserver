@@ -70,8 +70,8 @@
 							<td align="center" valign="middle"><strong>
 									<font size="+1">SCHEDULE FINISHING
 										<?php if (empty($_GET['no_mesin'])) {
-                                            echo "SEMUA MESIN";
-                                        } ?>
+											echo "SEMUA MESIN";
+										} ?>
 									</font>
 									<br>FW-14-PPC-11/00
 								</strong></td>
@@ -82,31 +82,31 @@
 							<tr>
 								<td width="78%">
 									<?php
-                                    // Set lokasi timezone ke Waktu Indonesia Barat
-                                    date_default_timezone_set('Asia/Jakarta');
+									// Set lokasi timezone ke Waktu Indonesia Barat
+									date_default_timezone_set('Asia/Jakarta');
 
-                                    // Tanggal dalam format Y-m-d H:i:s
-                                    $date = date('Y-m-d H:i:s');
+									// Tanggal dalam format Y-m-d H:i:s
+									$date = date('Y-m-d H:i:s');
 
-                                    // Array nama hari dalam bahasa Indonesia
-                                    $hari = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu");
+									// Array nama hari dalam bahasa Indonesia
+									$hari = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu");
 
-                                    // Array nama bulan dalam bahasa Indonesia
-                                    $bulan = array("", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+									// Array nama bulan dalam bahasa Indonesia
+									$bulan = array("", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
 
-                                    // Pisahkan tanggal, bulan, dan tahun
-                                    $timestamp = strtotime($date);
-                                    $hari_indonesia = $hari[date('w', $timestamp)];
-                                    $bulan_indonesia = $bulan[date('n', $timestamp)];
-                                    $tanggal_indonesia = date('d', $timestamp);
-                                    $tahun_indonesia = date('Y', $timestamp);
+									// Pisahkan tanggal, bulan, dan tahun
+									$timestamp = strtotime($date);
+									$hari_indonesia = $hari[date('w', $timestamp)];
+									$bulan_indonesia = $bulan[date('n', $timestamp)];
+									$tanggal_indonesia = date('d', $timestamp);
+									$tahun_indonesia = date('Y', $timestamp);
 
-                                    // Format tanggal dalam bahasa Indonesia
-                                    $tanggal_lengkap = $hari_indonesia . ', ' . $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahun_indonesia;
-                                    $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahun_indonesia;
+									// Format tanggal dalam bahasa Indonesia
+									$tanggal_lengkap = $hari_indonesia . ', ' . $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahun_indonesia;
+									$tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahun_indonesia;
 
-                                    // Tampilkan tanggal dengan format Indonesia
-                                    ?>
+									// Tampilkan tanggal dengan format Indonesia
+									?>
 									<font size="-1">Hari/Tanggal : <?= $tanggal_lengkap ?></font><br />
 								</td>
 								<td width="22%" align="right">
@@ -116,34 +116,34 @@
 							<tr>
 								<td>
 									<?php if ($_GET['kksudahproses'] == '1') {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>belum</b> dan <b>sudah</b> selesai diproses.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>belum</b> dan <b>sudah</b> selesai diproses.</li>";
+									} ?>
 									<?php if ($_GET['kksudahproses'] == '2') {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>sudah</b> selesai diproses.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>sudah</b> selesai diproses.</li>";
+									} ?>
 									<?php if ($_GET['kksudahproses'] == '3') {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>belum</b> selesai diproses.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>belum</b> selesai diproses.</li>";
+									} ?>
 
 									<?php if ($_GET['nourut']) {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nomor urut <b>$_GET[nourut]</b>.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nomor urut <b>$_GET[nourut]</b>.</li>";
+									} ?>
 
 									<?php if ($_GET['no_mesin']) {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nomor mesin <b>$_GET[no_mesin] - " . substr(TRIM($_GET['no_mesin']), -5, 2) . substr(TRIM($_GET['no_mesin']), -2) . "</b>.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nomor mesin <b>$_GET[no_mesin] - " . substr(TRIM($_GET['no_mesin']), -5, 2) . substr(TRIM($_GET['no_mesin']), -2) . "</b>.</li>";
+									} ?>
 
 									<?php if ($_GET['nama_mesin']) {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nama mesin <b>$_GET[nama_mesin]</b>.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan dengan nama mesin <b>$_GET[nama_mesin]</b>.</li>";
+									} ?>
 
 									<?php if ($_GET['proses']) {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan dengan proses <b>$_GET[proses]</b>.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan dengan proses <b>$_GET[proses]</b>.</li>";
+									} ?>
 
 									<?php if ($_GET['awal'] && $_GET['akhir']) {
-                                        echo "<li style='font-size: 10px;'>Hanya menampilkan dengan range tanggal <b>$_GET[awal]</b> s/d <b>$_GET[akhir]</b>.</li>";
-                                    } ?>
+										echo "<li style='font-size: 10px;'>Hanya menampilkan dengan range tanggal <b>$_GET[awal]</b> s/d <b>$_GET[akhir]</b>.</li>";
+									} ?>
 
 								</td>
 							</tr>
@@ -205,56 +205,56 @@
 					</thead>
 
 					<?php
-                    include('../../koneksi.php');
-                    ini_set("error_reporting", 1);
-                    if ($_GET['nourut'] == 'without0') {
-                        $where_nourut = "AND NOT nourut = '0'";
-                    } elseif ($_GET['nourut'] == 'with0') {
-                        $where_nourut = "";
-                    } else {
-                        $where_nourut = "AND nourut = '$_GET[nourut]'";
-                    }
+					include('../../koneksi.php');
+					ini_set("error_reporting", 1);
+					if ($_GET['nourut'] == 'without0') {
+						$where_nourut = "AND NOT nourut = '0'";
+					} elseif ($_GET['nourut'] == 'with0') {
+						$where_nourut = "";
+					} else {
+						$where_nourut = "AND nourut = '$_GET[nourut]'";
+					}
 
-                    if ($_GET['no_mesin']) {
-                        $where_no_mesin = "AND no_mesin = '$_GET[no_mesin]'";
-                    } else {
-                        $where_no_mesin = "";
-                    }
+					if ($_GET['no_mesin']) {
+						$where_no_mesin = "AND no_mesin = '$_GET[no_mesin]'";
+					} else {
+						$where_no_mesin = "";
+					}
 
-                    if ($_GET['nama_mesin']) {
-                        $where_nama_mesin = "AND nama_mesin = '$_GET[nama_mesin]'";
-                    } else {
-                        $where_nama_mesin = "";
-                    }
+					if ($_GET['nama_mesin']) {
+						$where_nama_mesin = "AND nama_mesin = '$_GET[nama_mesin]'";
+					} else {
+						$where_nama_mesin = "";
+					}
 
-                    if ($_GET['proses']) {
-                        $where_proses = "AND proses = '$_GET[proses]'";
-                    } else {
-                        $where_proses = "";
-                    }
+					if ($_GET['proses']) {
+						$where_proses = "AND proses = '$_GET[proses]'";
+					} else {
+						$where_proses = "";
+					}
 
-                    if ($_GET['awal']) {
-                        $where_tgl = "AND CONVERT(DATE,creationdatetime, 1, 10) BETWEEN '$_GET[awal]' AND '$_GET[akhir]'";
-                    } else {
-                        $where_tgl = "";
-                    }
-                    $no = 1;
-                    $query_schedule = "SELECT * FROM db_finishing.tbl_schedule_new 
+					if ($_GET['awal']) {
+						$where_tgl = "AND CONVERT(DATE,creationdatetime, 1, 10) BETWEEN '$_GET[awal]' AND '$_GET[akhir]'";
+					} else {
+						$where_tgl = "";
+					}
+					$no = 1;
+					$query_schedule = "SELECT * FROM db_finishing.tbl_schedule_new 
                     WHERE status = 'SCHEDULE' 
                     AND CONVERT(DATE, creationdatetime, 101) BETWEEN '$_GET[awal]' AND '$_GET[akhir]'
                     $where_nourut $where_nama_mesin $where_proses $where_no_mesin 
                     ORDER BY CONCAT(SUBSTRING(LTRIM(no_mesin), LEN(no_mesin) - 4, 2), SUBSTRING(LTRIM(no_mesin), LEN(no_mesin) - 1, 2)) ASC, nourut ASC";
 
-                    $q_schedule = sqlsrv_query($con, $query_schedule);
+					$q_schedule = sqlsrv_query($con, $query_schedule);
 
-                    $totalQty = 0;
-                    $totalRoll = 0;
-                    ?>
+					$totalQty = 0;
+					$totalRoll = 0;
+					?>
 					<?php while ($row_schedule = sqlsrv_fetch_array($q_schedule, SQLSRV_FETCH_ASSOC)): ?>
 					<?php
-                        $cek_proses = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
-                        $data_proses = sqlsrv_fetch_array($cek_proses, SQLSRV_FETCH_ASSOC);
-                        ?>
+						$cek_proses = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
+						$data_proses = sqlsrv_fetch_array($cek_proses, SQLSRV_FETCH_ASSOC);
+						?>
 					<?php if (empty($data_proses['jml']) and $_GET['kksudahproses'] == '3'): ?>
 					<tr>
 						<td align="center" valign="top" style="height: 0.35in;"><?= $row_schedule['nourut']; ?></td>
@@ -278,15 +278,15 @@
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= $row_schedule['lot']; ?></span></td>
 						<?php
-                                // Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
-                                if ($row_schedule['tgl_delivery'] instanceof DateTime) {
-                                    // Format objek DateTime ke 'Y-m-d'
-                                    $tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
-                                } else {
-                                    // Jika tidak, atur $tgl_delivery menjadi string kosong
-                                    $tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
-                                }
-                                ?>
+								// Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
+								if ($row_schedule['tgl_delivery'] instanceof DateTime) {
+									// Format objek DateTime ke 'Y-m-d'
+									$tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
+								} else {
+									// Jika tidak, atur $tgl_delivery menjadi string kosong
+									$tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
+								}
+								?>
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= htmlspecialchars($tgl_delivery) ?></span>
 						</td>
@@ -298,13 +298,13 @@
 							Nokk : <?= $row_schedule['nokk'] ?><br>
 							No demand : <?= $row_schedule['nodemand'] ?><br>
 							<?php
-                                    // CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
-                                    $cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
-                                    $data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
-                                    ?>
+									// CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
+									$cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
+									$data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
+									?>
 							<?php if ($data_hasilproses) {
-                                        echo "Sudah Jalan";
-                                    } ?><br>
+										echo "Sudah Jalan";
+									} ?><br>
 							<?= $data_hasilproses['tgl_buat']; ?><br>
 							<?= $data_hasilproses['no_mesin']; ?><br>
 							<?= $data_hasilproses['nama_mesin']; ?><br>
@@ -336,15 +336,15 @@
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= $row_schedule['lot']; ?></span></td>
 						<?php
-                                // Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
-                                if ($row_schedule['tgl_delivery'] instanceof DateTime) {
-                                    // Format objek DateTime ke 'Y-m-d'
-                                    $tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
-                                } else {
-                                    // Jika tidak, atur $tgl_delivery menjadi string kosong
-                                    $tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
-                                }
-                                ?>
+								// Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
+								if ($row_schedule['tgl_delivery'] instanceof DateTime) {
+									// Format objek DateTime ke 'Y-m-d'
+									$tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
+								} else {
+									// Jika tidak, atur $tgl_delivery menjadi string kosong
+									$tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
+								}
+								?>
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= htmlspecialchars($tgl_delivery) ?></span></td>
 						<td align="center" valign="top"><span
@@ -355,14 +355,14 @@
 							Nokk : <?= $row_schedule['nokk'] ?><br>
 							No demand : <?= $row_schedule['nodemand'] ?><br>
 							<?php
-                                    // CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
-                                    $cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
-                                    $data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
-                                    ?>
+									// CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
+									$cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
+									$data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
+									?>
 							<?php if ($data_hasilproses) {
-                                        echo "Sudah Jalan";
-                                    } ?><br>
-							<?= $data_hasilproses['tgl_buat']; ?><br>
+										echo "Sudah Jalan";
+									} ?><br>
+							<?= $data_hasilproses['tgl_buat']->format('Y-m-d'); ?><br>
 							<?= $data_hasilproses['no_mesin']; ?><br>
 							<?= $data_hasilproses['nama_mesin']; ?><br>
 							<?= $data_hasilproses['proses']; ?><br>
@@ -393,15 +393,15 @@
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= $row_schedule['lot']; ?></span></td>
 						<?php
-                                // Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
-                                if ($row_schedule['tgl_delivery'] instanceof DateTime) {
-                                    // Format objek DateTime ke 'Y-m-d'
-                                    $tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
-                                } else {
-                                    // Jika tidak, atur $tgl_delivery menjadi string kosong
-                                    $tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
-                                }
-                                ?>
+								// Periksa apakah $row_schedule['tgl_delivery'] adalah objek DateTime
+								if ($row_schedule['tgl_delivery'] instanceof DateTime) {
+									// Format objek DateTime ke 'Y-m-d'
+									$tgl_delivery = $row_schedule['tgl_delivery']->format('Y-m-d');
+								} else {
+									// Jika tidak, atur $tgl_delivery menjadi string kosong
+									$tgl_delivery = ''; // Atau gunakan nilai default sesuai kebutuhan
+								}
+								?>
 						<td align="center" valign="top"><span
 								style="height: 0.35in;"><?= htmlspecialchars($tgl_delivery) ?></span>
 						</td>
@@ -413,13 +413,13 @@
 							Nokk : <?= $row_schedule['nokk'] ?><br>
 							No demand : <?= $row_schedule['nodemand'] ?><br>
 							<?php
-                                    // CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
-                                    $cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
-                                    $data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
-                                    ?>
+									// CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
+									$cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
+									$data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
+									?>
 							<?php if ($data_hasilproses) {
-                                        echo "Sudah Jalan";
-                                    } ?><br>
+										echo "Sudah Jalan";
+									} ?><br>
 							<?= $data_hasilproses['tgl_buat']->format('Y-m-d'); ?><br>
 							<?= $data_hasilproses['no_mesin']; ?><br>
 							<?= $data_hasilproses['nama_mesin']; ?>-<?= $data_hasilproses['proses']; ?><br>
