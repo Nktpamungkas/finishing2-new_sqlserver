@@ -21,15 +21,21 @@ include("../../koneksi.php");
     // Refresh form
     echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiHapus'>";
   }
+
   if (isset($_POST['btnSimpan'])) {
     $proses = $_POST['proses'];
     $jns = $_POST['jns'];
     $ket = str_replace("'", "", $_POST['ket']);
-    $simpanSql = "INSERT INTO db_finishing.tbl_proses SET 
-	`proses`='$proses',
-	`jns`='$jns',
-	`ket`='$ket'";
-    sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
+
+    $simpanSql = "INSERT INTO db_finishing.tbl_proses (proses, jns, ket) VALUES (?, ?, ?)";
+
+    $params = array($proses, $jns, $ket);
+
+    $stmt = sqlsrv_query($con, $simpanSql, $params);
+
+    if ($stmt === false) {
+      die("Gagal Simpan: " . print_r(sqlsrv_errors(), true));
+    }
 
     // Refresh form
     echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiSimpan'>";

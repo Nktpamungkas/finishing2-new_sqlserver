@@ -39,6 +39,7 @@ function insertIntoTable($conn, $table, $data) {
     echo "Error: " . $e->getMessage();
   }
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -49,72 +50,91 @@ function insertIntoTable($conn, $table, $data) {
 
 <body>
 <?php
-// No Button
+// Nothing Button
 if(isset($_POST['btnHapus']))
   {
-		$hapusSql = "DELETE FROM db_finishing.[tbl_stop_mesin] WHERE id='$_POST[id]'";
+		$hapusSql = "DELETE FROM db_finishing.[tbl_mesin]  WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
 		
 		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-stop.php?status=Data Sudah DiHapus'>";
+		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiHapus'>";
 	}
 
 if(isset($_POST['btnSimpan']))
   {
-		$kode=$_POST['kode'];
+		$mesin=str_replace("'","",$_POST['nama']);
 		$ket=str_replace("'","",$_POST['ket']);
 
-    // $simpanSql = "INSERT INTO db_finishing.[tbl_stop_mesin] SET 
-    // [kode]='$kode',
+    // $simpanSql = "INSERT INTO db_finishing.[tbl_mesin] SET 
+    // [nama]='$mesin',
+    // [jenis]='$_POST[jenis]',
     // [ket]='$ket'";
-    //   sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
 
-    $dataInsert=[
-      'kode'=>(string) $kode,
+    // sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $dataInsertMesin=[
+      'nama'=>(string) $mesin,
+      'jenis'=>$_POST['jenis'],
       'ket'=>(string) $ket
     ];
 
-    insertIntoTable($con,'db_finishing.tbl_stop_mesin',$dataInsert);
-
-		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-stop.php?status=Data Sudah DiSimpan'>";
-	}
-
-// No Button
-if(isset($_POST['btnUbah']))
-  {
-		$kode=$_POST['kode'];
-		$ket=str_replace("'","",$_POST['ket']);
-    $simpanSql = "UPDATE db_finishing.[tbl_stop_mesin] SET 
-    [kode]='$kode',
-    [ket]='$ket'
-    WHERE [id]='$_POST[id]'";
-      sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
+    insertIntoTable($con, 'db_finishing.[tbl_mesin]', $dataInsertMesin);
 		
 		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-stop.php?status=Data Sudah DiUbah'>";
+		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiSimpan'>";
 	}
+
+  // Nothing Button
+if(isset($_POST['btnUbah']))
+  {
+    $mesin=str_replace("'","",$_POST['nama']);
+    $ket=str_replace("'","",$_POST['ket']);
+
+    $simpanSql = "UPDATE db_finishing.tbl_mesin SET 
+    [nama]='$mesin',
+    [jenis]='$_POST[jenis]',
+    [ket]='$ket'
+    WHERE [id]='$_POST[id]'";
+
+    sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
+    
+    // Refresh form
+    echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiUbah'>";
+  }
+
 	?>
 <form id="form1" name="form1" method="post" action=""  enctype="multipart/form-data">
 <table width="100%" border="0">
   <tr>
-    <th colspan="3" scope="row">Input Data Kode Mesin</th>
+    <th colspan="3" scope="row">Input Data Mesin</th>
   </tr>
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT TOP 1  * FROM db_finishing.[tbl_stop_mesin] 
-    WHERE kode='$_GET[kode]' ");
+    <?php $qtampil=sqlsrv_query($con,"SELECT TOP 1 * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]'");
 
-  $rt=sqlsrv_fetch_array($qtampil);
-	$rc=sqlsrv_num_rows($qtampil);
+  $rt = sqlsrv_fetch_array($qtampil);
+  $rc = sqlsrv_num_rows($qtampil);
+
 	?>
   <tr>
-    <td width="21%" scope="row">Kode</td>
+    <td width="21%" scope="row">Nama Mesin</td>
     <td width="1%">:</td>
-    <td width="78%"><label for="kode"></label>
-      <input type="text" name="kode" id="kode" onchange="window.location='data-stop.php?kode='+this.value" value="<?php echo $_GET['kode'];?>" required="required"/>
+    <td width="78%"><label for="nama"></label>
+      <input type="text" name="nama" id="nama" onchange="window.location='mesin.php?nama='+this.value" value="<?php echo $_GET['nama'];?>" required="required"/>
       <input type="hidden" name="id" value="<?php echo $rt['id'];?>"/></td>
+  </tr>
+  <tr>
+    <td scope="row">Jenis</td>
+    <td>:</td>
+    <td><select name="jenis" id="jenis">
+      <option value="">pilih</option>
+      <option value="oven" <?php if($rt['jenis']=="oven"){echo "SELECTED";} ?>>oven</option>
+      <option value="stenter" <?php if($rt['jenis']=="stenter"){echo "SELECTED";} ?>>stenter</option>
+      <option value="compact" <?php if($rt['jenis']=="compact"){echo "SELECTED";} ?>>compact</option>
+      <option value="belah-lipat" <?php if($rt['jenis']=="belah"){echo "SELECTED";} ?>>belah</option>
+	  <option value="belah-lipat" <?php if($rt['jenis']=="lipat"){echo "SELECTED";} ?>>lipat</option>	
+    </select></td>
   </tr>
   <tr>
     <td valign="top" scope="row">Keterangan</td>
@@ -129,22 +149,22 @@ if(isset($_POST['btnUbah']))
 <input type="button" name="tutup" id="tutup" value="Tutup" onclick="window.close();"/></th>
   </tr>
 </table>
-<h3>Data Detail Kode</h3>
+<h3>Data Detail Nama Mesin</h3>
 <table width="100%" border="0">
   <tr bgcolor="#0099CC">
     <th scope="row">No</th>
-    <th bgcolor="#0099CC">Kode</th>
+    <th bgcolor="#0099CC">Nama Mesin</th>
     <th>Keterangan</th>
     </tr>
   <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_stop_mesin] ORDER BY id ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.tbl_mesin ORDER BY nama ASC");
   $no=1;
-  while($r=sqlsrv_fetch_array($qry)) 
+  while($r=sqlsrv_fetch_array($qry))
   {
     $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
   <tr bgcolor="<?php echo $bgcolor;?>">
     <td align="center" scope="row"><?php echo $no;?></td>
-    <td align="center"><?php echo $r['kode'];?></td>
+    <td align="center"><?php echo $r['nama'];?></td>
     <td><?php echo $r['ket'];?></td>
     </tr>
   <?php $no++;} ?>

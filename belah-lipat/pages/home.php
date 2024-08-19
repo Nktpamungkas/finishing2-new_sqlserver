@@ -582,36 +582,36 @@
 			$byr = substr($langganan, ($posisi + 1), 100);
 
 			// Insert data to table schedule
-			$dataInsertSchedule = [
-				'nokk'=>(string)$nokk,
-				'nodemand'=>(string)$demand,
-				'langganan'=>(string)$cus,
-				'buyer'=>(string)$byr,
-				'no_order'=>(string)$order,
-				'no_hanger'=>(string)$item,
-				'no_item'=>(string)$item,
-				'jenis_kain'=>(string)$jenis_kain,
-				'lebar'=>(int)$lebar,
-				'gramasi'=>(int)$gramasi,
-				'warna'=>(string)$warna,
-				'no_warna'=>(string)$nowarna,
-				'bruto'=>(float)$qty,
-				'lot'=>(string)$lot,
-				'rol'=>(int)$rol,
-				'shift'=>(string)$shift,
-				'g_shift'=>(string)$shift2,
-				'no_mesin'=>(string)$mesin,
-				'proses'=>(string)$proses,
-				'revisi'=>(int)0,
-				'tgl_masuk'=>(string)date('Y-m-d H:i:s'),
-				'personil'=>(string)'Operator Fin',
-				'target'=>(int)0,
-				'catatan'=>(string)'data diinput dari finishing',
-				'tgl_update'=>(string)date('Y-m-d H:i:s'),
-				'tampil'=>(int)1
-			];
+			// $dataInsertSchedule = [
+			// 	'nokk'=>(string)$nokk,
+			// 	'nodemand'=>(string)$demand,
+			// 	'langganan'=>(string)$cus,
+			// 	'buyer'=>(string)$byr,
+			// 	'no_order'=>(string)$order,
+			// 	'no_hanger'=>(string)$item,
+			// 	'no_item'=>(string)$item,
+			// 	'jenis_kain'=>(string)$jenis_kain,
+			// 	'lebar'=>(int)$lebar,
+			// 	'gramasi'=>(int)$gramasi,
+			// 	'warna'=>(string)$warna,
+			// 	'no_warna'=>(string)$nowarna,
+			// 	'bruto'=>(float)$qty,
+			// 	'lot'=>(string)$lot,
+			// 	'rol'=>(int)$rol,
+			// 	'shift'=>(string)$shift,
+			// 	'g_shift'=>(string)$shift2,
+			// 	'no_mesin'=>(string)$mesin,
+			// 	'proses'=>(string)$proses,
+			// 	'revisi'=>(int)0,
+			// 	'tgl_masuk'=>(string)date('Y-m-d H:i:s'),
+			// 	'personil'=>(string)'Operator Fin',
+			// 	'target'=>(int)0,
+			// 	'catatan'=>(string)'data diinput dari finishing',
+			// 	'tgl_update'=>(string)date('Y-m-d H:i:s'),
+			// 	'tampil'=>(int)1
+			// ];
 
-			insertIntoTable($con,'db_finishing.[tbl_schedule]',$dataInsertSchedule);
+			// insertIntoTable($con,'db_finishing.[tbl_schedule]',$dataInsertSchedule);
 
 			// $sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.[tbl_schedule] SET
 			// nokk='$nokk',
