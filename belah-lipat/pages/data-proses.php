@@ -78,7 +78,7 @@ if(isset($_POST['btnSimpan'])){
     insertIntoTable($con,'db_finishing.tbl_proses',$dataInsert);
       
       // Refresh form
-      // echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiSimpan'>";
+      echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiSimpan'>";
 	}
 
 // No Button
