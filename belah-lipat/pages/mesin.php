@@ -50,7 +50,7 @@ function insertIntoTable($conn, $table, $data) {
 
 <body>
 <?php
-
+// Nothing Button
 if(isset($_POST['btnHapus']))
   {
 		$hapusSql = "DELETE FROM db_finishing.[tbl_mesin]  WHERE id='$_POST[id]'";
@@ -81,9 +81,10 @@ if(isset($_POST['btnSimpan']))
     insertIntoTable($con, 'db_finishing.[tbl_mesin]', $dataInsertMesin);
 		
 		// Refresh form
-		// echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiSimpan'>";
+		echo "<meta http-equiv='refresh' content='0; url=mesin.php?status=Data Sudah DiSimpan'>";
 	}
 
+  // Nothing Button
 if(isset($_POST['btnUbah']))
   {
     $mesin=str_replace("'","",$_POST['nama']);
