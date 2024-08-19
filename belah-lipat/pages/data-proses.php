@@ -2,6 +2,43 @@
 ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
+
+function insertIntoTable($conn, $table, $data) {
+  try {
+    // Get the column names from the keys of the associative array
+    $columns = array_keys($data);
+    // Create a comma-separated list of columns
+    $columnsList = implode(", ", $columns);
+    // Create a comma-separated list of placeholders (using ? for sqlsrv)
+    $placeholders = implode(", ", array_fill(0, count($columns), "?"));
+    
+    // Prepare the SQL statement
+    $sql = "INSERT INTO $table ($columnsList) VALUES ($placeholders)";
+    
+    // Extract values from the associative array
+    $values = array_values($data);
+
+    // Prepare the statement
+    $stmt = sqlsrv_prepare($conn, $sql, $values);
+    
+    if ($stmt === false) {
+      // Handle prepare error
+      throw new Exception(print_r(sqlsrv_errors(), true));
+    }
+    
+    // Execute the statement
+    if (!sqlsrv_execute($stmt)) {
+      // Handle execution error
+      throw new Exception(print_r(sqlsrv_errors(), true));
+    }
+
+    echo "Data inserted successfully!";
+    
+  } catch (Exception $e) {
+    // Handle the exception and echo the error message
+    echo "Error: " . $e->getMessage();
+  }
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,6 +49,7 @@ include("../../koneksi.php");
 
 <body>
 <?php
+// No Button
 if(isset($_POST['btnHapus'])){
 		$hapusSql = "DELETE FROM db_finishing.[tbl_proses] WHERE id='$_POST[id]'";
 		sqlsrv_query($con,$hapusSql) or die ("Gagal hapus".sqlsrv_errors());
@@ -19,27 +57,40 @@ if(isset($_POST['btnHapus'])){
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiHapus'>";
 	}
+
 if(isset($_POST['btnSimpan'])){
 		$proses=$_POST['proses'];
-	    $jns=$_POST['jns'];
+	  $jns=$_POST['jns'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "INSERT INTO db_finishing.[tbl_proses] SET 
-	[proses]='$proses',
-	[jns]='$jns',
-	[ket]='$ket'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
-		
-		// Refresh form
-		echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiSimpan'>";
+
+    // $simpanSql = "INSERT INTO db_finishing.[tbl_proses] SET 
+    // [proses]='$proses',
+    // [jns]='$jns',
+    // [ket]='$ket'";
+    //   sqlsrv_query($con,$simpanSql) or die ("Gagal Simpan".sqlsrv_errors());
+
+    $dataInsert=[
+      'proses'=>(string) $proses,
+      'jns'=>(string) $jns,
+      'ket'=>(string) $ket      
+    ];
+
+    insertIntoTable($con,'db_finishing.tbl_proses',$dataInsert);
+      
+      // Refresh form
+      // echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiSimpan'>";
 	}
-if(isset($_POST['btnUbah'])){
+
+// No Button
+if(isset($_POST['btnUbah']))
+  {
 		$proses=$_POST['proses'];
 		$ket=str_replace("'","",$_POST['ket']);
-	$simpanSql = "UPDATE db_finishing.[tbl_proses] SET 
-	[proses]='$proses',
-	[ket]='$ket'
-	WHERE [id]='$_POST[id]'";
-		sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
+    $simpanSql = "UPDATE db_finishing.[tbl_proses] SET 
+    [proses]='$proses',
+    [ket]='$ket'
+    WHERE [id]='$_POST[id]'";
+      sqlsrv_query($con,$simpanSql) or die ("Gagal Ubah".sqlsrv_errors());
 		
 		// Refresh form
 		echo "<meta http-equiv='refresh' content='0; url=data-proses.php?status=Data Sudah DiUbah'>";
