@@ -61,9 +61,9 @@ if(isset($_POST['btnUbah']))
   <tr>
     <td colspan="3" align="center" scope="row"><font color="#FF0000"><?php echo $_GET['status'];?></font></td>
     </tr>
-    <?php $qtampil=sqlsrv_query($con,"SELECT * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]' LIMIT 1");
+    <?php $qtampil=sqlsrv_query($con,"SELECT TOP 1 * FROM db_finishing.[tbl_mesin] WHERE nama='$_GET[nama]'");
 
-  $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
+  $rt = sqlsrv_fetch_array($qtampil);
   $rc = sqlsrv_num_rows($qtampil);
 
 	?>
@@ -107,9 +107,9 @@ if(isset($_POST['btnUbah']))
     <th>Keterangan</th>
     </tr>
   <?php 
-  $qry=sqlsrv_query($con,"SELECT * FROM tbl_mesin ORDER BY nama ASC");
+  $qry=sqlsrv_query($con,"SELECT * FROM db_finishing.tbl_mesin ORDER BY nama ASC");
   $no=1;
-  while($r=sqlsrv_fetch_array($qry, SQLSRV_FETCH_ASSOC))
+  while($r=sqlsrv_fetch_array($qry))
   {
     $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
   <tr bgcolor="<?php echo $bgcolor;?>">
