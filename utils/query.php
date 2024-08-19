@@ -29,7 +29,7 @@ function insertIntoTable($conn, $table, $data) {
             throw new Exception(print_r(sqlsrv_errors(), true));
         }
 
-        echo "Data inserted successfully!";
+        // echo "Data inserted successfully!";
         
     } catch (Exception $e) {
         // Handle the exception and echo the error message
@@ -37,14 +37,144 @@ function insertIntoTable($conn, $table, $data) {
     }
 }
 
-function updateTable($conn,$table,$data) {
+function updateTable($conn, $table, $data, $conditions) {
+    try {
+        // Loop through the data array to check for empty strings and set them to null
+        foreach ($data as $key => $value) {
+            if ($value === '') {
+                $data[$key] = null;
+            }
+        }
 
+        // Build the SET part of the SQL statement
+        $setClauses = [];
+        foreach ($data as $key => $value) {
+            $setClauses[] = "$key = ?";
+        }
+        $setClause = implode(", ", $setClauses);
+
+        // Build the WHERE part of the SQL statement
+        $conditionClauses = [];
+        $conditionValues = [];
+        foreach ($conditions as $key => $value) {
+            $conditionClauses[] = "$key = ?";
+            $conditionValues[] = $value;
+        }
+        $whereClause = implode(" AND ", $conditionClauses);
+
+        // Combine all values (data + conditions) for the prepared statement
+        $values = array_merge(array_values($data), $conditionValues);
+
+        // Prepare the SQL statement
+        $sql = "UPDATE $table SET $setClause WHERE $whereClause";
+
+        // Prepare the statement
+        $stmt = sqlsrv_prepare($conn, $sql, $values);
+
+        if ($stmt === false) {
+            // Handle prepare error
+            throw new Exception(print_r(sqlsrv_errors(), true));
+        }
+
+        // Execute the statement
+        if (!sqlsrv_execute($stmt)) {
+            // Handle execution error
+            throw new Exception(print_r(sqlsrv_errors(), true));
+        }
+
+        echo "Record updated successfully!";
+        
+    } catch (Exception $e) {
+        // Handle the exception and echo the error message
+        echo "Error: " . $e->getMessage();
+    }
 }
 
-function deleteTable($conn,$table,$data){
+function deleteTable($conn, $table, $conditions) {
+    try {
+        // Build the WHERE part of the SQL statement
+        $conditionClauses = [];
+        $conditionValues = [];
+        foreach ($conditions as $key => $value) {
+            $conditionClauses[] = "$key = ?";
+            $conditionValues[] = $value;
+        }
+        $whereClause = implode(" AND ", $conditionClauses);
 
+        // Prepare the SQL statement
+        $sql = "DELETE FROM $table WHERE $whereClause";
+
+        // Prepare the statement
+        $stmt = sqlsrv_prepare($conn, $sql, $conditionValues);
+
+        if ($stmt === false) {
+            // Handle prepare error
+            throw new Exception(print_r(sqlsrv_errors(), true));
+        }
+
+        // Execute the statement
+        if (!sqlsrv_execute($stmt)) {
+            // Handle execution error
+            throw new Exception(print_r(sqlsrv_errors(), true));
+        }
+
+        echo "Record(s) deleted successfully!";
+        
+    } catch (Exception $e) {
+        // Handle the exception and echo the error message
+        echo "Error: " . $e->getMessage();
+    }
 }
 
 function resultSelect($data){
     
 }
+
+/*
+HOW TO USE
+=======================================================================
+1. Insert Into Table
+
+    $data = [
+        'name' => 'John Doe',
+        'email' => '', // This will be converted to NULL
+        'age' => 30
+    ];
+
+    insertIntoTable($conn, 'users', $data);
+
+=======================================================================
+
+2. Update Table
+
+    $data = [
+        'name' => 'John Doe',
+        'email' => '', // This will be converted to NULL
+        'age' => 30
+    ];
+
+    $conditions = [
+        'id' => 1,
+        'status' => 'active'
+    ];
+
+    updateTable($conn, 'users', $data, $conditions);
+
+=======================================================================
+
+3. Delete Table
+
+    $conditions = [
+        'id' => 1,
+        'status' => 'inactive'
+    ];
+
+    deleteTable($conn, 'users', $conditions);
+
+=======================================================================
+
+4. ResultSelect
+
+
+
+*/
