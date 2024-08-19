@@ -21,17 +21,25 @@ include("../../koneksi.php");
         // Refresh form
         echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiHapus'>";
     }
+
     if (isset($_POST['btnSimpan'])) {
         $nama = str_replace("'", "", $_POST['nama']);
         $jabatan = str_replace("'", "", $_POST['jabatan']);
-        $simpanSql = "INSERT INTO db_finishing.tbl_staff SET 
-	`nama`='$nama',
-	`jabatan`='$jabatan'";
-        sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
+
+        $simpanSql = "INSERT INTO db_finishing.tbl_staff (nama, jabatan) VALUES (?, ?)";
+
+        $params = array($nama, $jabatan);
+
+        $stmt = sqlsrv_query($con, $simpanSql, $params);
+
+        if ($stmt === false) {
+            die("Gagal Simpan: " . print_r(sqlsrv_errors(), true));
+        }
 
         // Refresh form
-        echo "<meta http-equiv='refresh' content='0; url=data-acc.php?status=Data Sudah DiSimpan'>";
+        echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiSimpan'>";
     }
+
     if (isset($_POST['btnUbah'])) {
         $nama = str_replace("'", "", $_POST['nama']);
         $jabatan = str_replace("'", "", $_POST['jabatan']);
