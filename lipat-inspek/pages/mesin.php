@@ -2,43 +2,7 @@
 ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
-
-function insertIntoTable($conn, $table, $data) {
-  try {
-    // Get the column names from the keys of the associative array
-    $columns = array_keys($data);
-    // Create a comma-separated list of columns
-    $columnsList = implode(", ", $columns);
-    // Create a comma-separated list of placeholders (using ? for sqlsrv)
-    $placeholders = implode(", ", array_fill(0, count($columns), "?"));
-    
-    // Prepare the SQL statement
-    $sql = "INSERT INTO $table ($columnsList) VALUES ($placeholders)";
-    
-    // Extract values from the associative array
-    $values = array_values($data);
-
-    // Prepare the statement
-    $stmt = sqlsrv_prepare($conn, $sql, $values);
-    
-    if ($stmt === false) {
-      // Handle prepare error
-      throw new Exception(print_r(sqlsrv_errors(), true));
-    }
-    
-    // Execute the statement
-    if (!sqlsrv_execute($stmt)) {
-      // Handle execution error
-      throw new Exception(print_r(sqlsrv_errors(), true));
-    }
-
-    echo "Data inserted successfully!";
-    
-  } catch (Exception $e) {
-    // Handle the exception and echo the error message
-    echo "Error: " . $e->getMessage();
-  }
-}
+include("../../utils/query.php");
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -64,6 +28,7 @@ if(isset($_POST['btnSimpan']))
   {
 		$mesin=str_replace("'","",$_POST['nama']);
 		$ket=str_replace("'","",$_POST['ket']);
+    $jenis=$_POST['jenis'];
 
     // $simpanSql = "INSERT INTO db_finishing.[tbl_mesin] SET 
     // [nama]='$mesin',
@@ -74,7 +39,7 @@ if(isset($_POST['btnSimpan']))
 
     $dataInsertMesin=[
       'nama'=>(string) $mesin,
-      'jenis'=>$_POST['jenis'],
+      'jenis'=>(string) $jenis,
       'ket'=>(string) $ket
     ];
 
