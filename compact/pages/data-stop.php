@@ -21,25 +21,6 @@ include("../../koneksi.php");
     // Refresh form
     echo "<meta http-equiv='refresh' content='0; url=data-stop.php?status=Data Sudah DiHapus'>";
   }
-
-  if (isset($_POST['btnSimpan'])) {
-    $kode = trim($_POST['kode']);
-    $ket = str_replace("'", "", $_POST['ket']);
-
-    $simpanSql = "INSERT INTO db_finishing.tbl_staff (nama, jabatan) VALUES (?, ?)";
-
-    $params = array($kode, $ket);
-
-    $stmt = sqlsrv_query($con, $simpanSql, $params);
-
-    if ($stmt === false) {
-      die("Gagal Simpan: " . print_r(sqlsrv_errors(), true));
-    }
-
-    // Refresh form
-    echo "<meta http-equiv='refresh' content='0; url=data-stop.php?status=Data Sudah DiSimpan'>";
-  }
-
   if (isset($_POST['btnSimpan'])) {
     $kode = $_POST['kode'];
     $ket = str_replace("'", "", $_POST['ket']);
@@ -54,7 +35,7 @@ include("../../koneksi.php");
   if (isset($_POST['btnUbah'])) {
     $kode = $_POST['kode'];
     $ket = str_replace("'", "", $_POST['ket']);
-    $simpanSql = "UPDATE db_finishing.tbl_stop_mesin SET 
+    $simpanSql = "UPDATE tbl_stop_mesin SET 
 	`kode`='$kode',
 	`ket`='$ket'
 	WHERE `id`='$_POST[id]'";
@@ -74,7 +55,7 @@ include("../../koneksi.php");
           <font color="#FF0000"><?php echo $_GET['status']; ?></font>
         </td>
       </tr>
-      <?php $qtampil = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_stop_mesin WHERE kode='$_GET[kode]' LIMIT 1");
+      <?php $qtampil = sqlsrv_query($con, "SELECT TOP 1 * FROM db_finishing.tbl_stop_mesin WHERE kode='$_GET[kode]'");
       $rt = sqlsrv_fetch_array($qtampil);
       $rc = sqlsrv_num_rows($qtampil);
       ?>
