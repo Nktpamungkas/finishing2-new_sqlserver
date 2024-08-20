@@ -140,23 +140,12 @@ function resultSelect($data) {
         }
 
         elseif (is_float($value)) {
-
-            $updatedData[$key] = round($value, 2);
+            $updatedData[$key] = number_format($value, 2, '.', '');
         }
 
         elseif (is_int($value)) {
 
             $updatedData[$key] = number_format($value);
-        }
-
-        elseif (strtotime($value) !== false) {
-            if (preg_match('/\d{2}:\d{2}:\d{2}/', $value)) {
-                $date = new DateTime($value);
-                $updatedData[$key] = $date->format('Y-m-d H:i:s');
-            } else {
-                $date = new DateTime($value);
-                $updatedData[$key] = $date->format('Y-m-d');
-            }
         }
 
         elseif($value==='0000-00-00 00:00:00'){
@@ -220,6 +209,7 @@ HOW TO USE
 
 4. ResultSelect
 
+    while ($row_data = resultSelect(sqlsrv_fetch_array($stmt))
 
 
 */
