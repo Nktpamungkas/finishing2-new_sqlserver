@@ -682,7 +682,7 @@
                 }
             // }
 
-            echo "Data successfully inserted!";
+            // echo "Data successfully inserted!";
             } catch (PDOException $e) {
             echo "xError: " . $e->getMessage();
             }
@@ -797,7 +797,7 @@
                                             tampil='1'");
 
             // Refresh form
-            // echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
+            echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
         }
     ?>
     <form id="form1" name="form1" method="post" action="">
@@ -856,9 +856,9 @@
                                     $sql_ITXVIEWKK_demand  = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
                                     while ($r_demand = db2_fetch_assoc($sql_ITXVIEWKK_demand)) :
                                 ?>
-                            <option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
+                            <option value="<?php echo $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
                                                                                     echo 'SELECTED';
-                                                                                } ?>><?= $r_demand['DEMAND']; ?>
+                                                                                } ?>><?php echo $r_demand['DEMAND']; ?>
                             </option>
                             <?php endwhile; ?>
                         </select>
@@ -872,9 +872,8 @@
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
                                 ?>
                             <?php if($_GET['kklanjutan']) : ?>
-                            <?php echo $r_demand['nodemand'];
-                            var_dump($r_demand['nodemand']);?>
-                            <option value="<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>" <?php if (isset($_GET['demand']) && $r_demand['nodemand'] === $_GET['demand']) {
+                            <?php echo $r_demand['nodemand'];?>
+                            <option value="<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>" <?php if (isset($_GET['demand']) && $r_demand['nodemand'] == $_GET['demand']) {
                                     echo 'selected';
                                 } ?>>
                                 <?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>
@@ -889,9 +888,7 @@
                             <?php if(empty($data_proses['jml'])) : ?>
                             <option value="<?php echo $r_demand['nodemand']; ?>"
                                 <?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>>
-                                <?php echo $r_demand['nodemand']; ?>
-                                <?php var_dump($data_proses['jml']);
-                                        var_dump($row_kkmasuk['no_mesin']);?></option>
+                                <?php echo $r_demand['nodemand']; ?></option>
                             <?php endif; ?>
                             <?php endif; ?>
                             <?php endwhile; ?>
