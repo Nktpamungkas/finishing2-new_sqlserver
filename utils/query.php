@@ -126,8 +126,47 @@ function deleteTable($conn, $table, $conditions) {
     }
 }
 
-function resultSelect($data){
-    
+function resultSelect($data) {
+    $updatedData = [];
+
+    foreach ($data as $key => $value) {
+
+        if ($value instanceof DateTime) {
+            if ($value->format('H:i:s') === '00:00:00') {
+                $updatedData[$key] = $value->format('Y-m-d');
+            } else {
+                $updatedData[$key] = $value->format('Y-m-d H:i:s');
+            }
+
+        }
+
+        elseif (is_float($value)) {
+
+            $updatedData[$key] = round($value, 2);
+        }
+
+        elseif (is_int($value)) {
+
+            $updatedData[$key] = number_format($value);
+        }
+
+        elseif (strtotime($value) !== false) {
+            if (preg_match('/\d{2}:\d{2}:\d{2}/', $value)) {
+                $date = new DateTime($value);
+                echo $date->format('Y-m-d H:i:s');
+                $updatedData[$key] = $date->format('Y-m-d H:i:s');
+            } else {
+                $date = new DateTime($value);
+                $updatedData[$key] = $date->format('Y-m-d');
+            }
+        }
+
+        else {
+            $updatedData[$key] = $value; // Leave other types unchanged
+        }
+    }
+
+    return $updatedData;
 }
 
 /*
