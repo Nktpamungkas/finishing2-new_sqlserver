@@ -392,10 +392,10 @@ include('../koneksi.php');
                 <td style="border:1px solid;vertical-align:middle; text-align: center;">
                     <?= $row_tblmasuk['operation'] ?></td>
                 <td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK"
-                        href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?= TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nokk'] ?></a>
+                        href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nokk'] ?></a>
                 </td>
                 <td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK"
-                        href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_tblmasuk['nodemand']; ?>&prod_order=<?= $row_tblmasuk['nokk']; ?>"><?= $row_tblmasuk['nodemand'] ?></a>
+                        href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nodemand'] ?></a>
                 </td>
                 <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
                 <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
