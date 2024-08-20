@@ -856,9 +856,9 @@
                                     $sql_ITXVIEWKK_demand  = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
                                     while ($r_demand = db2_fetch_assoc($sql_ITXVIEWKK_demand)) :
                                 ?>
-                            <option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
+                            <option value="<?php echo $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
                                                                                     echo 'SELECTED';
-                                                                                } ?>><?= $r_demand['DEMAND']; ?>
+                                                                                } ?>><?php echo $r_demand['DEMAND']; ?>
                             </option>
                             <?php endwhile; ?>
                         </select>
@@ -872,9 +872,8 @@
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
                                 ?>
                             <?php if($_GET['kklanjutan']) : ?>
-                            <?php echo $r_demand['nodemand'];
-                            var_dump($r_demand['nodemand']);?>
-                            <option value="<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>" <?php if (isset($_GET['demand']) && $r_demand['nodemand'] === $_GET['demand']) {
+                            <?php echo $r_demand['nodemand'];?>
+                            <option value="<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>" <?php if (isset($_GET['demand']) && $r_demand['nodemand'] == $_GET['demand']) {
                                     echo 'selected';
                                 } ?>>
                                 <?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>
