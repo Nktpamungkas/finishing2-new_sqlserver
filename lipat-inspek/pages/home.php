@@ -438,6 +438,7 @@
 			$jmlKonsen5 = $_POST['jmlKonsen5'];
 
 			$dataInsert=[
+				'kklanjutan'=>(int) 0,
 				'nokk'=>(string)$nokk,
 				'demandno'=>(string)$demand,
 				'shift'=>(string)$shift,

@@ -396,6 +396,7 @@
 
 				// Insert data to table produksi
 				$dataInsertProduksi = [
+					'kklanjutan'=>(int) 0,
 					'nokk' => (string) $nokk,
 					'demandno' => (string) $demand,
 					'shift' => (string) $shift,
