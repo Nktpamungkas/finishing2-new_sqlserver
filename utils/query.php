@@ -137,7 +137,6 @@ function resultSelect($data) {
             } else {
                 $updatedData[$key] = $value->format('Y-m-d H:i:s');
             }
-
         }
 
         elseif (is_float($value)) {
@@ -153,12 +152,19 @@ function resultSelect($data) {
         elseif (strtotime($value) !== false) {
             if (preg_match('/\d{2}:\d{2}:\d{2}/', $value)) {
                 $date = new DateTime($value);
-                echo $date->format('Y-m-d H:i:s');
                 $updatedData[$key] = $date->format('Y-m-d H:i:s');
             } else {
                 $date = new DateTime($value);
                 $updatedData[$key] = $date->format('Y-m-d');
             }
+        }
+
+        elseif($value==='0000-00-00 00:00:00'){
+            $updatedData[$key] = NULL;
+        }
+
+        elseif(empty($value)){
+            $updatedData[$key] = NULL;
         }
 
         else {
