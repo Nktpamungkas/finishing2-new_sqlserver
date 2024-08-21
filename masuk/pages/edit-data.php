@@ -549,7 +549,7 @@ if (empty($_SESSION['usr'])) {
 								$qry = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_mesinbc ORDER BY no_mesin ASC");
 								while ($row = sqlsrv_fetch_array($qry)) {
 									?>
-                            <option value="<?php echo $row['no_mesin']; ?>" <?php if ($rw['no_mesin'] == $row['no_mesin']) {
+                                <option value="<?php echo $row['no_mesin']; ?>" <?php if ($row_kkmasuk['prosesbc'] == $row['no_mesin']) {
 										   echo "SELECTED";
 									   } ?>>
                                 <?php echo $row['no_mesin']; ?>
