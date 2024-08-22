@@ -127,6 +127,11 @@ function deleteTable($conn, $table, $conditions) {
 }
 
 function resultSelect($data) {
+
+    if (empty($data)) {
+        return 'Data is empty';
+    }
+
     $updatedData = [];
 
     foreach ($data as $key => $value) {
