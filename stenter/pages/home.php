@@ -499,7 +499,7 @@
             $jmlKonsen5 = $_POST['jmlKonsen5'];
             $jmlKonsen6 = $_POST['jmlKonsen6'];
             $jmlKonsen7 = $_POST['jmlKonsen7'];
-            $kklanjutan = $_POST['kklanjutan'];
+            $kklanjutan = $_GET['kklanjutan'];
             $jnsmesin ='stenter';
             // $dataInsertProduksi=[];
             $dataInsertProduksi=[
@@ -830,7 +830,7 @@
                         </select>
 
                         <input type="checkbox" name="kklanjutan" id="kklanjutan"
-                            value="<?php if($_GET['kklanjutan']){ echo "1"; } ?>"
+                            value="<?php if($_GET['kklanjutan']){ echo "1"; }else{echo "0";} ?>"
                             <?php if($_GET['kklanjutan']){ echo "checked"; } ?>
                             onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&kklanjutan=1'">
                         KK LANJUTAN
