@@ -301,7 +301,7 @@
 									<?php
 									// CEK JIKA SUDAH PROSES MAKA MUNCULIN DI KETERANGAN
 									$cek_hasilproses = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_produksi WHERE nokk = '$row_schedule[nokk]' AND demandno = '$row_schedule[nodemand]' AND no_mesin = '$row_schedule[no_mesin]' AND nama_mesin = '$row_schedule[operation]'");
-									$data_hasilproses = resultSelect(sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC));
+									$data_hasilproses = sqlsrv_fetch_array($cek_hasilproses, SQLSRV_FETCH_ASSOC);
 									?>
 									<?php if ($data_hasilproses) {
 										echo "Sudah Jalan";
