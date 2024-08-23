@@ -867,22 +867,28 @@
                             required="required">
                             <option value="">Pilih</option>
                             <?php
+                            if ($_GET['kklanjutan'] == '1') {
+                                $wherecekproses = "";
+                            } else {
+                                $wherecekproses = "NOT EXISTS (
+                                        SELECT 1
+                                        FROM
+                                            db_finishing.tbl_produksi c
+                                        WHERE
+                                            c.nokk = a.nokk 
+                                            AND c.demandno = a.nodemand 
+                                            AND c.nama_mesin = a.operation
+                                        )
+                                AND";
+                            }
                             $qry1 = sqlsrv_query($con, "SELECT 
-															* 
-															FROM 
-																db_finishing.tbl_schedule_new a
-															WHERE
-															NOT EXISTS (
-																		SELECT 1
-																		FROM
-																			db_finishing.tbl_produksi c
-																		WHERE
-																			c.nokk = a.nokk 
-																			AND c.demandno = a.nodemand 
-																			AND c.nama_mesin = a.operation
-																		)
-																AND nokk = '$idkk' 
-																AND NOT nourut = 0");
+                                                                * 
+                                                            FROM 
+                                                                db_finishing.tbl_schedule_new a
+                                                            WHERE
+                                                            $wherecekproses
+                                                                nokk = '$idkk' 
+                                                                AND NOT nourut = 0");
 
                             if ($_GET['typekk'] == 'NOW') {
                                 $if_operation = "$_GET[operation]";
