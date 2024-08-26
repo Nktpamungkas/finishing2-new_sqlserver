@@ -173,7 +173,7 @@
                                 type: 'warning',
                             }).then((result) => {
                                 if (result.value) {
-                                    window.location.href = 'http://localhost/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
+                                    window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
                                 }
                             });
                         </script>";
@@ -188,7 +188,7 @@
                                 type: 'warning',
                             }).then((result) => {
                                 if (result.value) {
-                                    window.location.href = 'http://localhost/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
+                                    window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
                                 }
                             });
                         </script>";
@@ -211,7 +211,7 @@
                                     type: 'warning',
                                 }).then((result) => {
                                     if (result.value) {
-                                        window.location.href = 'http://localhost/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
+                                        window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
                                     }
                                 });
                             </script>";
@@ -223,7 +223,7 @@
                                     type: 'warning',
                                 }).then((result) => {
                                     if (result.value) {
-                                        window.location.href = 'http://localhost/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
+                                        window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/stenter/?typekk=SCHEDULE'; 
                                     }
                                 });
                             </script>";
