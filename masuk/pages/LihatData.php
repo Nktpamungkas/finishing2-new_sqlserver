@@ -146,7 +146,7 @@ include('../koneksi.php');
                     </tr>
                 </table>
             </div>
-            <div style="flex: 1;">
+            <!-- <div style="flex: 1;">
                 <table width="100%" border="1" id="datatables_rangkuman" class="display">
                     <thead>
                         <tr>
@@ -211,7 +211,7 @@ include('../koneksi.php');
                     </tfoot>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
         </div>
 
     </form>
@@ -284,134 +284,144 @@ include('../koneksi.php');
             $totalRoll = 0;
             ?>
             <?php while ($row_tblmasuk  = sqlsrv_fetch_array($q_tblmasuk)) : ?>
-            <?php
-                $q_cekposisikk      = db2_exec($conn_db2, "SELECT
-                                                            p.PRODUCTIONORDERCODE,
-                                                            p.STEPNUMBER AS STEPNUMBER,
-                                                            CASE
-                                                                WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
-                                                                ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
-                                                            END AS OPERATIONCODE,
-                                                            TRIM(o.OPERATIONGROUPCODE) AS DEPT,
-                                                            o.LONGDESCRIPTION,
-                                                            CASE
-                                                                WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
-                                                                WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
-                                                                WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
-                                                                WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
-                                                            END AS STATUS_OPERATION,
-                                                            iptip.MULAI,
-                                                            CASE
-                                                                WHEN p.PROGRESSSTATUS = 3 THEN COALESCE(iptop.SELESAI, SUBSTRING(p.LASTUPDATEDATETIME, 1, 19) || '(Run Manual Closures)')
-                                                                ELSE iptop.SELESAI
-                                                            END AS SELESAI,
-                                                            p.PRODUCTIONORDERCODE,
-                                                            p.PRODUCTIONDEMANDCODE,
-                                                            iptip.LONGDESCRIPTION AS OP1,
-                                                            iptop.LONGDESCRIPTION AS OP2,
-                                                            CASE
-                                                                WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
-                                                                ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
-                                                            END AS GEROBAK 
-                                                        FROM 
-                                                            PRODUCTIONDEMANDSTEP p 
-                                                        LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                        LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
-                                                        LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                        LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                        LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                            -- AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
-                                                                                            AND idqd.OPERATIONCODE = CASE
-                                                                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
-                                                                                                                        ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
-                                                                                                                    END
-                                                                                            AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
-                                                                                            AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB2' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB3' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB4' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB5' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB6' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                            AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
-                                                        WHERE
-                                                            p.PRODUCTIONORDERCODE  = '$row_tblmasuk[nokk]' AND p.PRODUCTIONDEMANDCODE = '$row_tblmasuk[nodemand]' AND TRIM(o.OPERATIONGROUPCODE) = 'FIN'
-                                                            AND CASE
-                                                                WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
-                                                                ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
-                                                            END = '$row_tblmasuk[operation]'
-                                                        GROUP BY
-                                                            p.PRODUCTIONORDERCODE,
-                                                            p.STEPNUMBER,
-                                                            p.OPERATIONCODE,
-                                                            p.PRODRESERVATIONLINKGROUPCODE,
-                                                            o.OPERATIONGROUPCODE,
-                                                            o.LONGDESCRIPTION,
-                                                            p.PROGRESSSTATUS,
-                                                            iptip.MULAI,
-                                                            iptop.SELESAI,
-                                                            p.LASTUPDATEDATETIME,
-                                                            p.PRODUCTIONORDERCODE,
-                                                            p.PRODUCTIONDEMANDCODE,
-                                                            iptip.LONGDESCRIPTION,
-                                                            iptop.LONGDESCRIPTION,
-                                                            a.VALUEBOOLEAN
-                                                        ORDER BY p.STEPNUMBER ASC
-                                                        FETCH FIRST 1 ROWS ONLY");
-                $row_cekposisikk    = db2_fetch_assoc($q_cekposisikk);
+                <?php
+                    // Periksa di NOW apakah sudah KK OKE atau CLOSE, jika sudah CLOSE. Tidak perlu muncul kembali di KK MASUK
+                    $q_cek_productionorder  = db2_exec($conn_db2, "SELECT TRIM(PROGRESSSTATUS) AS PROGRESSSTATUS FROM PRODUCTIONORDER p WHERE CODE = '$row_tblmasuk[nokk]'");
+                    $r_cek_productionorder  = db2_fetch_assoc($q_cek_productionorder);                    
                 ?>
-            <tr>
-                <td style="border:1px solid;vertical-align:middle; text-align: center;">
-                    <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
-                    <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
-                    <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
-                </td>
-                <td style="border:1px solid;vertical-align:middle; text-align: center;">
-                    <?= $row_tblmasuk['nama_mesin'] ?></td>
-                <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['prosesbc'] ?>
-                </td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['proses'] ?></td>
-                <td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_tblmasuk['catatan'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;">
-                    <?= $row_tblmasuk['personil'] ?><br><?php if($row_tblmasuk['creationdatetime']!=null or $row_tblmasuk['creationdatetime'] != ''){
-                        echo $row_tblmasuk['creationdatetime']->format('Y-m-d H:i:s');
-                    }else{
-                        echo '';
-                    } ?></td>
-                <td style="border:1px solid;vertical-align:middle;">
-                    <?php if ($_SESSION['usr'] != 'husni') : ?>
-                    <?php if ($_SESSION['usr'] == 'suharna' or $_SESSION['usr'] == 'wilson' or $_SESSION['usr'] == 'widodo' or $_SESSION['usr'] == 'dit' or $_SESSION['usr'] == 'husni.kamani' or $_SESSION['usr'] == 'dyo') : ?>
-                    <a href="?p=edit-data&id=<?= $row_tblmasuk['id']; ?>&typekk=NOW" class="button"
-                        target="_blank">Edit</a>
+                <?php if ($r_cek_productionorder['PROGRESSSTATUS'] == '6') : ?>
+                <?php else : ?>
+                    <?php
+                        $q_cekposisikk      = db2_exec($conn_db2, "SELECT
+                                                                    p.PRODUCTIONORDERCODE,
+                                                                    p.STEPNUMBER AS STEPNUMBER,
+                                                                    CASE
+                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                        ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                    END AS OPERATIONCODE,
+                                                                    TRIM(o.OPERATIONGROUPCODE) AS DEPT,
+                                                                    o.LONGDESCRIPTION,
+                                                                    CASE
+                                                                        WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                        WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
+                                                                        WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
+                                                                        WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
+                                                                    END AS STATUS_OPERATION,
+                                                                    iptip.MULAI,
+                                                                    CASE
+                                                                        WHEN p.PROGRESSSTATUS = 3 THEN COALESCE(iptop.SELESAI, SUBSTRING(p.LASTUPDATEDATETIME, 1, 19) || '(Run Manual Closures)')
+                                                                        ELSE iptop.SELESAI
+                                                                    END AS SELESAI,
+                                                                    p.PRODUCTIONORDERCODE,
+                                                                    p.PRODUCTIONDEMANDCODE,
+                                                                    iptip.LONGDESCRIPTION AS OP1,
+                                                                    iptop.LONGDESCRIPTION AS OP2,
+                                                                    CASE
+                                                                        WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
+                                                                        ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                    END AS GEROBAK 
+                                                                FROM 
+                                                                    PRODUCTIONDEMANDSTEP p 
+                                                                LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
+                                                                                                    -- AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
+                                                                                                    AND idqd.OPERATIONCODE = CASE
+                                                                                                                                WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                                                                ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                                            END
+                                                                                                    AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
+                                                                                                    AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB2' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB3' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB4' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB5' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB6' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB7' OR
+                                                                                                        idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                    AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                WHERE
+                                                                    p.PRODUCTIONORDERCODE  = '$row_tblmasuk[nokk]' AND p.PRODUCTIONDEMANDCODE = '$row_tblmasuk[nodemand]' AND TRIM(o.OPERATIONGROUPCODE) = 'FIN'
+                                                                    AND CASE
+                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                        ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                    END = '$row_tblmasuk[operation]'
+                                                                GROUP BY
+                                                                    p.PRODUCTIONORDERCODE,
+                                                                    p.STEPNUMBER,
+                                                                    p.OPERATIONCODE,
+                                                                    p.PRODRESERVATIONLINKGROUPCODE,
+                                                                    o.OPERATIONGROUPCODE,
+                                                                    o.LONGDESCRIPTION,
+                                                                    p.PROGRESSSTATUS,
+                                                                    iptip.MULAI,
+                                                                    iptop.SELESAI,
+                                                                    p.LASTUPDATEDATETIME,
+                                                                    p.PRODUCTIONORDERCODE,
+                                                                    p.PRODUCTIONDEMANDCODE,
+                                                                    iptip.LONGDESCRIPTION,
+                                                                    iptop.LONGDESCRIPTION,
+                                                                    a.VALUEBOOLEAN
+                                                                ORDER BY p.STEPNUMBER ASC
+                                                                FETCH FIRST 1 ROWS ONLY");
+                        $row_cekposisikk    = db2_fetch_assoc($q_cekposisikk);
+                    ?>
+                    <?php if($row_cekposisikk['STATUS_OPERATION'] == 'Closed') : ?>
+                        <tr>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
+                                <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
+                                <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
+                            </td>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= $row_tblmasuk['nama_mesin'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_tblmasuk['prosesbc'] ?>
+                            </td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['proses'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_tblmasuk['catatan'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;">
+                                <?= $row_tblmasuk['personil'] ?><br><?php if($row_tblmasuk['creationdatetime']!=null or $row_tblmasuk['creationdatetime'] != ''){
+                                    echo $row_tblmasuk['creationdatetime']->format('Y-m-d H:i:s');
+                                }else{
+                                    echo '';
+                                } ?></td>
+                            <td style="border:1px solid;vertical-align:middle;">
+                                <?php if ($_SESSION['usr'] != 'husni') : ?>
+                                <?php if ($_SESSION['usr'] == 'suharna' or $_SESSION['usr'] == 'wilson' or $_SESSION['usr'] == 'widodo' or $_SESSION['usr'] == 'dit' or $_SESSION['usr'] == 'husni.kamani' or $_SESSION['usr'] == 'dyo') : ?>
+                                <a href="?p=edit-data&id=<?= $row_tblmasuk['id']; ?>&typekk=NOW" class="button"
+                                    target="_blank">Edit</a>
+                                <?php endif; ?>
+                                <button class="button" style="background-color: #ff004c; color: #ffffff;"
+                                    onclick="showConfirmation(<?= $row_tblmasuk['id'] ?>);">Hapus</button>
+                                <?php endif; ?>
+                            </td>
+                            <td style="border:1px solid;vertical-align:middle; text-align: center;">
+                                <?= $row_tblmasuk['operation'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK"
+                                    href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nokk'] ?></a>
+                            </td>
+                            <td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK"
+                                    href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nodemand'] ?></a>
+                            </td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_order'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['jenis_kain'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lebar'] ?> x
+                                <?= $row_tblmasuk['gramasi'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_warna'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['warna'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lot'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['roll'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order'] ?></td>
+                            <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order_yd'] ?></td>
+                            <?php $totalQty += $row_tblmasuk['qty_order']; ?>
+                            <?php $totalRoll += $row_tblmasuk['roll']; ?>
+                        </tr>
                     <?php endif; ?>
-                    <button class="button" style="background-color: #ff004c; color: #ffffff;"
-                        onclick="showConfirmation(<?= $row_tblmasuk['id'] ?>);">Hapus</button>
-                    <?php endif; ?>
-                </td>
-                <td style="border:1px solid;vertical-align:middle; text-align: center;">
-                    <?= $row_tblmasuk['operation'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><a title="MEMO PENTING" target="_BLANK"
-                        href="http://online.indotaichen.com/laporan/ppc_filter.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nokk'] ?></a>
-                </td>
-                <td style="border:1px solid;vertical-align:middle;"><a title="POSISI KK" target="_BLANK"
-                        href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?=TRIM($row_tblmasuk['nodemand']); ?>&prod_order=<?=TRIM($row_tblmasuk['nokk']); ?>"><?= $row_tblmasuk['nodemand'] ?></a>
-                </td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['langganan'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['buyer'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_order'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['jenis_kain'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lebar'] ?> x
-                    <?= $row_tblmasuk['gramasi'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['no_warna'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['warna'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['lot'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['roll'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order'] ?></td>
-                <td style="border:1px solid;vertical-align:middle;"><?= $row_tblmasuk['qty_order_yd'] ?></td>
-                <?php $totalQty += $row_tblmasuk['qty_order']; ?>
-                <?php $totalRoll += $row_tblmasuk['roll']; ?>
-            </tr>
+                <?php endif; ?>
             <?php endwhile; ?>
         </tbody>
         <tfoot>
