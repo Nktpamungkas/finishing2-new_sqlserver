@@ -294,8 +294,16 @@
             $gerobak = $_POST['no_gerobak'];
             $jam_in = $_POST['proses_in'];
             $jam_out = $_POST['proses_out'];
+        if ($_POST['proses_jam'] != NULL or $_POST['proses_jam'] != '') {
             $proses_jam = $_POST['proses_jam'];
+        } else
+            $proses_jam = 0;
+        if ($_POST['proses_menit'] != NULL or $_POST['proses_menit'] != '') {
             $proses_menit = $_POST['proses_menit'];
+        } else
+            $proses_menit = 0;
+            // $proses_jam = $_POST['proses_jam'];
+            // $proses_menit = $_POST['proses_menit'];
             $tgl_proses_in = $_POST['tgl_proses_m'];
             $tgl_proses_out = $_POST['tgl_proses_k'];
             $mulai = $_POST['stop_mulai'];
@@ -304,8 +312,17 @@
             $selesai = $_POST['stop_selesai'];
             $selesai2 = $_POST['stop_selesai2'];
             $selesai3 = $_POST['stop_selesai3'];
+
+        if ($_POST['stop_jam'] != NULL or $_POST['stop_jam'] != '') {
             $stop_jam = $_POST['stop_jam'];
+        } else
+            $stop_jam = 0;
+        if ($_POST['stop_menit'] != NULL or $_POST['stop_menit'] != '') {
             $stop_menit = $_POST['stop_menit'];
+        } else
+            $stop_menit = 0;
+            // $stop_jam = $_POST['stop_jam'];
+            // $stop_menit = $_POST['stop_menit'];
             $tgl_stop_m = $_POST['tgl_stop_m'];
             $tgl_stop_m2 = $_POST['tgl_stop_m2'];
             $tgl_stop_m3 = $_POST['tgl_stop_m3'];
@@ -344,76 +361,80 @@
             $jmlKonsen5 = $_POST['jmlKonsen5'];
             $jmlKonsen6 = $_POST['jmlKonsen6'];
             $jmlKonsen7 = $_POST['jmlKonsen7'];
-            $simpanSql = "UPDATE tbl_produksi SET 
-                    `shift`='$shift',
-                    `shift2`='$shift2',
-                    `buyer`='$buyer',
-                    `no_item`='$item',
-                    `no_warna`='$nowarna',
-                    `jenis_bahan`='$bahan',
-                    `kondisi_kain`='$kain',
-                    `panjang`='$qty2',
-                    `panjang_h`='$qty3',
-                    `no_gerobak`='$gerobak',
-                    `no_mesin`='$mesin',
-                    `nama_mesin`='$nmmesin',
-                    `langganan`='$langganan',
-                    `no_order`='$order',
-                    `jenis_kain`='$jenis_kain',
-                    `warna`='$warna',
-                    `lot`='$lot',
-                    `rol`='$rol',
-                    `qty`='$qty',
-                    `proses`='$proses',
-                    `jam_in`='$jam_in',
-                    `jam_out`='$jam_out',
-                    `tgl_proses_in`='$tgl_proses_in',
-                    `tgl_proses_out`='$tgl_proses_out',
-                    `stop_l`='$mulai',
-                    `stop_l2`='$mulai2',
-                    `stop_l3`='$mulai3',
-                    `stop_r`='$selesai',
-                    `stop_r2`='$selesai2',
-                    `stop_r3`='$selesai3',
-                    `tgl_stop_l`='$tgl_stop_m',
-                    `tgl_stop_l2`='$tgl_stop_m2',
-                    `tgl_stop_l3`='$tgl_stop_m3',
-                    `tgl_stop_r`='$tgl_stop_s',
-                    `tgl_stop_r2`='$tgl_stop_s2',
-                    `tgl_stop_r3`='$tgl_stop_s3',
-                    `kd_stop`='$kd',
-                    `kd_stop2`='$kd2',
-                    `kd_stop3`='$kd3',
-                    `acc_staff`='$acc_kain',
-                    `catatan`='$catatan',
-                    `suhu`='$suhu',
-                    `speed`='$speed',
-                    `omt`='$omt',
-                    `vmt`='$vmt',
-                    `t_vmt`='$vmt_time',
-                    `buka_rantai`='$buka',
-                    `overfeed`='$overfeed',
-                    `lebar`='$lebar',
-                    `gramasi`='$gramasi',
-                    `lebar_h`='$hlebar',
-                    `gramasi_h`='$hgramasi',
-                    `ph_larut`='$phlarutan',
-                    `chemical_1`='$chemical1',
-                    `chemical_2`='$chemical2',
-                    `chemical_3`='$chemical3',
-                    `chemical_4`='$chemical4',
-                    `chemical_5`='$chemical5',
-                    `chemical_6`='$chemical6',
-                    `chemical_7`='$chemical7',
-                    `konsen_1`='$jmlKonsen1',
-                    `konsen_2`='$jmlKonsen2',
-                    `konsen_3`='$jmlKonsen3',
-                    `konsen_4`='$jmlKonsen4',
-                    `konsen_5`='$jmlKonsen5',
-                    `konsen_6`='$jmlKonsen6',
-                    `konsen_7`='$jmlKonsen7',
-                    `tgl_update`='$tgl'
-            WHERE `id`='$_POST[id]'";
+            $simpanSql = "UPDATE db_finishing.tbl_produksi SET 
+                    stop_jam=$stop_jam ,
+                    stop_menit=$stop_menit,
+                    proses_jam=$proses_jam,
+                    proses_menit=$proses_menit,
+                    shift='$shift',
+                    shift2='$shift2',
+                    buyer='$buyer',
+                    no_item='$item',
+                    no_warna='$nowarna',
+                    jenis_bahan='$bahan',
+                    kondisi_kain='$kain',
+                    panjang='$qty2',
+                    panjang_h='$qty3',
+                    no_gerobak='$gerobak',
+                    no_mesin='$mesin',
+                    nama_mesin='$nmmesin',
+                    langganan='$langganan',
+                    no_order='$order',
+                    jenis_kain='$jenis_kain',
+                    warna='$warna',
+                    lot='$lot',
+                    rol='$rol',
+                    qty='$qty',
+                    proses='$proses',
+                    jam_in='$jam_in',
+                    jam_out='$jam_out',
+                    tgl_proses_in='$tgl_proses_in',
+                    tgl_proses_out='$tgl_proses_out',
+                    stop_l='$mulai',
+                    stop_l2='$mulai2',
+                    stop_l3='$mulai3',
+                    stop_r='$selesai',
+                    stop_r2='$selesai2',
+                    stop_r3='$selesai3',
+                    tgl_stop_l='$tgl_stop_m',
+                    tgl_stop_l2='$tgl_stop_m2',
+                    tgl_stop_l3='$tgl_stop_m3',
+                    tgl_stop_r='$tgl_stop_s',
+                    tgl_stop_r2='$tgl_stop_s2',
+                    tgl_stop_r3='$tgl_stop_s3',
+                    kd_stop='$kd',
+                    kd_stop2='$kd2',
+                    kd_stop3='$kd3',
+                    acc_staff='$acc_kain',
+                    catatan='$catatan',
+                    suhu='$suhu',
+                    speed='$speed',
+                    omt='$omt',
+                    vmt='$vmt',
+                    t_vmt='$vmt_time',
+                    buka_rantai='$buka',
+                    overfeed='$overfeed',
+                    lebar='$lebar',
+                    gramasi='$gramasi',
+                    lebar_h='$hlebar',
+                    gramasi_h='$hgramasi',
+                    ph_larut='$phlarutan',
+                    chemical_1='$chemical1',
+                    chemical_2='$chemical2',
+                    chemical_3='$chemical3',
+                    chemical_4='$chemical4',
+                    chemical_5='$chemical5',
+                    chemical_6='$chemical6',
+                    chemical_7='$chemical7',
+                    konsen_1='$jmlKonsen1',
+                    konsen_2='$jmlKonsen2',
+                    konsen_3='$jmlKonsen3',
+                    konsen_4='$jmlKonsen4',
+                    konsen_5='$jmlKonsen5',
+                    konsen_6='$jmlKonsen6',
+                    konsen_7='$jmlKonsen7',
+                    tgl_update='$tgl'
+            WHERE id='$_POST[id]'";
             sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
 
             // Refresh form
@@ -449,8 +470,17 @@
             $gerobak = $_POST['no_gerobak'];
             $jam_in = $_POST['proses_in'];
             $jam_out = $_POST['proses_out'];
-            $proses_jam = $_POST['proses_jam'];
-            $proses_menit = $_POST['proses_menit'];
+            if ($_POST['proses_jam']!=NULL or $_POST['proses_jam']!=''){
+                $proses_jam = $_POST['proses_jam'];
+            } else $proses_jam = 0;
+
+            if ($_POST['proses_menit'] != NULL or $_POST['proses_menit'] != '') {
+                $proses_menit = $_POST['proses_menit'];
+            } else
+                $proses_menit = 0;
+
+            // $proses_jam = $_POST['proses_jam'];
+            // $proses_menit = $_POST['proses_menit'];
             $tgl_proses_in = $_POST['tgl_proses_m'];
             $tgl_proses_out = $_POST['tgl_proses_k'];
             $mulai = $_POST['stop_mulai'];
@@ -459,8 +489,16 @@
             $selesai = $_POST['stop_selesai'];
             $selesai2 = $_POST['stop_selesai2'];
             $selesai3 = $_POST['stop_selesai3'];
+        if ($_POST['stop_jam'] != NULL or $_POST['stop_jam'] != '') {
             $stop_jam = $_POST['stop_jam'];
+        } else
+            $stop_jam = 0;
+        if ($_POST['stop_menit'] != NULL or $_POST['stop_menit'] != '') {
             $stop_menit = $_POST['stop_menit'];
+        } else
+            $stop_menit = 0;
+            // $stop_jam = $_POST['stop_jam'];
+            // $stop_menit = $_POST['stop_menit'];
             $tgl_stop_m = $_POST['tgl_stop_m'];
             $tgl_stop_m2 = $_POST['tgl_stop_m2'];
             $tgl_stop_m3 = $_POST['tgl_stop_m3'];
@@ -503,6 +541,10 @@
             $jnsmesin ='stenter';
             // $dataInsertProduksi=[];
             $dataInsertProduksi=[
+            $stop_jam,
+            $stop_menit,
+                $proses_jam,
+$proses_menit,
                         cek($nokk),
                         cek($demand),
                         cek($kklanjutan),
@@ -578,8 +620,8 @@
                         cek($jnsmesin),
                         cek($tgl)
                     ];
-            try{
-            $simpanSql = "INSERT INTO db_finishing.tbl_produksi (
+            
+            $simpanSql = "INSERT INTO db_finishing.tbl_produksi (stop_jam,stop_menit,proses_jam,proses_menit,
                         nokk,
                         demandno,
                         kklanjutan ,
@@ -653,39 +695,50 @@
                         konsen_6,
                         konsen_7,
                         jns_mesin,
-                        tgl_update)VALUES(
+                        tgl_update)VALUES(?,?,?,?,
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
                         ?,?,?,?,?,?,?,?,?,?
                         )";
-            // sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
-            $stmt = $pdo->prepare($simpanSql);
+            // // sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
+            // $stmt = $pdo->prepare($simpanSql);
 
-            // Define the data to be inserted
-            $data = $dataInsertProduksi;
+            // // Define the data to be inserted
+            // $data = $dataInsertProduksi;
 
-            // foreach ($data as $row) {
-                // echo '<pre>';
+            // // foreach ($data as $row) {
+            //     // echo '<pre>';
     
-                // print_r($data);
+            //     // print_r($data);
     
-                // echo '</pre>';
+            //     // echo '</pre>';
     
-                if (!$stmt->execute($data)) {
-                    // Handle error
-                    echo "Error: ";
+            //     if (!$stmt->execute($data)) {
+            //         // Handle error
+            //         echo "Error: ";
 
-                    print_r($stmt->errorInfo());
+            //         print_r($stmt->errorInfo());
 
-                    exit();
+            //         exit();
 
-                }
+            //     }
+            // // }
+
+            // // echo "Data successfully inserted!";
+            // } catch (PDOException $e) {
+            // echo "xError: " . $e->getMessage();
             // }
+        $stmt = sqlsrv_prepare($con, $simpanSql, $dataInsertProduksi);
 
-            // echo "Data successfully inserted!";
-            } catch (PDOException $e) {
-            echo "xError: " . $e->getMessage();
-            }
+        if ($stmt === false) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+        $result = sqlsrv_execute($stmt);
+
+        if ($result === false) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+        // echo 'Berhasil simpan';
             // $simpanSql = "INSERT INTO db_finishing.tbl_produksi SET 
             //             `nokk`='$nokk',
             //             `demandno`='$demand',
@@ -789,11 +842,11 @@
                                             no_mesin='$mesin',
                                             proses='$proses',
                                             revisi='0',
-                                            tgl_masuk=now(),
+                                            tgl_masuk=GETDATE(),
                                             personil='Operator Fin',
-                                            target='0',
+                                            [target]='0',
                                             catatan='data diinput dari finishing',
-                                            tgl_update=now(),
+                                            tgl_update=GETDATE(),
                                             tampil='1'");
 
             // Refresh form
