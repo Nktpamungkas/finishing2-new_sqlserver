@@ -213,7 +213,7 @@ include('../koneksi.php');
 					</tr>
 				</table>
 			</div>
-			<!-- <div style="flex: 1;">
+			<div style="flex: 1;">
 				<table width="100%" border="1" id="datatables_rangkuman" class="display">
 					<thead>
 						<tr>
@@ -307,7 +307,7 @@ include('../koneksi.php');
 					</tfoot>
 					</tbody>
 				</table>
-			</div> -->
+			</div> 
 		</div>
 	</form>
 	<table width="100%" border="1" id="datatables" class="display">
