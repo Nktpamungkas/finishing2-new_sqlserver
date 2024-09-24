@@ -113,6 +113,47 @@
 			if ($idkk != "") {
 				include_once("../now.php");
 			}
+
+			// if ($idkk != "") {
+			// 	if ($_GET['demand'] != "") {
+			// 		$nomordemand = $_GET['demand'];
+			// 		$anddemand = "AND nodemand = '$nomordemand'";
+			// 	}else{
+			// 		$anddemand = "";
+			// 	}
+			// 	// CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
+			// 	$q_cekshedule    = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
+			// 	WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
+			// 	$row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
+
+			// 	if(empty($row_cekschedule['nourut']) AND $_GET['demand']){
+			// 		echo     "<script>
+			// 					swal({
+			// 						title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan NOMOR URUT yang tepat.',   
+			// 						text: 'Klik Ok untuk input data kembali',
+			// 						type: 'warning',
+			// 					}).then((result) => {
+			// 						if (result.value) {
+			// 							window.location.href = 'http://online.indotaichen.com/finishing2-new/belah-lipat/?typekk=SCHEDULE'; 
+			// 						}
+			// 					});
+			// 				</script>";
+			// 	}elseif (empty($row_cekschedule['group_shift']) AND $_GET['demand']) {
+			// 		echo     "<script>
+			// 					swal({
+			// 						title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan GROUP SHIFT yang tepat.',   
+			// 						text: 'Klik Ok untuk input data kembali',
+			// 						type: 'warning',
+			// 					}).then((result) => {
+			// 						if (result.value) {
+			// 							window.location.href = 'http://online.indotaichen.com/finishing2-new/belah-lipat/?typekk=SCHEDULE'; 
+			// 						}
+			// 					});
+			// 				</script>";
+			// 	}else{
+			// 		include_once("../now.php");
+			// 	}
+			// }
 		} elseif ($_GET['typekk'] == "SCHEDULE") {
 			if ($idkk != "") {
 				if ($_GET['demand'] != "") {
@@ -124,7 +165,7 @@
 				// CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
 				$q_cekshedule    = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] 
 				WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
-				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule);
+				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
 
 				if(empty($row_cekschedule['nourut']) AND $_GET['demand']){
 					echo     "<script>
@@ -261,6 +302,8 @@
 						proses='$proses',
 						jam_in='$jam_in',
 						jam_out='$jam_out',
+						proses_jam='$proses_jam',
+						proses_menit='$proses_menit',
 						tgl_proses_in='$tgl_proses_in',
 						tgl_proses_out='$tgl_proses_out',
 						stop_l='$mulai',
@@ -269,6 +312,8 @@
 						stop_r='$selesai',
 						stop_r2='$selesai2',
 						stop_r3='$selesai3',
+						stop_jam='$stop_jam',
+						stop_menit='$stop_menit',
 						tgl_stop_l='$tgl_stop_m',
 						tgl_stop_l2='$tgl_stop_m2',
 						tgl_stop_l3='$tgl_stop_m3',
@@ -421,6 +466,8 @@
 					'proses'=>(string) $proses,
 					'jam_in'=>(string) $jam_in,
 					'jam_out'=>(string) $jam_out,
+					'proses_jam'=>(int) $proses_jam,
+					'proses_menit'=>(int) $proses_menit,
 					'tgl_proses_in'=>(string) $tgl_proses_in,
 					'tgl_proses_out'=>(string) $tgl_proses_out,
 					'stop_l'=>(string)$mulai,
@@ -429,6 +476,8 @@
 					'stop_r'=>(string)$selesai,
 					'stop_r2'=>(string)$selesai2,
 					'stop_r3'=>(string)$selesai3,
+					'stop_jam'=>(int)$stop_jam,
+					'stop_menit'=>(int)$stop_menit,
 					'tgl_stop_l'=>(string)$tgl_stop_m,
 					'tgl_stop_l2'=>(string)$tgl_stop_m2,
 					'tgl_stop_l3'=>(string)$tgl_stop_m3,
@@ -608,7 +657,7 @@
 				// tampil='1'");
 
 				// Refresh form
-				echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
+				// echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
 			}
 	?>
 	<form id="form1" name="form1" method="post" action="">
