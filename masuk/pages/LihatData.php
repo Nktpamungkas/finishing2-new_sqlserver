@@ -146,7 +146,7 @@ include('../koneksi.php');
                     </tr>
                 </table>
             </div>
-            <!-- <div style="flex: 1;">
+            <div style="flex: 1;">
                 <table width="100%" border="1" id="datatables_rangkuman" class="display">
                     <thead>
                         <tr>
@@ -211,7 +211,7 @@ include('../koneksi.php');
                     </tfoot>
                     </tbody>
                 </table>
-            </div> -->
+            </div>
         </div>
 
     </form>
@@ -286,11 +286,11 @@ include('../koneksi.php');
             <?php while ($row_tblmasuk  = sqlsrv_fetch_array($q_tblmasuk)) : ?>
                 <?php
                     // Periksa di NOW apakah sudah KK OKE atau CLOSE, jika sudah CLOSE. Tidak perlu muncul kembali di KK MASUK
-                    $q_cek_productionorder  = db2_exec($conn_db2, "SELECT TRIM(PROGRESSSTATUS) AS PROGRESSSTATUS FROM PRODUCTIONORDER p WHERE CODE = '$row_tblmasuk[nokk]'");
-                    $r_cek_productionorder  = db2_fetch_assoc($q_cek_productionorder);                    
+                    // $q_cek_productionorder  = db2_exec($conn_db2, "SELECT TRIM(PROGRESSSTATUS) AS PROGRESSSTATUS FROM PRODUCTIONORDER p WHERE CODE = '$row_tblmasuk[nokk]'");
+                    // $r_cek_productionorder  = db2_fetch_assoc($q_cek_productionorder);                    
                 ?>
-                <?php if ($r_cek_productionorder['PROGRESSSTATUS'] == '6') : ?>
-                <?php else : ?>
+                <?php // if ($r_cek_productionorder['PROGRESSSTATUS'] == '6') : ?>
+                <?php // else : ?>
                     <?php
                         $q_cekposisikk      = db2_exec($conn_db2, "SELECT
                                                                     p.PRODUCTIONORDERCODE,
@@ -368,7 +368,7 @@ include('../koneksi.php');
                                                                 FETCH FIRST 1 ROWS ONLY");
                         $row_cekposisikk    = db2_fetch_assoc($q_cekposisikk);
                     ?>
-                    <?php if($row_cekposisikk['STATUS_OPERATION'] == 'Closed') : ?>
+                    <?php // if($row_cekposisikk['STATUS_OPERATION'] == 'Closed') : ?>
                         <tr>
                             <td style="border:1px solid;vertical-align:middle; text-align: center;">
                                 <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
@@ -420,8 +420,8 @@ include('../koneksi.php');
                             <?php $totalQty += $row_tblmasuk['qty_order']; ?>
                             <?php $totalRoll += $row_tblmasuk['roll']; ?>
                         </tr>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php // endif; ?>
+                <?php // endif; ?>
             <?php endwhile; ?>
         </tbody>
         <tfoot>
