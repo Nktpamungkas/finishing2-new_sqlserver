@@ -76,6 +76,7 @@
     ini_set("error_reporting", 1);
     session_start();
     include('../koneksi.php');
+    include('../utils/query.php');
     function nourut()
     {
         include('../koneksi.php');
@@ -387,8 +388,17 @@
         $gerobak = $_POST['no_gerobak'];
         $jam_in = $_POST['proses_in'];
         $jam_out = $_POST['proses_out'];
-        $proses_jam = $_POST['proses_jam'];
-        $proses_menit = $_POST['proses_menit'];
+        if ($_POST['proses_jam'] != NULL or $_POST['proses_jam'] != '') {
+            $proses_jam = $_POST['proses_jam'];
+        } else
+            $proses_jam = 0;
+
+        if ($_POST['proses_menit'] != NULL or $_POST['proses_menit'] != '') {
+            $proses_menit = $_POST['proses_menit'];
+        } else
+            $proses_menit = 0;
+        // $proses_jam = $_POST['proses_jam'];
+        // $proses_menit = $_POST['proses_menit'];
         $tgl_proses_in = $_POST['tgl_proses_m'];
         $tgl_proses_out = $_POST['tgl_proses_k'];
         $mulai = $_POST['stop_mulai'];
@@ -397,8 +407,16 @@
         $selesai = $_POST['stop_selesai'];
         $selesai2 = $_POST['stop_selesai2'];
         $selesai3 = $_POST['stop_selesai3'];
-        $stop_jam = $_POST['stop_jam'];
-        $stop_menit = $_POST['stop_menit'];
+        if ($_POST['stop_jam'] != NULL or $_POST['stop_jam'] != '') {
+            $stop_jam = $_POST['stop_jam'];
+        } else
+            $stop_jam = 0;
+        if ($_POST['stop_menit'] != NULL or $_POST['stop_menit'] != '') {
+            $stop_menit = $_POST['stop_menit'];
+        } else
+            $stop_menit = 0;
+        // $stop_jam = $_POST['stop_jam'];
+        // $stop_menit = $_POST['stop_menit'];
         $tgl_stop_m = $_POST['tgl_stop_m'];
         $tgl_stop_m2 = $_POST['tgl_stop_m2'];
         $tgl_stop_m3 = $_POST['tgl_stop_m3'];
@@ -437,6 +455,10 @@
         $jnsmesin = 'compact';
 
         $dataInsertProduksi = [
+            $proses_jam,
+            $proses_menit,
+            $stop_jam,
+            $stop_menit,
             cek($nokk),
             cek($demand),
             cek($kklanjutan),
@@ -514,6 +536,10 @@
         ];
         try {
             $simpanSql = "INSERT INTO db_finishing.tbl_produksi (
+                        proses_jam,
+                        proses_menit,
+                        stop_jam,
+                        stop_menit,
                         nokk,
                         demandno,
                         kklanjutan ,
@@ -590,7 +616,7 @@
                         tgl_update)VALUES(
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
-                        ?,?,?,?,?,?,?,?,?,?
+                        ?,?,?,?,?,?,?,?,?,?,?,?,?,?
                         )";
             // sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
             $stmt = $pdo->prepare($simpanSql);
