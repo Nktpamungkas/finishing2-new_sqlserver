@@ -657,7 +657,7 @@
 				// tampil='1'");
 
 				// Refresh form
-				// echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
+				echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
 			}
 	?>
 	<form id="form1" name="form1" method="post" action="">
