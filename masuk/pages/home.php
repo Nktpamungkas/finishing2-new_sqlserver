@@ -168,7 +168,8 @@ if (empty($_SESSION['usr'])) {
 	<?php
 	// ini_set("error_reporting", 1);
 	session_start();
-	include('../koneksi.php');
+	include '../koneksi.php';
+	include '../utils/helper.php';
 	function nourut()
 	{
 		include('../koneksi.php');
@@ -321,6 +322,31 @@ if (empty($_SESSION['usr'])) {
 								});
 							</script>";
 		} else {
+			$nokk = cek_input('nokk');
+			$demand = cek_input('demand');
+			$nama_mesin = cek_input('nama_mesin');
+			$operation = cek_input('operation');
+			$PELANGGAN = $dt_pelanggan_buyer['PELANGGAN'];
+			$BUYER = $dt_pelanggan_buyer['BUYER'];
+			$no_order = cek_input('no_order');
+			$tgl_delivery = cek_input('tgl_delivery');
+			$lebar = cek_input('lebar');
+			$gramasi = cek_input('gramasi');
+			$warna = cek_input('warna');
+			$no_warna = cek_input('no_warna');
+			$qty = cek_input('qty');
+			$qty2 = cek_input('qty2');
+			$lot = cek_input('lot');
+			$rol = cek_input('rol');
+			$proses = cek_input('proses');
+			$personil = cek_input('personil');
+			$catatan = cek_input('catatan');
+			$KK_MASUK = 'KK MASUK';
+			$REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
+			$prosesbc = cek_input('prosesbc');
+			$data=[$nokk,$demand,$operation,$nama_mesin,$PELANGGAN,$BUYER,$no_order,$tgl_delivery,$jenis_kain,$lebar,$gramasi,
+$warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$creationdatetime,$REMOTE_ADDR,$prosesbc];
+
 			$simpanSql = "INSERT INTO db_finishing.tbl_masuk (nokk,
 													nodemand,
 													operation,
@@ -345,31 +371,20 @@ if (empty($_SESSION['usr'])) {
 													creationdatetime,
 													ipaddress,
 													prosesbc) 
-										VALUES('$_POST[nokk]',
-												'$_POST[demand]',
-												'$_POST[operation]',
-												'$_POST[nama_mesin]',
-												'$dt_pelanggan_buyer[PELANGGAN]',
-												'$dt_pelanggan_buyer[BUYER]',
-												'$_POST[no_order]',
-												'$_POST[tgl_delivery]',
-												'$jenis_kain',
-												'$_POST[lebar]',
-												'$_POST[gramasi]',
-												'$_POST[warna]',
-												'$_POST[no_warna]',
-												'$_POST[qty]',
-												'$_POST[qty2]',
-												'$_POST[lot]',
-												'$_POST[rol]',
-												'$_POST[proses]',
-												'$_POST[personil]',
-												'$_POST[catatan]',
-												'KK MASUK',
-												'$creationdatetime',
-												'$_SERVER[REMOTE_ADDR]',
-												'$_POST[prosesbc]')";
-			sqlsrv_query($con, $simpanSql);
+										VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			// sqlsrv_query($con, $simpanSql);
+
+			$stmt = sqlsrv_prepare($con, $simpanSql, $data);
+
+			if ($stmt === false) {
+				die(print_r(sqlsrv_errors(), true));
+			}
+			$result = sqlsrv_execute($stmt);
+
+			if ($result === false) {
+				die(print_r(sqlsrv_errors(), true));
+			} 
+			// echo 'Berhasil simpan';
 
 			// Refresh form
 			// echo "<meta http-equiv='refresh' content='0; url=?typekk=NOW&idkk=$idkk&status=Data Sudah DiSimpan'>";
