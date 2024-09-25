@@ -607,7 +607,7 @@ include('../koneksi.php');
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['qty_order'] ?></td>
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['qty_order_yd'] ?></td>
 					<?php $totalQty += $row_schedule['qty_order']; ?>
-					<?php $totalRoll += $row_schedule['roll']; ?>
+					<?php $totalRoll += $row_schedule['roll'] ? $row_schedule['roll'] : 0; ?>
 				</tr>
 			<?php endwhile; ?>
 		</tbody>
