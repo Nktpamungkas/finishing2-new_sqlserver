@@ -117,7 +117,7 @@
                                 type: 'warning',
                             }).then((result) => {
                                 if (result.value) {
-                                    window.location.href = 'http://10.0.5.25/finishing2-new_sqlserver/oven/?typekk=SCHEDULE'; 
+                                    window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
                                 }
                             });
                         </script>";
@@ -147,7 +147,7 @@
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://10.0.5.25/finishing2-new_sqlserver/oven/?typekk=SCHEDULE'; 
+										window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
 									}
 								});
 							</script>";
@@ -159,7 +159,7 @@
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://10.0.5.25/finishing2-new_sqlserver/oven/?typekk=SCHEDULE'; 
+										window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
 									}
 								});
 							</script>";

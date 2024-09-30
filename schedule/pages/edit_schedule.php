@@ -181,7 +181,7 @@ if (empty($_SESSION['usr'])) {
                     type: 'success',
                 }).then((result) => {
                     if (result.value) {
-                        window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/schedule/?typekk=NOW'; 
+                        window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/?typekk=NOW'; 
                     }
                 });
               </script>";
@@ -202,7 +202,7 @@ if (empty($_SESSION['usr'])) {
                         type: 'warning',
                     }).then((result) => {
                         if (result.value) {
-                            window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/schedule/?typekk=NOW'; 
+                            window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/?typekk=NOW'; 
                         }
                     });
                   </script>";
@@ -255,7 +255,7 @@ if (empty($_SESSION['usr'])) {
                 type: 'success',
             }).then((result) => {
                 if (result.value) {
-                    window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/schedule/index.php?p=LihatData'; 
+                    window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData'; 
                 }
             });
           </script>";

@@ -474,7 +474,7 @@ include('../koneksi.php');
                 }).then((result) => {
                     if (result.value) {
                         window.location.href =
-                            'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/index.php?p=LihatData';
+                            'http://online.indotaichen.com/finishing2-new/masuk/index.php?p=LihatData';
                     }
                 });
                 closeModal();

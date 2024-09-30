@@ -214,7 +214,7 @@ if (empty($_SESSION['usr'])) {
 							type: 'success',
 						}).then((result) => {
 							if (result.value) {
-								window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+								window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 							}
 						});
 					</script>";
@@ -250,7 +250,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -262,7 +262,7 @@ if (empty($_SESSION['usr'])) {
 								type: 'warning',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
@@ -274,7 +274,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -302,7 +302,7 @@ if (empty($_SESSION['usr'])) {
 								type: 'warning',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
@@ -317,7 +317,7 @@ if (empty($_SESSION['usr'])) {
 									type: 'warning',
 								}).then((result) => {
 									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+										window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 									}
 								});
 							</script>";
@@ -395,7 +395,7 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 								type: 'success',
 							}).then((result) => {
 								if (result.value) {
-									window.location.href = 'http://online.indotaichen.com/finishing2-new_sqlserver/masuk/?typekk=NOW'; 
+									window.location.href = 'http://online.indotaichen.com/finishing2-new/masuk/?typekk=NOW'; 
 								}
 							});
 						</script>";
