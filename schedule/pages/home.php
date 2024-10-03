@@ -436,7 +436,7 @@ if (empty($_SESSION['usr'])) {
 						<strong>Panjang (Yard)</strong>
 
 						<input name="qty2" type="text" id="qty2" size="8" value="<?= $row_kkmasuk['qty_order_yd']; ?>"
-							placeholder="0.00" onfocus="jumlah();" />
+							placeholder="0.00">
 					</td>
 				</tr>
 				<tr>

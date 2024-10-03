@@ -820,7 +820,7 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 						<td>:</td>
 						<td colspan="2"><input name="qty2" type="text" id="qty2" size="8"
 								value="<?= $dt_qtyorder['QTY_ORDER_YARD']; ?><?php echo $rw['panjang']; ?>"
-								placeholder="0.00" onfocus="jumlah();" /></td>
+								placeholder="0.00" /></td>
 					</tr>
 					<tr>
 						<td scope="row">
