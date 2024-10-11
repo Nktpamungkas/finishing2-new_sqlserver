@@ -234,18 +234,22 @@
 					}
 
 					if ($_GET['awal']) {
-						$where_tgl = "AND CONVERT(DATE,creationdatetime, 1, 10) BETWEEN '$_GET[awal]' AND '$_GET[akhir]'";
+						$where_tgl = "AND  FORMAT(creationdatetime, 'yyyy-MM-dd') BETWEEN '$_GET[awal]' AND '$_GET[akhir]'";
 					} else {
 						$where_tgl = "";
 					}
 					$no = 1;
-					$query_schedule = " SELECT * 
-					FROM db_finishing.tbl_schedule_new
-					WHERE status = 'SCHEDULE' $where_nourut $where_tgl $where_nama_mesin $where_proses $where_no_mesin
-					ORDER BY TRY_CAST(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 4, 2) AS INT), 
-							TRY_CAST(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 1, 2) AS INT),
-							nourut ASC";
-
+					$query_schedule = " SELECT
+											*
+										FROM
+											db_finishing.tbl_schedule_new
+										WHERE
+											status = 'SCHEDULE' $where_nourut $where_tgl $where_nama_mesin $where_proses $where_no_mesin
+										ORDER BY
+											TRY_CAST(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 4, 2) AS INT), 
+																	TRY_CAST(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 1, 2) AS INT),
+																	nourut ASC";
+					
 					$q_schedule = sqlsrv_query($con, $query_schedule);
 
 					$totalQty = 0;
@@ -316,8 +320,8 @@
 									<?= $data_hasilproses['proses']; ?><br>
 								</td>
 							</tr>
-							<?php $totalQty += $row_schedule['qty_order']; ?>
-							<?php $totalRoll += $row_schedule['roll']; ?>
+							<?php $totalQty += (int)$row_schedule['qty_order']; ?>
+							<?php $totalRoll += (int)$row_schedule['roll']; ?>
 						<?php elseif (!empty($data_proses['jml']) and $_GET['kksudahproses'] == '2'): ?>
 							<tr>
 								<td align="center" valign="top" style="height: 0.35in;"><?= $row_schedule['nourut']; ?></td>
@@ -377,8 +381,8 @@
 									<?= $data_hasilproses['proses']; ?><br>
 								</td>
 							</tr>
-							<?php $totalQty += $row_schedule['qty_order']; ?>
-							<?php $totalRoll += $row_schedule['roll']; ?>
+							<?php $totalQty += (int)$row_schedule['qty_order']; ?>
+							<?php $totalRoll += (int)$row_schedule['roll']; ?>
 						<?php elseif ((!empty($data_proses['jml']) or empty($data_proses['jml'])) and $_GET['kksudahproses'] == '1'): ?>
 							<tr>
 								<td align="center" valign="top" style="height: 0.35in;"><?= $row_schedule['nourut']; ?></td>
@@ -440,8 +444,8 @@
 									<?= $data_hasilproses['nama_mesin']; ?>-<?= $data_hasilproses['proses']; ?><br>
 								</td>
 							</tr>
-							<?php $totalQty += $row_schedule['qty_order']; ?>
-							<?php $totalRoll += $row_schedule['roll']; ?>
+							<?php $totalQty += (int)$row_schedule['qty_order']; ?>
+							<?php $totalRoll += (int)$row_schedule['roll'] ?>
 						<?php endif; ?>
 					<?php endwhile; ?>
 					<tr>
