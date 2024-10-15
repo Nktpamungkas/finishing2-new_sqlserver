@@ -113,7 +113,7 @@
 									<!--Jam: <?php echo date('H:i:s', strtotime($jam)); ?>-->
 								</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td>
 									<?php if ($_GET['kksudahproses'] == '1') {
 										echo "<li style='font-size: 10px;'>Hanya menampilkan data yang <b>belum</b> dan <b>sudah</b> selesai diproses.</li>";
@@ -146,7 +146,7 @@
 									} ?>
 
 								</td>
-							</tr>
+							</tr> -->
 						</tbody>
 					</table>
 				</td>
