@@ -107,7 +107,7 @@
 
 									// Tampilkan tanggal dengan format Indonesia
 									?>
-									<font size="-1">Hari/Tanggal : <?= $tanggal_lengkap ?></font><br />
+									<font size="-1">Hari/Tanggal : <?= $_GET['awal'] ?> - <?= $_GET['akhir'] ?></font><br />
 								</td>
 								<td width="22%" align="right">
 									<!--Jam: <?php echo date('H:i:s', strtotime($jam)); ?>-->
