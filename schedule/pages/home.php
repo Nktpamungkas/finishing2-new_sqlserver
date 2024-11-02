@@ -762,10 +762,9 @@ if (empty($_SESSION['usr'])) {
 		</fieldset>
 		<br><br>
 		<input type="submit" name="btnSimpan" id="btnSimpan" value="Simpan" class="art-button" />
-		<input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'"
-			class="art-button" />
-		<input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'"
-			class="art-button" />
+		<input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'" class="art-button" />
+		<input type="button" name="LihatData" value="Lihat Data" onclick="window.location.href='index.php?p=LihatData'" class="art-button" />
+		<a href="pages/cetak_schedule_p1.php" target="_blank" class="art-button">Cetak</a>
 		<?php endif; ?>
 	</form>
 </body>
