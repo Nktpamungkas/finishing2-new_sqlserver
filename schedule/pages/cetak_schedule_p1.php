@@ -449,8 +449,8 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					<tr>
 						<td valign="top" style="height: 0.5in;">Tanda Tangan</td>
 						<td align="center"><img src="../../ttd/husni.jpg" width="80" height="73" alt="" /></td>
-						<td align="center"><img src="../../ttd/putri.jpg" width="80" height="73" alt="" /></td>
-						<td align="center"><img src="../../ttd/yayan.jpg" width="80" height="73" alt="" /></td>
+						<td align="center"><img src="../../ttd/aressa.jpeg" width="80" height="73" alt="" /></td>
+						<td align="center"><img src="../../ttd/indra_cahya.png" width="80" height="73" alt="" /></td>
 					</tr>
 
 				</table>
