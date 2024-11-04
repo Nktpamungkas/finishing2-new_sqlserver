@@ -30,8 +30,13 @@ if ($_GET['awal']) {
 	$params[] = "FORMAT(creationdatetime, 'yyyy-MM-dd') BETWEEN '$_GET[awal]' AND '$_GET[akhir]'";
 }
 
-$params[] = "status = 'SCHEDULE'";
 
+// if(count($params) < 1) {
+// 	$params[] = "CONVERT(date, creationdatetime) = CAST(GETDATE() AS DATE)";
+// }
+
+$params[] = "status = 'SCHEDULE'";
+	
 $wheres = implode(" AND ", $params);
 
 $query_schedule = "SELECT
@@ -50,14 +55,36 @@ $query_schedule = "SELECT
 						qty_order,
 						proses
 					FROM
-						db_finishing.tbl_schedule_new
-					WHERE $wheres";
+						db_finishing.tbl_schedule_new a
+					WHERE 
+						$wheres
+						AND NOT nourut = 0 
+						AND NOT EXISTS (
+										SELECT 1
+										FROM 
+												db_finishing.tbl_produksi b
+											WHERE
+												b.nokk = a.nokk
+												AND b.demandno = a.nodemand
+												AND b.no_mesin = a.no_mesin
+												AND b.nama_mesin = a.operation
+						)
+					ORDER BY
+						CONCAT(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 5 + 1, 2),
+						SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 2 + 1, 2)) ASC, nourut ASC";
 
 $q_schedule = sqlsrv_query($con, $query_schedule);
 
 $row_schedules = [];
 while ($row = sqlsrv_fetch_array($q_schedule, SQLSRV_FETCH_ASSOC)) {
-	$row_schedules[$row['nama_mesin']][trim($row['no_mesin'])][] = $row;
+
+	// Mengambil dan membersihkan data dari no_mesin
+	$noMesin = trim($row['no_mesin']);
+
+	// Mengambil dua karakter dari posisi -5 dan dua karakter terakhir
+	$nama_mesin_new = substr($noMesin, -5, 2) . substr($noMesin, -2);
+
+	$row_schedules[$nama_mesin_new][trim($row['no_mesin'])][] = $row;
 }
 
 // Fungsi untuk mengurutkan array berdasarkan 'nourut'
@@ -86,8 +113,6 @@ function sortNourutInArray(&$data)
 
 // Call the function to sort
 sortNourutInArray($row_schedules);
-
-
 
 // Tanggal dalam format Y-m-d H:i:s
 $date = date('Y-m-d H:i:s');
