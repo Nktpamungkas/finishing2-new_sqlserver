@@ -422,7 +422,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 							<div align="center">Dibuat Oleh</div>
 						</td>
 						<td width="29%" scope="col">
-							<div align="center">DIperiksa Oleh</div>
+							<div align="center">Diperiksa Oleh</div>
 						</td>
 						<td width="26%" scope="col">
 							<div align="center">Diketahui Oleh</div>
@@ -431,13 +431,13 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					<tr>
 						<td>Nama</td>
 						<td align="center">Husni Jr</td>
-						<td align="center">Putri</td>
-						<td align="center">Yayan</td>
+						<td align="center">Aressa</td>
+						<td align="center">Indra Cahya</td>
 					</tr>
 					<tr>
 						<td>Jabatan</td>
 						<td align="center">Staff Schedule</td>
-						<td align="center">SPV</td>
+						<td align="center">Ast. SPV</td>
 						<td align="center"> Ast. Manager</td>
 					</tr>
 					<tr>
@@ -473,17 +473,17 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					</div>
 				</td>
 				<td width="20%">
-					<pre>No. Form	: 14-11</pre>
+					<pre>No. Form &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 14-11</pre>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<pre>No. Revisi	: 22</pre>
+					<pre>No. Revisi	: 23</pre>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<pre>Tgl. Terbit	: 19 Januari 2024</pre>
+					<pre>Tgl. Terbit	: </pre>
 				</td>
 			</tr>
 			<tr>
