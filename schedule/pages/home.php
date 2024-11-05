@@ -647,52 +647,28 @@ if (empty($_SESSION['usr'])) {
 						<select name="no_urut" class="form-control select2" id="no_urut">
 							<option value="">Pilih</option>
 							<?php
-								// Query untuk mendapatkan daftar no_urut yang sudah ada
-								$sql_nourut = "SELECT STRING_AGG(CONVERT(varchar, nourut), ',') AS nourut
-                               FROM db_finishing.tbl_schedule_new 
-                               WHERE nokk = ? 
-                               AND nodemand = ?";
-								$params_nourut = array($row_kkmasuk['nokk'], $row_kkmasuk['nodemand']);
-								$stmt_nourut = sqlsrv_query($con, $sql_nourut, $params_nourut);
-
-								if ($stmt_nourut === false) {
-									die(print_r(sqlsrv_errors(), true));
-								}
-
-								$data_nourut = sqlsrv_fetch_array($stmt_nourut, SQLSRV_FETCH_ASSOC);
-
-								// Jika ada no_urut yang ditemukan, query untuk mendapatkan no_urut yang belum terpakai
-								if ($data_nourut['nourut']) {
-									$nourut_list = explode(',', $data_nourut['nourut']);
-									$placeholders = implode(',', array_fill(0, count($nourut_list), '?'));
-									$sqlKap = "SELECT no_urut 
-                               FROM db_finishing.tbl_urut 
-                               WHERE no_urut NOT IN ($placeholders) 
-                               ORDER BY no_urut ASC";
-									$paramsKap = $nourut_list;
-								} else {
-									// Jika tidak ada no_urut yang ditemukan, ambil semua no_urut
-									$sqlKap = "SELECT no_urut 
-                               FROM db_finishing.tbl_urut 
-                               ORDER BY no_urut ASC";
-									$paramsKap = array();
-								}
-
-								$stmtKap = sqlsrv_query($con, $sqlKap, $paramsKap);
-
-								if ($stmtKap === false) {
-									die(print_r(sqlsrv_errors(), true));
-								}
-
-								// Mengambil hasil query dan menampilkan option
-								while ($rK = sqlsrv_fetch_array($stmtKap, SQLSRV_FETCH_ASSOC)) {
-									?>
-							<option value="<?= htmlspecialchars($rK['no_urut']); ?>">
-								<?= htmlspecialchars($rK['no_urut']); ?>
-							</option>
-							<?php
-								}
+							// Use SQL Server syntax for querying with schema db_finishing
+							$q_nourut = sqlsrv_query($con, "SELECT
+																STRING_AGG(CONVERT(VARCHAR, nourut), ',') AS nourut
+															FROM
+																db_finishing.tbl_schedule_new 
+															WHERE
+																nokk = ? 
+																AND nodemand = ?", array($row_kkmasuk['nokk'], $row_kkmasuk['nodemand']));
+							
+							$data_nourut = sqlsrv_fetch_array($q_nourut, SQLSRV_FETCH_ASSOC);
+							
+							
+							if ($data_nourut['nourut']) {
+								$sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut WHERE no_urut NOT IN (" . $data_nourut['nourut'] . ") ORDER BY no_urut ASC");
+							} else {
+								$sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut ORDER BY no_urut ASC");
+							}
+							
+							while ($rK = sqlsrv_fetch_array($sqlKap, SQLSRV_FETCH_ASSOC)) {
 								?>
+								<option value="<?php echo $rK['no_urut']; ?>"><?php echo $rK['no_urut']; ?></option>
+							<?php } ?>
 						</select>
 					</td>
 				</tr>
