@@ -889,7 +889,7 @@
 					<td>
 						<select name="nama_mesin" id="nama_mesin"
 							onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&kklanjutan='+document.getElementById('kklanjutan').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
-							required="required">
+							required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 							if ($_GET['kklanjutan'] == '1') {
@@ -957,7 +957,7 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required">
+						<select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 							$q_mesin = db2_exec($conn_db2, "SELECT
