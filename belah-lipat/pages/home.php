@@ -753,7 +753,7 @@
 					</td>
 					<td>:</td>
 					<td>
-						<input type="text" name="nama_mesin" id="nama_mesin" required value="<?php print_r ($row_kkmasuk['operation']); ?>" readonly >
+						<input type="text" name="nama_mesin" id="nama_mesin" required value="<?php echo $row_kkmasuk['operation']; ?>" readonly >
 						<!-- <select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
