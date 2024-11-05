@@ -209,6 +209,7 @@ include('../koneksi.php');
 								<input type="button" name="button2" id="button2" value="Kembali"
 									onclick="window.location.href='../schedule/index.php?p=LihatData'" class="art-button" />
 							<?php endif; ?>
+							<a href="pages/cetak_schedule_p1.php" target="_blank" class="art-button">Cetak</a>
 						</td>
 					</tr>
 				</table>
