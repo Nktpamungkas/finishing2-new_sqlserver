@@ -888,7 +888,8 @@
                     </td>
                     <td>:</td>
                     <td>
-                        <select name="nama_mesin" id="nama_mesin"
+                    <input  name="nama_mesin" id="nama_mesin" type="text" placeholder="Nama Mesin" required  value="<?php echo $row_kkmasuk['operation']; ?> "readonly >
+                        <!-- <select name="nama_mesin" id="nama_mesin"
                             onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&kklanjutan='+document.getElementById(`kklanjutan`).value+'&demand='+document.getElementById(`demand`).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
                             required="required" disabled>
                             <option value="">Pilih</option>
@@ -937,7 +938,7 @@
                                     <?= $r['operation']; ?>     <?= $desc_op['LONGDESCRIPTION']; ?>
                                 </option>
                             <?php } ?>
-                        </select>
+                        </select> -->
                         <!-- <?php if ($_SESSION['lvl'] == "SPV") { ?>
                             <input type="button" name="btnmesin2" id="btnmesin2" value="..." onclick="window.open('pages/mesin.php','MyWindow','height=400,width=650');" />
                         <?php } ?> -->
@@ -959,7 +960,8 @@
                     <td><strong>No. Mesin</strong></td>
                     <td>:</td>
                     <td>
-                        <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
+                        <input  type="text" name="no_mesin" id="no_mesin" value="<?php echo  $row_kkmasuk['no_mesin']; ?>" required readonly>
+                        <!-- <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
                             <option value="">Pilih</option>
                             <?php
                             $q_mesin = db2_exec($conn_db2, "SELECT DISTINCT
@@ -1081,7 +1083,7 @@
                         <?php if ($_SESSION['lvl'] == "SPV") { ?>
                             <input type="button" name="btnproses" id="btnproses" value="..."
                                 onclick="window.open('pages/data-proses.php','MyWindow','height=400,width=650');" />
-                        <?php } ?>
+                        <?php } ?> -->
                     </td>
                 </tr>
                 <tr>

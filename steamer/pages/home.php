@@ -887,7 +887,9 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="nama_mesin" id="nama_mesin"
+						<input  name="operation" id="operation" type="text" placeholder="Nama Mesin" value="<?php echo $row_kkmasuk['operation'] ?>" required readonly>
+
+						<!-- <select name="nama_mesin" id="nama_mesin"
 							onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&kklanjutan='+document.getElementById('kklanjutan').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
 							required="required" disabled>
 							<option value="">Pilih</option>
@@ -934,7 +936,7 @@
 									  echo "SELECTED";
 								  } ?>><?= $r['operation']; ?> 	<?= $desc_op['LONGDESCRIPTION']; ?></option>
 							<?php } ?>
-						</select>
+						</select> -->
 						<?php if ($_SESSION['lvl'] == "SPV") { ?>
 							<input type="button" name="btnmesin2" id="btnmesin2" value="..."
 								onclick="window.open('pages/mesin.php','MyWindow','height=400,width=650');" />
@@ -957,7 +959,8 @@
 					</td>
 					<td>:</td>
 					<td>
-						<select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
+						<input name="no_mesin" type="text" id="no_mesin" value="<?php echo $row_kkmasuk['no_mesin'] ?>" readonly >
+						<!-- <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 							$q_mesin = db2_exec($conn_db2, "SELECT
@@ -1017,7 +1020,7 @@
 									   echo "SELECTED";
 								   } ?> 	<?= $selected ?>><?php echo $r['CODE']; ?></option>
 							<?php } ?>
-						</select>
+						</select> -->
 						<?php if ($_SESSION['lvl'] == "SPV") { ?>
 							<input type="button" name="btnmesin" id="btnmesin" value="..."
 								onclick="window.open('pages/data-mesin.php','MyWindow','height=400,width=650');" />
