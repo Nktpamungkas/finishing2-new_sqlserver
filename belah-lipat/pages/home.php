@@ -753,8 +753,7 @@
 					</td>
 					<td>:</td>
 					<td>
-						<!-- <input type="text" name="nama_mesin" id="nama_mesin" required value="<?php print_r ($row_kkmasuk['operation']); ?>" readonly > -->
-						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required">
+						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 								$qry1 = db2_exec($conn_db2, "SELECT 
@@ -818,8 +817,8 @@
 					<td><strong>No. Mesin</strong></td>
 					<td>:</td>
 					<td>
-						 <!-- <input type="text" name="no_mesin" id="no_mesin" value="<?php echo $row_kkmasuk['no_mesin'] ?>"> -->
-						<select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required">
+						<input type="text" name="no_mesin" id="no_mesin" value="<?php echo $row_kkmasuk['no_mesin'] ?>">
+						<!-- <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 								$q_mesin = db2_exec($conn_db2, "SELECT

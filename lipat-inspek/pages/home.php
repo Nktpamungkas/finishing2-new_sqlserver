@@ -718,8 +718,7 @@
 					</td>
 					<td>:</td>
 					<td>
-					<input  name="nama_mesin" id="nama_mesin" type="text" placeholder="Nama Mesin" required  value="<?php echo $row_kkmasuk['operation']; ?> "readonly >
-						<!-- <select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required" disabled>
+						<select name="nama_mesin" id="nama_mesin" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+document.getElementById('demand').value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 								$qry1 = sqlsrv_query($con, "SELECT 
@@ -759,7 +758,7 @@
 						</select>
 						<?php if ($_SESSION['lvl'] == "SPV") { ?>
 							<input type="button" name="btnmesin2" id="btnmesin2" value="..." onclick="window.open('pages/mesin.php','MyWindow','height=400,width=650');" />
-						<?php } ?> -->
+						<?php } ?>
 					</td>
 					<td width="14%">
 						<h4>Shift</h4>
@@ -778,8 +777,7 @@
 					<td><strong>No. Mesin</strong></td>
 					<td>:</td>
 					<td>
-					<input  type="text" name="no_mesin" id="no_mesin" value="<?php echo  $row_kkmasuk['no_mesin']; ?>" required readonly>
-						<!-- <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
+						<select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
 							<option value="">Pilih</option>
 							<?php
 								$q_mesin = db2_exec($conn_db2, "SELECT
@@ -841,7 +839,7 @@
 						</select>
 						<?php if ($_SESSION['lvl'] == "SPV") { ?>
 							<input type="button" name="btnmesin" id="btnmesin" value="..." onclick="window.open('pages/data-mesin.php','MyWindow','height=400,width=650');" />
-						<?php } ?> -->
+						<?php } ?>
 					</td>
 					<td>
 						<h4>Tgl Proses</h4>
