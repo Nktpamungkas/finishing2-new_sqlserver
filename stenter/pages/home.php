@@ -972,7 +972,7 @@ $proses_menit,
                     <td>
                         <select name="nama_mesin" id="nama_mesin"
                             onchange="window.location='?typekk='+document.getElementById(`typekk`).value+'&idkk='+document.getElementById(`nokk`).value+'&kklanjutan='+document.getElementById(`kklanjutan`).value+'&demand='+document.getElementById(`demand`).value+'&shift=<?php echo $_GET['shift']; ?>&shift2=<?php echo $_GET['shift2']; ?>&operation='+this.value"
-                            required="required" disabled>
+                            required="required">
                             <option value="">Pilih</option>
                             <?php
                                 if($_GET['kklanjutan'] == '1'){
@@ -1040,7 +1040,7 @@ $proses_menit,
                     <td><strong>No. Mesin</strong></td>
                     <td>:</td>
                     <td>
-                        <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required" disabled>
+                        <select name="no_mesin" id="no_mesin" onchange="myFunction();" required="required">
                             <option value="">Pilih</option>
                             <?php
                             
