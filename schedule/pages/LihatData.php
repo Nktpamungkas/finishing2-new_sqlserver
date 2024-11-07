@@ -198,18 +198,30 @@ include('../koneksi.php');
 					<tr>
 						<td colspan="3">
 							<input type="submit" name="button" id="button" value="Cari data" class="art-button" />
-							<input type="button" name="batal" value="Reset"
-								onclick="window.location.href='index.php?p=LihatData'" class="art-button">
-							<input type="button" name="batal" value="View Report"
-								onclick="window.location.href='index.php?p=Reports'" class="art-button">
+							<input type="button" name="batal" value="Reset" onclick="window.location.href='index.php?p=LihatData'" class="art-button">
+							<input type="button" name="batal" value="View Report" onclick="window.location.href='index.php?p=Reports'" class="art-button">
+
 							<?php if (!isset($_POST['kkbelumsusun'])): ?>
 								<input type="submit" name="kkbelumsusun" value="KK belum tersusun" class="art-button" />
+								<a href="pages/cetak_schedule_p1.php?cetak=lihatData&nourut=<?=$urut?>&no_mesin=<?=$_POST['no_mesin']?>&nama_mesin=<?=$_POST['nama_mesin']?>&awal=<?=$_POST['awal']?>&akhir=<?=$_POST['akhir']?>&nourut=without0" target="_blank" class="art-button">Cetak</a>
 							<?php endif; ?>
+
 							<?php if (isset($_POST['kkbelumsusun'])): ?>
 								<input type="button" name="button2" id="button2" value="Kembali"
 									onclick="window.location.href='../schedule/index.php?p=LihatData'" class="art-button" />
+								<a href="pages/cetak_schedule_p1.php?cetak=lihatData&nourut=<?=$urut?>&no_mesin=<?=$_POST['no_mesin']?>&nama_mesin=<?=$_POST['nama_mesin']?>&awal=<?=$_POST['awal']?>&akhir=<?=$_POST['akhir']?>&nourut=with0" target="_blank" class="art-button">Cetak</a>
 							<?php endif; ?>
-							<a href="pages/cetak_schedule_p1.php" target="_blank" class="art-button">Cetak</a>
+
+							<?php
+							if(isset($_POST['button'])) {
+								$urut = "without0";
+							}
+							
+							if(isset($_POST['kkbelumsusun'])) {
+								$urut = "";
+							}
+							?>
+
 						</td>
 					</tr>
 				</table>

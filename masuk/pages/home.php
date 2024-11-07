@@ -39,29 +39,29 @@ if (empty($_SESSION['usr'])) {
 
 		}
 
-		$(document).ready(function () {
-			$('#proses_in').change(function () {
+		$(document).ready(function() {
+			$('#proses_in').change(function() {
 				var jam_proses_in = document.getElementById('proses_in').value;
 				if (jam_proses_in.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI PROSES tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai').change(function () {
+			$('#stop_mulai').change(function() {
 				var jam_stop_mulai = document.getElementById('stop_mulai').value;
 				if (jam_stop_mulai.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai2').change(function () {
+			$('#stop_mulai2').change(function() {
 				var jam_stop_mulai2 = document.getElementById('stop_mulai2').value;
 				if (jam_stop_mulai2.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai3').change(function () {
+			$('#stop_mulai3').change(function() {
 				var jam_stop_mulai3 = document.getElementById('stop_mulai3').value;
 				if (jam_stop_mulai3.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
@@ -69,28 +69,28 @@ if (empty($_SESSION['usr'])) {
 			});
 
 
-			$('#proses_out').change(function () {
+			$('#proses_out').change(function() {
 				var jam_proses_out = document.getElementById('proses_out').value;
 				if (jam_proses_out.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI PROSES tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai').change(function () {
+			$('#stop_selesai').change(function() {
 				var jam_stop_selesai = document.getElementById('stop_selesai').value;
 				if (jam_stop_selesai.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai2').change(function () {
+			$('#stop_selesai2').change(function() {
 				var jam_stop_selesai2 = document.getElementById('stop_selesai2').value;
 				if (jam_stop_selesai2.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai3').change(function () {
+			$('#stop_selesai3').change(function() {
 				var jam_stop_selesai3 = document.getElementById('stop_selesai3').value;
 				if (jam_stop_selesai3.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
@@ -344,8 +344,34 @@ if (empty($_SESSION['usr'])) {
 			$KK_MASUK = 'KK MASUK';
 			$REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 			$prosesbc = cek_input('prosesbc');
-			$data=[$nokk,$demand,$operation,$nama_mesin,$PELANGGAN,$BUYER,$no_order,$tgl_delivery,$jenis_kain,$lebar,$gramasi,
-$warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$creationdatetime,$REMOTE_ADDR,$prosesbc];
+			$kondisikain = cek_input('kondisikain');
+			$data = [
+				$nokk,
+				$demand,
+				$operation,
+				$nama_mesin,
+				$PELANGGAN,
+				$BUYER,
+				$no_order,
+				$tgl_delivery,
+				$jenis_kain,
+				$lebar,
+				$gramasi,
+				$warna,
+				$no_warna,
+				$qty,
+				$qty2,
+				$lot,
+				$rol,
+				$proses,
+				$personil,
+				$catatan,
+				$KK_MASUK,
+				$creationdatetime,
+				$REMOTE_ADDR,
+				$prosesbc,
+				$kondisikain
+			];
 
 			$simpanSql = "INSERT INTO db_finishing.tbl_masuk (nokk,
 													nodemand,
@@ -370,8 +396,9 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 													[status],
 													creationdatetime,
 													ipaddress,
-													prosesbc) 
-										VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+													prosesbc,
+													kondisikain) 
+										VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			// sqlsrv_query($con, $simpanSql);
 
 			$stmt = sqlsrv_prepare($con, $simpanSql, $data);
@@ -383,7 +410,7 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 
 			if ($result === false) {
 				die(print_r(sqlsrv_errors(), true));
-			} 
+			}
 			// echo 'Berhasil simpan';
 
 			// Refresh form
@@ -447,12 +474,12 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 								onchange="window.location='?typekk='+this.value" required>
 								<option value="" disabled selected>-Pilih Tipe Kartu Kerja-</option>
 								<option value="KKLama" <?php if ($_GET['typekk'] == "KKLama") {
-									echo "SELECTED";
-								} ?>>KK Lama
+															echo "SELECTED";
+														} ?>>KK Lama
 								</option>
 								<option value="NOW" <?php if ($_GET['typekk'] == "NOW") {
-									echo "SELECTED";
-								} ?>>KK NOW
+														echo "SELECTED";
+													} ?>>KK NOW
 								</option>
 								</select=>
 						</td>
@@ -536,10 +563,10 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 																	a.VALUEBOOLEAN
 																ORDER BY p.STEPNUMBER ASC");
 								while ($r = db2_fetch_assoc($qry1)) {
-									?>
+								?>
 									<option value="<?= $r['OPERATIONCODE']; ?>" <?php if ($_GET['operation'] == $r['OPERATIONCODE']) {
-										  echo "SELECTED";
-									  } ?>>
+																					echo "SELECTED";
+																				} ?>>
 										<?= $r['OPERATIONCODE']; ?> - <?= $r['LONGDESCRIPTION']; ?> (STATUS NOW :
 										<?= $r['STATUS_OPERATION']; ?>)
 									</option>
@@ -566,10 +593,10 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 									<?php
 									$sql_ITXVIEWKK_demand = db2_exec($conn_db2, "SELECT DEAMAND AS DEMAND FROM ITXVIEWKK WHERE PRODUCTIONORDERCODE = '$idkk'");
 									while ($r_demand = db2_fetch_assoc($sql_ITXVIEWKK_demand)):
-										?>
+									?>
 										<option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
-											  echo 'SELECTED';
-										  } ?>><?= $r_demand['DEMAND']; ?></option>
+																						echo 'SELECTED';
+																					} ?>><?= $r_demand['DEMAND']; ?></option>
 									<?php endwhile; ?>
 								</select>
 							<?php } else { ?>
@@ -586,10 +613,10 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 								<?php
 								$qry1 = sqlsrv_query($con, "SELECT proses,jns,ket FROM db_finishing.tbl_proses ORDER BY ket, id ASC");
 								while ($r = sqlsrv_fetch_array($qry1)) {
-									?>
+								?>
 									<option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($rw['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
-												 echo "SELECTED";
-											 } ?>><?= $r['ket'] ?> - <?= $r['proses'] . " (" . $r['jns'] . ")"; ?></option>
+																												echo "SELECTED";
+																											} ?>><?= $r['ket'] ?> - <?= $r['proses'] . " (" . $r['jns'] . ")"; ?></option>
 								<?php } ?>
 							</select>
 						</td>
@@ -668,7 +695,7 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 																AND p.PRODUCTIONDEMANDCODE = '$_GET[demand]'
 																AND w.OPERATIONCODE = '$_GET[operation]'");
 								while ($r = db2_fetch_assoc($qry1)) {
-									?>
+								?>
 									<option value="<?php echo $r['WORKCENTERCODE']; ?>" SELECTED>
 										<?php echo $r['WORKCENTERCODE']; ?> - <?php echo $r['LONGDESCRIPTION']; ?>
 									</option>
@@ -827,7 +854,8 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 							<h4>Lot</h4>
 						</td>
 						<td>:</td>
-						<td><input name="lot" type="text" id="lot" size="5" value="<?= $dt_ITXVIEWKK['LOT']; ?>" /></td>
+						<td><input name="lot" type="text" id="lot" size="5" value="<?= $dt_ITXVIEWKK['LOT']; ?>" />
+						</td>
 
 						<td>
 							<h4>Proses BC</h4>
@@ -840,13 +868,25 @@ $warna,$no_warna,$qty,$qty2,$lot,$rol,$proses,$personil,$catatan,$KK_MASUK,$crea
 								// Mengambil data dari tabel tbl_no_mesin
 								$qry = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_mesinbc ORDER BY no_mesin ASC");
 								while ($row = sqlsrv_fetch_array($qry)) {
-									?>
+								?>
 									<option value="<?php echo $row['no_mesin']; ?>" <?php if ($rw['no_mesin'] == $row['no_mesin']) {
-										   echo "SELECTED";
-									   } ?>>
+																						echo "SELECTED";
+																					} ?>>
 										<?php echo $row['no_mesin']; ?>
 									</option>
 								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h4>Kondisi Kain</h4>
+						</td>
+						<td>:</td>
+						<td>
+							<select name="kondisikain" id="kondisikain">
+								<option value="">Pilih</option>
+								<option value="Basah">Kain Basah </option>
 							</select>
 						</td>
 					</tr>

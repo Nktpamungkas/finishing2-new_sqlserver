@@ -226,7 +226,7 @@ include('../koneksi.php');
 					<?php if (isset($_POST['submit'])) : ?>
 						<a href="pages/ExportData.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=<?= urlencode($_POST['nourut']); ?>&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
 							class="art-button">Cetak Ke Excel</a>
-						<a href="pages/cetak_schedule_p1.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=<?= urlencode($_POST['nourut']); ?>&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
+						<a href="pages/cetak_schedule_p1.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
 							class="art-button" target="_blank">Cetak Ke PDF</a>
 					<?php endif; ?>
 				</td>

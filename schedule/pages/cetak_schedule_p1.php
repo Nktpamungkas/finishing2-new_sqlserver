@@ -8,9 +8,10 @@ $params = [];
 
 if ($_GET['nourut'] == 'without0') {
 	$params[] = "NOT nourut = '0'";
-}
-
-if ($_GET['nourut'] != 'without0' && $_GET['nourut'] != 'with0' && !empty($_GET['nourut'])) {
+} elseif ($_GET['nourut'] == 'with0') {
+	$params[] = "nourut = '0'";
+	// $params[] = "";
+} else {
 	$params[] = "nourut = '$_GET[nourut]'";
 }
 
@@ -31,47 +32,57 @@ if ($_GET['awal']) {
 }
 
 
-// if(count($params) < 1) {
-// 	$params[] = "CONVERT(date, creationdatetime) = CAST(GETDATE() AS DATE)";
-// }
-
 $params[] = "status = 'SCHEDULE'";
+
+if($_GET['cetak'] == "lihatData") {
+	$params[] = "NOT EXISTS (
+							SELECT 1
+							FROM 
+									db_finishing.tbl_produksi b
+								WHERE
+									b.nokk = a.nokk
+									AND b.demandno = a.nodemand
+									AND b.no_mesin = a.no_mesin
+									AND b.nama_mesin = a.operation
+						)
+					";
+}
 	
 $wheres = implode(" AND ", $params);
 
-$query_schedule = "SELECT
+$query_schedule = "SELECT 
 						nama_mesin,
 						no_mesin,
 						nourut,
-						langganan,
-						no_order,
-						jenis_kain,
-						warna,
-						no_warna,
-						nodemand,
-						lot,
-						tgl_delivery,
-						roll,
-						qty_order,
-						proses
+						STRING_AGG(langganan,', ') AS langganan,
+						STRING_AGG(no_order,', ') AS no_order,
+						STRING_AGG(jenis_kain,', ') AS jenis_kain,
+						STRING_AGG(warna,', ') AS warna,
+						STRING_AGG(no_warna,', ') AS no_warna,
+						STRING_AGG(nodemand,', ') AS nodemand,
+						STRING_AGG(lot,', ') AS lot,
+						STRING_AGG(tgl_delivery,', ') AS tgl_delivery,
+						STRING_AGG(roll,', ') AS roll,
+						STRING_AGG(qty_order,', ') AS qty_order,
+						STRING_AGG(proses,', ') AS proses,
+						STRING_AGG(nokk,', ') AS nokk,
+						STRING_AGG(lebar,', ') AS lebar,
+						STRING_AGG(gramasi,', ') AS gramasi,
+						STRING_AGG(personil,', ') AS personil,
+						STRING_AGG(catatan,', ') AS catatan,
+						STRING_AGG(kondisikain,', ') AS kondisikain
 					FROM
 						db_finishing.tbl_schedule_new a
 					WHERE 
 						$wheres
-						AND NOT nourut = 0 
-						AND NOT EXISTS (
-										SELECT 1
-										FROM 
-												db_finishing.tbl_produksi b
-											WHERE
-												b.nokk = a.nokk
-												AND b.demandno = a.nodemand
-												AND b.no_mesin = a.no_mesin
-												AND b.nama_mesin = a.operation
-						)
+					GROUP BY
+						nama_mesin,
+						no_mesin,
+						nourut
 					ORDER BY
 						CONCAT(SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 5 + 1, 2),
 						SUBSTRING(LTRIM(RTRIM(no_mesin)), LEN(LTRIM(RTRIM(no_mesin))) - 2 + 1, 2)) ASC, nourut ASC";
+
 
 $q_schedule = sqlsrv_query($con, $query_schedule);
 
@@ -246,10 +257,10 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 						<tr>
 							<td width="9%" align="center"><img src="../../indo.jpg" width="40" height="40" /></td>
 							<td align="center" valign="middle"><strong>
-									<font size="+1">SCHEDULE FINISHING
-										<?php if (empty($_GET['no_mesin'])) {
+									<font size="+1">SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK
+										<!-- <?php if (empty($_GET['no_mesin'])) {
 											echo "SEMUA MESIN";
-										} ?>
+										} ?> -->
 									</font>
 								</strong></td>
 						</tr>
@@ -257,10 +268,18 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					<table width="100%" border="0">
 						<tbody>
 							<tr>
-								<td width="78%">
-									<font size="-1">Hari/Tanggal : <?= date('l, d F Y'); ?></font>
-									<br />
-								</td>
+							<td width="78%">
+								<?php
+								if (empty($_GET['awal']) && empty($_GET['akhir'])) {
+									// Jika 'awal' dan 'akhir' kosong, cetak tanggal hari ini
+									echo '<font size="-1">Hari/Tanggal : ' . date('l, d F Y') . '</font>';
+								} else {
+									// Jika 'awal' dan 'akhir' ada isinya, cetak sesuai dengan input
+									echo '<font size="-1">Hari/Tanggal : ' . $_GET['awal'] . ' - ' . $_GET['akhir'] . '</font>';
+								}
+								?>
+								<br />
+							</td>
 								<td width="22%" align="right">
 									Jam: <?php echo date('H:i:s'); ?>
 								</td>
@@ -275,9 +294,9 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 				<table width="100%" border="1" class="table-list1">
 					<thead>
 						<tr>
-							<td width="5%" rowspan="2" scope="col">
+							<!-- <td width="5%" rowspan="2" scope="col">
 								<div align="center">Kapasitas Mesin</div>
-							</td>
+							</td> -->
 							<td width="4%" rowspan="2" scope="col">
 								<div align="center">Nomor<br>Mesin</div>
 							</td>
@@ -293,11 +312,14 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 							<td width="12%" rowspan="2" scope="col">
 								<div align="center">Jenis Kain</div>
 							</td>
+							<td width="7%" rowspan="2" scope="col">
+								<div align="center">Lebar x Gramasi</div>
+							</td>
 							<td width="9%" rowspan="2" scope="col">
 								<div align="center">Warna</div>
 							</td>
-							<td width="9%" rowspan="2" scope="col">
-								<div align="center">No. Warna</div>
+							<td width="4%" rowspan="2" scope="col">
+								<div align="center">No. KK</div>
 							</td>
 							<td width="4%" rowspan="2" scope="col">
 								<div align="center">No Demand</div>
@@ -336,13 +358,13 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									<?php
 									if ($satu > 0) {
 										?>
-										<td rowspan="<?= count($value1) ?>">
+										<!-- <td rowspan="<?= count($value1) ?>">
 											<a class="hurufvertical">
 												<h2>
 													<div align="center"><?php echo ''// $rowd['kapasitas']; ?></div>
 												</h2>
 											</a>
-										</td>
+										</td> -->
 										<td rowspan="<?= count($value1) ?>">
 											<div align="center" style="font-size: 18px;">
 												<strong>
@@ -373,12 +395,18 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
+										<?php echo $value2['lebar'] . ' x ' . $value2['gramasi']; ?>
+
+										</div>
+									</td>
+									<td align="center" valign="top">
+										<div style="font-size: 8px;">
 										<?php echo $value2['warna']; ?>
 										</div>
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['no_warna']; ?>
+										<?php echo $value2['nokk']; ?>
 										</div>
 									</td>
 									<td align="center" valign="top">
@@ -401,7 +429,13 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									<?php echo $value2['qty_order']; ?>
 									</td>
 									<td valign="top">
-									<?php echo $value2['proses']; ?>
+									<?php echo $value2['proses'] ;
+									echo "<br>";
+									echo $value2['personil'];
+									echo "<br>";
+									echo $value2['kondisikain'];
+									echo "<br>";
+									echo $value2['catatan']; ?>
 									</td>
 								</tr>
 								<?php
