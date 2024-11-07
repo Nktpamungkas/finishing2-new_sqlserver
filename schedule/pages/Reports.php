@@ -261,7 +261,7 @@ $query_schedule = "SELECT * FROM db_finishing.tbl_schedule_new WHERE status = 'S
 					<?php if (isset($_POST['submit'])) : ?>
 						<a href="pages/ExportData.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=<?= urlencode($_POST['nourut']); ?>&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
 							class="art-button">Cetak Ke Excel</a>
-						<a href="pages/cetak_schedule_p1.php?where_nourut=<?= $where_nourut; ?>&where_tgl=<?= $where_tgl; ?>&where_nama_mesin=<?= $where_nama_mesin; ?>&where_proses=<?= $where_proses ?>&where_no_mesin=<?= $where_no_mesin; ?>&params=viewreport"class="art-button" target="_blank">Cetak Ke PDF</a>
+						<a href="pages/cetak_schedule_p1.php?datestart=<?= $_POST['awal'] ?>&datestop=<?= $_POST['akhir'] ?>&where_nourut=<?= $where_nourut; ?>&where_tgl=<?= $where_tgl; ?>&where_nama_mesin=<?= $where_nama_mesin; ?>&where_proses=<?= $where_proses ?>&where_no_mesin=<?= $where_no_mesin; ?>&params=viewreport"class="art-button" target="_blank">Cetak Ke PDF</a>
 					<?php endif; ?>
 				</td>
 				<!-- <button type="submit" name="submit" class="art-button">Cetak Ke Excel</button>

@@ -70,6 +70,7 @@ $query_schedule = "SELECT
 						STRING_AGG(roll, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS roll,
 						STRING_AGG(qty_order, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS qty_order,
 						STRING_AGG(proses, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS proses,
+						STRING_AGG(operation, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS operation,
 						STRING_AGG(nokk, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
 						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
 						STRING_AGG(gramasi, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS gramasi,
@@ -263,10 +264,14 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 							<td width="9%" align="center"><img src="../../indo.jpg" width="40" height="40" /></td>
 							<td align="center" valign="middle"><strong>
 									<font size="+1">
-										<?php if($_GET['nourut'] == 'without0') : ?>
+										<?php if($_GET['params'] == 'viewreport') : ?>
 											SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK
-										<?php elseif($_GET['nourut'] == 'with0') : ?>
-											SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK BELUM TERSUSUN
+										<?php else : ?>
+											<?php if($_GET['nourut'] == 'without0') : ?>
+												SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK
+											<?php elseif($_GET['nourut'] == 'with0') : ?>
+												SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK BELUM TERSUSUN
+											<?php endif; ?>
 										<?php endif; ?>
 									</font>
 								</strong></td>
@@ -277,13 +282,19 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 							<tr>
 							<td width="78%">
 								<?php
-								if (empty($_GET['awal']) && empty($_GET['akhir'])) {
-									// Jika 'awal' dan 'akhir' kosong, cetak tanggal hari ini
-									echo '<font size="-1">Hari/Tanggal : ' . date('l, d F Y') . '</font>';
-								} else {
-									// Jika 'awal' dan 'akhir' ada isinya, cetak sesuai dengan input
-									echo '<font size="-1">Hari/Tanggal : ' . $_GET['awal'] . ' - ' . $_GET['akhir'] . '</font>';
-								}
+									if($_GET['params'] == 'viewreport'){
+										$date1 = date_create($_GET['datestart']);
+										$date2 = date_create($_GET['datestop']);
+										echo '<font size="-1">Hari/Tanggal : ' . date_format($date1, "d M Y") . ' s/d ' . date_format($date2, "d M Y") . '</font>';
+									}else{
+										if (empty($_GET['awal']) && empty($_GET['akhir'])) {
+											// Jika 'awal' dan 'akhir' kosong, cetak tanggal hari ini
+											echo '<font size="-1">Hari/Tanggal : ' . date('l, d F Y') . '</font>';
+										} else {
+											// Jika 'awal' dan 'akhir' ada isinya, cetak sesuai dengan input
+											echo '<font size="-1">Hari/Tanggal : ' . $_GET['awal'] . ' - ' . $_GET['akhir'] . '</font>';
+										}
+									}
 								?>
 								<br />
 							</td>
@@ -436,7 +447,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									<?php echo $value2['qty_order']; ?>
 									</td>
 									<td valign="top">
-									<?php echo $value2['proses'] ;
+									<?php echo $value2['operation'] ;
 									echo "<br>";
 									echo $value2['personil'];
 									echo "<br>";
@@ -504,13 +515,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 			<tr>
 				<td width="73%" rowspan="4">
 					<div style="font-size: 11px; font-family:sans-serif, Roman, serif;">
-						Perbaikan: <?php echo '' ?> Lot &nbsp; <?php echo ''; ?>
-						Kg<br />
-						Gagal Proses : <?php echo ''; ?> Lot &nbsp;
-						<?php echo ''; ?> Kg<br />
-						Greige : <?php echo ''; ?> Lot &nbsp; <?php echo ''; ?> Kg<br />
-						Tolak Basah : <?php echo ''; ?> Lot &nbsp;
-						<?php echo ''; ?> Kg
+						
 					</div>
 				</td>
 				<td width="20%">
