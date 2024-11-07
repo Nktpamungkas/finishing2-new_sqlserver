@@ -54,23 +54,23 @@ $query_schedule = "SELECT
 						nama_mesin,
 						no_mesin,
 						nourut,
-						STRING_AGG(langganan,', ') AS langganan,
-						STRING_AGG(no_order,', ') AS no_order,
-						STRING_AGG(jenis_kain,', ') AS jenis_kain,
-						STRING_AGG(warna,', ') AS warna,
-						STRING_AGG(no_warna,', ') AS no_warna,
-						STRING_AGG(nodemand,', ') AS nodemand,
-						STRING_AGG(lot,', ') AS lot,
-						STRING_AGG(tgl_delivery,', ') AS tgl_delivery,
-						STRING_AGG(roll,', ') AS roll,
-						STRING_AGG(qty_order,', ') AS qty_order,
-						STRING_AGG(proses,', ') AS proses,
-						STRING_AGG(nokk,', ') AS nokk,
-						STRING_AGG(lebar,', ') AS lebar,
-						STRING_AGG(gramasi,', ') AS gramasi,
-						STRING_AGG(personil,', ') AS personil,
-						STRING_AGG(catatan,', ') AS catatan,
-						STRING_AGG(kondisikain,', ') AS kondisikain
+						STRING_AGG(langganan, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS langganan,
+						STRING_AGG(no_order, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS no_order,
+						STRING_AGG(jenis_kain, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS jenis_kain,
+						STRING_AGG(warna, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS warna,
+						STRING_AGG(no_warna, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS no_warna,
+						STRING_AGG(nodemand, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nodemand,
+						STRING_AGG(lot, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lot,
+						STRING_AGG(tgl_delivery, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS tgl_delivery,
+						STRING_AGG(roll, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS roll,
+						STRING_AGG(qty_order, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS qty_order,
+						STRING_AGG(proses, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS proses,
+						STRING_AGG(nokk, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
+						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
+						STRING_AGG(gramasi, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS gramasi,
+						STRING_AGG(personil, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS personil,
+						STRING_AGG(catatan, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS catatan,
+						STRING_AGG(kondisikain, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS kondisikain
 					FROM
 						db_finishing.tbl_schedule_new a
 					WHERE 
@@ -257,10 +257,12 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 						<tr>
 							<td width="9%" align="center"><img src="../../indo.jpg" width="40" height="40" /></td>
 							<td align="center" valign="middle"><strong>
-									<font size="+1">SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK
-										<!-- <?php if (empty($_GET['no_mesin'])) {
-											echo "SEMUA MESIN";
-										} ?> -->
+									<font size="+1">
+										<?php if($_GET['nourut'] == 'without0') : ?>
+											SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK
+										<?php elseif($_GET['nourut'] == 'with0') : ?>
+											SCHEDULE FINISHING STEAM, OVEN, STENTER, COMPACT, INSPEK BELUM TERSUSUN
+										<?php endif; ?>
 									</font>
 								</strong></td>
 						</tr>
