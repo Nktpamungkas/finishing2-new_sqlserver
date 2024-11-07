@@ -47,8 +47,13 @@ if($_GET['cetak'] == "lihatData") {
 						)
 					";
 }
-	
-$wheres = implode(" AND ", $params);
+
+if($_GET['params'] == 'viewreport'){
+	$wheres	= "status = 'SCHEDULE' $_GET[where_nourut] $_GET[where_tgl] $_GET[where_nama_mesin] $_GET[where_proses] $_GET[where_no_mesin]";
+}else{
+	$wheres = implode(" AND ", $params);
+}
+
 
 $query_schedule = "SELECT 
 						nama_mesin,

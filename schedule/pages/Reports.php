@@ -3,6 +3,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php
 include('../koneksi.php');
+include('../../koneksi.php');
+ini_set("error_reporting", 1);
+if ($_POST['nourut'] == 'without0') {
+	$where_nourut  = "AND NOT nourut = '0'";
+} elseif ($_POST['nourut'] == 'with0') {
+	$where_nourut  = "";
+} else {
+	$where_nourut  = "AND nourut = '$_POST[nourut]'";
+}
+
+if ($_POST['no_mesin']) {
+	$where_no_mesin  = "AND no_mesin = '$_POST[no_mesin]'";
+} else {
+	$where_no_mesin  = "";
+}
+
+if ($_POST['nama_mesin']) {
+	$where_nama_mesin  = "AND nama_mesin = '$_POST[nama_mesin]'";
+} else {
+	$where_nama_mesin  = "";
+}
+
+if ($_POST['proses']) {
+	$where_proses  = "AND proses = '$_POST[proses]'";
+} else {
+	$where_proses  = "";
+}
+
+if ($_POST['awal']) {
+	$where_tgl  = "AND CONVERT(DATE, creationdatetime) BETWEEN '$_POST[awal]' AND '$_POST[akhir]'";
+} else {
+	$where_tgl  = "";
+}
+$no = 1;
+$query_schedule = "SELECT * FROM db_finishing.tbl_schedule_new WHERE status = 'SCHEDULE' $where_nourut $where_tgl $where_nama_mesin $where_proses $where_no_mesin";
 ?>
 
 <head>
@@ -129,7 +164,7 @@ include('../koneksi.php');
 				<td>
 					<select name="no_mesin" class="form-control select2">
 						<option value="-" disabled selected>Pilih</option>
-						<option value="">Semua Nomor Mesin</option>
+						<option value="" <?php if ('' == $_POST['no_mesin']) { echo 'SELECTED'; } ?>>Semua Nomor Mesin</option>
 						<?php
 						$q_mesin    = sqlsrv_query($con, "SELECT DISTINCT
                                                             no_mesin,
@@ -156,7 +191,7 @@ include('../koneksi.php');
 				<td>
 					<select name="nama_mesin" class="form-control select2">
 						<option value="-" disabled selected>Pilih</option>
-						<option value="">Semua Nama Mesin</option>
+						<option value="" <?php if ('' == $_POST['nama_mesin']) { echo 'SELECTED'; } ?>>Semua Nama Mesin</option>
 						<?php
 						$q_mesin    = sqlsrv_query($con, "SELECT
                                                                     DISTINCT
@@ -179,7 +214,7 @@ include('../koneksi.php');
 				<td>
 					<select name="proses" class="form-control select2">
 						<option value="-" disabled selected>Pilih</option>
-						<option value="">Semua proses</option>
+						<option value="" <?php if ('' == $_POST['proses']) { echo 'SELECTED'; } ?>>Semua proses</option>
 						<?php
 						$q_proses    = sqlsrv_query($con, "SELECT
                                                                 DISTINCT
@@ -226,8 +261,7 @@ include('../koneksi.php');
 					<?php if (isset($_POST['submit'])) : ?>
 						<a href="pages/ExportData.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=<?= urlencode($_POST['nourut']); ?>&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
 							class="art-button">Cetak Ke Excel</a>
-						<a href="pages/cetak_schedule_p1.php?kksudahproses=<?= urlencode($_POST['kksudahproses']); ?>&nourut=&no_mesin=<?= urlencode($_POST['no_mesin']); ?>&nama_mesin=<?= urlencode($_POST['nama_mesin']); ?>&proses=<?= urlencode($_POST['proses']); ?>&awal=<?= urlencode($_POST['awal']); ?>&akhir=<?= urlencode($_POST['akhir']); ?>"
-							class="art-button" target="_blank">Cetak Ke PDF</a>
+						<a href="pages/cetak_schedule_p1.php?where_nourut=<?= $where_nourut; ?>&where_tgl=<?= $where_tgl; ?>&where_nama_mesin=<?= $where_nama_mesin; ?>&where_proses=<?= $where_proses ?>&where_no_mesin=<?= $where_no_mesin; ?>&params=viewreport"class="art-button" target="_blank">Cetak Ke PDF</a>
 					<?php endif; ?>
 				</td>
 				<!-- <button type="submit" name="submit" class="art-button">Cetak Ke Excel</button>
@@ -270,41 +304,6 @@ include('../koneksi.php');
 			</thead>
 			<tbody>
 				<?php
-				include('../../koneksi.php');
-				ini_set("error_reporting", 1);
-				if ($_POST['nourut'] == 'without0') {
-					$where_nourut  = "AND NOT nourut = '0'";
-				} elseif ($_POST['nourut'] == 'with0') {
-					$where_nourut  = "";
-				} else {
-					$where_nourut  = "AND nourut = '$_POST[nourut]'";
-				}
-
-				if ($_POST['no_mesin']) {
-					$where_no_mesin  = "AND no_mesin = '$_POST[no_mesin]'";
-				} else {
-					$where_no_mesin  = "";
-				}
-
-				if ($_POST['nama_mesin']) {
-					$where_nama_mesin  = "AND nama_mesin = '$_POST[nama_mesin]'";
-				} else {
-					$where_nama_mesin  = "";
-				}
-
-				if ($_POST['proses']) {
-					$where_proses  = "AND proses = '$_POST[proses]'";
-				} else {
-					$where_proses  = "";
-				}
-
-				if ($_POST['awal']) {
-					$where_tgl  = "AND CONVERT(DATE, creationdatetime) BETWEEN '$_POST[awal]' AND '$_POST[akhir]'";
-				} else {
-					$where_tgl  = "";
-				}
-				$no = 1;
-				$query_schedule = "SELECT * FROM  db_finishing.tbl_schedule_new WHERE status = 'SCHEDULE' $where_nourut $where_tgl $where_nama_mesin $where_proses $where_no_mesin";
 				$q_schedule     = sqlsrv_query($con, $query_schedule);
 				?>
 				<?php while ($row_schedule  = sqlsrv_fetch_array($q_schedule, SQLSRV_FETCH_ASSOC)) : ?>
