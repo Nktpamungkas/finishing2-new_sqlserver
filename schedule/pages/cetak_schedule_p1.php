@@ -549,20 +549,26 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 										</div>
 									</td>
 									<td align="center" valign="top">
-										<?php 
-											$data_tgl_delivery = $value2['tgl_delivery'];
+									<?php 
+										$data_tgl_delivery = $value2['tgl_delivery'];
 
-											// Ubah string menjadi array
-											$Array_tgl_delivery = explode(', ', $data_tgl_delivery);
-											
-											// Hapus duplikat menggunakan array_unique
-											$dataUnique_tgl_delivery = array_unique($Array_tgl_delivery);
-											
-											// Gabungkan kembali menjadi string
+										// Ubah string menjadi array
+										$Array_tgl_delivery = explode(', ', $data_tgl_delivery);
+										
+										// Hapus duplikat menggunakan array_unique
+										$dataUnique_tgl_delivery = array_unique($Array_tgl_delivery);
+										
+										// Gabungkan kembali menjadi string
+										if (count($dataUnique_tgl_delivery) > 1) {
+											// Jika ada lebih dari 1 tanggal, gunakan implode dengan newline
+											$dataClean_tgl_delivery = implode("\n", $dataUnique_tgl_delivery);
+										} else {
+											// Jika hanya 1 tanggal, gabungkan menjadi string biasa
 											$dataClean_tgl_delivery = implode(', ', $dataUnique_tgl_delivery);
-											
-											echo $dataClean_tgl_delivery; // Output: DOM2401663
-										?>
+										}
+										
+										echo nl2br($dataClean_tgl_delivery); // Output dengan enter
+									?>
 									</td>
 									<td align="center" valign="top">
 										<?php echo cek($value2['roll']); ?>
@@ -571,20 +577,22 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 										<?php echo $value2['qty_order']; ?>
 									</td>
 									<td align="right" valign="top">
-										<?php 
-											$data_proses = $value2['proses'];
+									<?php 
+										$data_proses = $value2['proses'];
 
-											// Ubah string menjadi array
-											$Array_proses = explode(', ', $data_proses);
-											
-											// Hapus duplikat menggunakan array_unique
-											$dataUnique_proses = array_unique($Array_proses);
-											
-											// Gabungkan kembali menjadi string
-											$dataClean_proses = implode(', ', $dataUnique_proses);
-											
-											echo $dataClean_proses; // Output: DOM2401663
-										?>
+										// Ubah string menjadi array
+										$Array_proses = explode(', ', $data_proses);
+										
+										// Hapus duplikat menggunakan array_unique
+										$dataUnique_proses = array_unique($Array_proses);
+										
+										// Gabungkan kembali menjadi string dengan koma dan baris baru setelah setiap item
+										$dataClean_proses = implode(',<br>', $dataUnique_proses);
+										
+										// Output data yang sudah dibersihkan
+										echo $dataClean_proses;
+									?>
+
 									</td>
 									<td valign="top">
 										<!-- <?php 
