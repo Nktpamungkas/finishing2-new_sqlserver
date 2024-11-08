@@ -60,18 +60,18 @@ $query_schedule = "SELECT
 						no_mesin,
 						nourut,
 						STRING_AGG(langganan, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS langganan,
-						STRING_AGG(no_order, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS no_order,
+						STRING_AGG(COALESCE(no_order, 'Development'), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS no_order,
 						STRING_AGG(jenis_kain, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS jenis_kain,
 						STRING_AGG(warna, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS warna,
 						STRING_AGG(no_warna, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS no_warna,
-						STRING_AGG(nodemand, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nodemand,
+						STRING_AGG(TRIM(nodemand), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nodemand,
 						STRING_AGG(lot, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lot,
 						STRING_AGG(tgl_delivery, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS tgl_delivery,
 						STRING_AGG(roll, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS roll,
-						STRING_AGG(qty_order, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS qty_order,
+						SUM(qty_order) AS qty_order,
 						STRING_AGG(proses, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS proses,
 						STRING_AGG(operation, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS operation,
-						STRING_AGG(nokk, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
+						STRING_AGG(TRIM(nokk), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
 						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
 						STRING_AGG(gramasi, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS gramasi,
 						STRING_AGG(personil, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS personil,
@@ -352,6 +352,9 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 								<div align="center">Quantity</div>
 							</td>
 							<td width="14%" rowspan="2" scope="col">
+								<div align="center">Proses</div>
+							</td>
+							<td width="14%" rowspan="2" scope="col">
 								<div align="center">Keterangan</div>
 							</td>
 						</tr>
@@ -400,60 +403,234 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									<td valign="top" style="height: 0.27in;">
 										<div align="center"><?=  $value2['nourut']; ?></div>
 									</td>
-									<td align="center" valign="top"><?php echo $value2['langganan']; ?></td>
+									<td align="center" valign="top">
+										<?php 
+											$data_langganan = $value2['langganan'];
+
+											// Ubah string menjadi array
+											$Array_langganan = explode(', ', $data_langganan);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_langganan = array_unique($Array_langganan);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_langganan = implode(', ', $dataUnique_langganan);
+											
+											echo $dataClean_langganan; // Output: DOM2401663
+										?>
+									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-											<?php echo $value2['no_order']; ?>
+											<?php 
+												$data_no_order = $value2['no_order'];
+
+												// Ubah string menjadi array
+												$Array_no_order = explode(', ', $data_no_order);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_no_order = array_unique($Array_no_order);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_no_order = implode(', ', $dataUnique_no_order);
+												
+												echo $dataClean_no_order; // Output: DOM2401663
+											?>
 										</div>
 									</td>
 									<td valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['jenis_kain']; ?>
-										</div>
-									</td>
-									<td align="center" valign="top">
-										<div style="font-size: 8px;">
-										<?php echo $value2['lebar'] . ' x ' . $value2['gramasi']; ?>
+											<?php 
+												$data_jenis_kain = $value2['jenis_kain'];
 
+												// Ubah string menjadi array
+												$Array_jenis_kain = explode(', ', $data_jenis_kain);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_jenis_kain = array_unique($Array_jenis_kain);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_jenis_kain = implode(', ', $dataUnique_jenis_kain);
+												
+												echo $dataClean_jenis_kain; // Output: DOM2401663
+											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['warna']; ?>
+											<?php echo $value2['lebar'] . ' x ' . $value2['gramasi']; ?>
 										</div>
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['nokk']; ?>
+											<?php 
+												$data_warna = $value2['warna'];
+
+												// Ubah string menjadi array
+												$Array_warna = explode(', ', $data_warna);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_warna = array_unique($Array_warna);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_warna = implode(', ', $dataUnique_warna);
+												
+												echo $dataClean_warna; // Output: DOM2401663
+											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['nodemand']; ?>
+											<?php 
+												$data_nokk = $value2['nokk'];
+
+												// Ubah string menjadi array
+												$Array_nokk = explode(', ', $data_nokk);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_nokk = array_unique($Array_nokk);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_nokk = implode(', ', $dataUnique_nokk);
+												
+												echo $dataClean_nokk; // Output: DOM2401663
+											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-										<?php echo $value2['lot']; ?>
+											<?php 
+												$data_nodemand = $value2['nodemand'];
+
+												// Ubah string menjadi array
+												$Array_nodemand = explode(', ', $data_nodemand);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_nodemand = array_unique($Array_nodemand);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_nodemand = implode(', ', $dataUnique_nodemand);
+												
+												echo $dataClean_nodemand; // Output: DOM2401663
+											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
-									<?php echo cek($value2['tgl_delivery']); ?>
+										<div style="font-size: 8px;">
+											<?php 
+												$data_lot = $value2['lot'];
+
+												// Ubah string menjadi array
+												$Array_lot = explode(', ', $data_lot);
+												
+												// Hapus duplikat menggunakan array_unique
+												$dataUnique_lot = array_unique($Array_lot);
+												
+												// Gabungkan kembali menjadi string
+												$dataClean_lot = implode(', ', $dataUnique_lot);
+												
+												echo $dataClean_lot; // Output: DOM2401663
+											?>
+										</div>
 									</td>
 									<td align="center" valign="top">
-									<?php echo cek($value2['roll']); ?>
+										<?php 
+											$data_tgl_delivery = $value2['tgl_delivery'];
+
+											// Ubah string menjadi array
+											$Array_tgl_delivery = explode(', ', $data_tgl_delivery);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_tgl_delivery = array_unique($Array_tgl_delivery);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_tgl_delivery = implode(', ', $dataUnique_tgl_delivery);
+											
+											echo $dataClean_tgl_delivery; // Output: DOM2401663
+										?>
+									</td>
+									<td align="center" valign="top">
+										<?php echo cek($value2['roll']); ?>
 									</td>
 									<td align="right" valign="top">
-									<?php echo $value2['qty_order']; ?>
+										<?php echo $value2['qty_order']; ?>
+									</td>
+									<td align="right" valign="top">
+										<?php 
+											$data_proses = $value2['proses'];
+
+											// Ubah string menjadi array
+											$Array_proses = explode(', ', $data_proses);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_proses = array_unique($Array_proses);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_proses = implode(', ', $dataUnique_proses);
+											
+											echo $dataClean_proses; // Output: DOM2401663
+										?>
 									</td>
 									<td valign="top">
-									<?php echo $value2['operation'] ;
-									echo "<br>";
-									echo $value2['personil'];
-									echo "<br>";
-									echo $value2['kondisikain'];
-									echo "<br>";
-									echo $value2['catatan']; ?>
+										<?php 
+											$data_operation = $value2['operation'];
+
+											// Ubah string menjadi array
+											$Array_operation = explode(', ', $data_operation);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_operation = array_unique($Array_operation);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_operation = implode(', ', $dataUnique_operation);
+											
+											echo $dataClean_operation; // Output: DOM2401663
+										?>
+										<br>
+										<?php 
+											$data_personil = $value2['personil'];
+
+											// Ubah string menjadi array
+											$Array_personil = explode(', ', $data_personil);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_personil = array_unique($Array_personil);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_personil = implode(', ', $dataUnique_personil);
+											
+											echo $dataClean_personil; // Output: DOM2401663
+										?>
+										<br>
+										<?php 
+											$data_kondisikain = $value2['kondisikain'];
+
+											// Ubah string menjadi array
+											$Array_kondisikain = explode(', ', $data_kondisikain);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_kondisikain = array_unique($Array_kondisikain);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_kondisikain = implode(', ', $dataUnique_kondisikain);
+											
+											echo $dataClean_kondisikain; // Output: DOM2401663
+										?>
+										<br>
+										<?php 
+											$data_catatan = $value2['catatan'];
+
+											// Ubah string menjadi array
+											$Array_catatan = explode(', ', $data_catatan);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_catatan = array_unique($Array_catatan);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_catatan = implode(', ', $dataUnique_catatan);
+											
+											echo $dataClean_catatan; // Output: DOM2401663
+										?>
+										<br>
 									</td>
 								</tr>
 								<?php
