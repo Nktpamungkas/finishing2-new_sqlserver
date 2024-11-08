@@ -414,7 +414,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 											$dataUnique_langganan = array_unique($Array_langganan);
 											
 											// Gabungkan kembali menjadi string
-											$dataClean_langganan = implode(', ', $dataUnique_langganan);
+											$dataClean_langganan = implode(',<br>', $dataUnique_langganan);
 											
 											echo $dataClean_langganan; // Output: DOM2401663
 										?>
@@ -431,7 +431,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 												$dataUnique_no_order = array_unique($Array_no_order);
 												
 												// Gabungkan kembali menjadi string
-												$dataClean_no_order = implode(', ', $dataUnique_no_order);
+												$dataClean_no_order = implode(',<br>', $dataUnique_no_order);
 												
 												echo $dataClean_no_order; // Output: DOM2401663
 											?>
@@ -488,7 +488,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 												$dataUnique_warna = array_unique($Array_warna);
 												
 												// Gabungkan kembali menjadi string
-												$dataClean_warna = implode(', ', $dataUnique_warna);
+												$dataClean_warna = implode(',<br>', $dataUnique_warna);
 												
 												echo $dataClean_warna; // Output: DOM2401663
 											?>
@@ -542,33 +542,27 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 												$dataUnique_lot = array_unique($Array_lot);
 												
 												// Gabungkan kembali menjadi string
-												$dataClean_lot = implode(', ', $dataUnique_lot);
+												$dataClean_lot = implode(',<br>', $dataUnique_lot);
 												
 												echo $dataClean_lot; // Output: DOM2401663
 											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
-									<?php 
-										$data_tgl_delivery = $value2['tgl_delivery'];
+										<?php 
+											$data_tgl_delivery = $value2['tgl_delivery'];
 
-										// Ubah string menjadi array
-										$Array_tgl_delivery = explode(', ', $data_tgl_delivery);
-										
-										// Hapus duplikat menggunakan array_unique
-										$dataUnique_tgl_delivery = array_unique($Array_tgl_delivery);
-										
-										// Gabungkan kembali menjadi string
-										if (count($dataUnique_tgl_delivery) > 1) {
-											// Jika ada lebih dari 1 tanggal, gunakan implode dengan newline
-											$dataClean_tgl_delivery = implode("\n", $dataUnique_tgl_delivery);
-										} else {
-											// Jika hanya 1 tanggal, gabungkan menjadi string biasa
-											$dataClean_tgl_delivery = implode(', ', $dataUnique_tgl_delivery);
-										}
-										
-										echo nl2br($dataClean_tgl_delivery); // Output dengan enter
-									?>
+											// Ubah string menjadi array
+											$Array_tgl_delivery = explode(', ', $data_tgl_delivery);
+											
+											// Hapus duplikat menggunakan array_unique
+											$dataUnique_tgl_delivery = array_unique($Array_tgl_delivery);
+											
+											// Gabungkan kembali menjadi string
+											$dataClean_tgl_delivery = implode(',<br>', $dataUnique_tgl_delivery);
+											
+											echo $dataClean_tgl_delivery; // Output: DOM2401663
+										?>
 									</td>
 									<td align="center" valign="top">
 										<?php echo cek($value2['roll']); ?>
