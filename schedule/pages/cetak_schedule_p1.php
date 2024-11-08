@@ -571,7 +571,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 										?>
 									</td>
 									<td valign="top">
-										<?php 
+										<!-- <?php 
 											$data_operation = $value2['operation'];
 
 											// Ubah string menjadi array
@@ -585,7 +585,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 											
 											echo $dataClean_operation; // Output: DOM2401663
 										?>
-										<br>
+										<br> -->
 										<?php 
 											$data_personil = $value2['personil'];
 
