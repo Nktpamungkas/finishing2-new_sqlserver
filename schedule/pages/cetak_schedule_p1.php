@@ -457,7 +457,23 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									</td>
 									<td align="center" valign="top">
 										<div style="font-size: 8px;">
-											<?php echo $value2['lebar'] . ' x ' . $value2['gramasi']; ?>
+											<?php
+
+											 // Mengambil nilai lebar dan gramasi, misalnya dari database
+											 $lebar = explode(", ", $value2['lebar']); // Array lebar
+											 $gramasi = explode(", ", $value2['gramasi']); // Array gramasi
+								 
+											 // Mengiterasi elemen-elemen dari array lebar dan gramasi
+											 for ($i = 0; $i < count($lebar); $i++) {
+												 // Gabungkan lebar dan gramasi dengan format 'lebar x gramasi'
+												 echo $lebar[$i] . ' x ' . $gramasi[$i];
+								 
+												 // Tambahkan koma dan line break jika bukan elemen terakhir
+												 if ($i < count($lebar) - 1) {
+													 echo ',<br>';
+												 }
+											 }
+											?>
 										</div>
 									</td>
 									<td align="center" valign="top">
