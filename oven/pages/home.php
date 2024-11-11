@@ -136,25 +136,13 @@
             // CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
             $q_cekshedule = sqlsrv_query($con, "SELECT * 
 														FROM db_finishing.tbl_schedule_new 
-														WHERE nokk = '$idkk' $anddemand AND nourut <> 0
+														WHERE nokk = '$idkk' $anddemand AND nourut = 1
 														");
             $row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
-            if (empty($row_cekschedule['nourut']) and $_GET['demand']) {
+            if($row_cekschedule['nourut'] != '1'){
                 echo "<script>
 								swal({
-									title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan NOMOR URUT yang tepat.',   
-									text: 'Klik Ok untuk input data kembali',
-									type: 'warning',
-								}).then((result) => {
-									if (result.value) {
-										window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
-									}
-								});
-							</script>";
-            } elseif (empty($row_cekschedule['group_shift']) and $_GET['demand']) {
-                echo "<script>
-								swal({
-									title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan GROUP SHIFT yang tepat.',   
+									title: 'Harus No Urut `1`.',   
 									text: 'Klik Ok untuk input data kembali',
 									type: 'warning',
 								}).then((result) => {
@@ -203,160 +191,6 @@
     ?>
 
     <?php
-    // if (isset($_POST['btnSimpan']) and $_POST['shift'] == $rw['shift'] and $_POST['shift2'] == $rw['shift2'] and $_POST['proses'] == $rw['proses']) {
-    //     $shift = $_POST['shift'];
-    //     $shift2 = $_POST['shift2'];
-    //     $langganan = $_POST['buyer'];
-    //     $buyer = $_POST['kd_buyer'];
-    //     $order = $_POST['no_order'];
-    //     $item = $_POST['no_item'];
-    //     $jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
-    //     $kain = $_POST['kondisi_kain'];
-    //     $bahan = $_POST['jenis_bahan'];
-    //     $warna = str_replace("'", "''", $_POST['warna']);
-    //     $nowarna = $_POST['no_warna'];
-    //     $lot = $_POST['lot'];
-    //     $qty = $_POST['qty'];
-    //     $qty2 = $_POST['qty2'];
-    //     $qty3 = $_POST['qty3'];
-    //     $rol = $_POST['rol'];
-    //     $mesin = str_replace("'", "''", $_POST['no_mesin']);
-    //     $nmmesin = str_replace("'", "''", $_POST['nama_mesin']);
-    //     $proses = $_POST['proses'];
-    //     $gerobak = $_POST['no_gerobak'];
-    //     $jam_in = $_POST['proses_in'];
-    //     $jam_out = $_POST['proses_out'];
-    //     $proses_jam = $_POST['proses_jam'];
-    //     $proses_menit = $_POST['proses_menit'];
-    //     $tgl_proses_in = $_POST['tgl_proses_m'];
-    //     $tgl_proses_out = $_POST['tgl_proses_k'];
-    //     $mulai = $_POST['stop_mulai'];
-    //     $mulai2 = $_POST['stop_mulai2'];
-    //     $mulai3 = $_POST['stop_mulai3'];
-    //     $selesai = $_POST['stop_selesai'];
-    //     $selesai2 = $_POST['stop_selesai2'];
-    //     $selesai3 = $_POST['stop_selesai3'];
-    //     $stop_jam = $_POST['stop_jam'];
-    //     $stop_menit = $_POST['stop_menit'];
-    //     $tgl_stop_m = $_POST['tgl_stop_m'];
-    //     $tgl_stop_m2 = $_POST['tgl_stop_m2'];
-    //     $tgl_stop_m3 = $_POST['tgl_stop_m3'];
-    //     $tgl_stop_s = $_POST['tgl_stop_s'];
-    //     $tgl_stop_s2 = $_POST['tgl_stop_s2'];
-    //     $tgl_stop_s3 = $_POST['tgl_stop_s3'];
-    //     $kd = $_POST['kd_stop'];
-    //     $kd2 = $_POST['kd_stop2'];
-    //     $kd3 = $_POST['kd_stop3'];
-    //     $tgl = $_POST['tgl'];
-    //     $acc_kain = str_replace("'", "''", $_POST['acc_kain']);
-    //     $catatan = str_replace("'", "''", $_POST['catatan']);
-    //     $suhu = $_POST['suhu'];
-    //     $speed = $_POST['speed'];
-    //     $omt = $_POST['omt'];
-    //     $vmt = $_POST['vmt'];
-    //     $vmt_time = $_POST['vmt_time'];
-    //     $buka = $_POST['buka_rantai'];
-    //     $overfeed = $_POST['overfeed'];
-    //     $hlebar = $_POST['h_lebar'];
-    //     $hgramasi = $_POST['h_gramasi'];
-    //     $lebar = $_POST['lebar'];
-    //     $gramasi = $_POST['gramasi'];
-    //     $phlarutan = $_POST['pH_larutan'];
-    //     $chemical1 = $_POST['chemical_1'];
-    //     $chemical2 = $_POST['chemical_2'];
-    //     $chemical3 = $_POST['chemical_3'];
-    //     $chemical4 = $_POST['chemical_4'];
-    //     $chemical5 = $_POST['chemical_5'];
-    //     $chemical6 = $_POST['chemical_6'];
-    //     $chemical7 = $_POST['chemical_7'];
-    //     $jmlKonsen1 = $_POST['jmlKonsen1'];
-    //     $jmlKonsen2 = $_POST['jmlKonsen2'];
-    //     $jmlKonsen3 = $_POST['jmlKonsen3'];
-    //     $jmlKonsen4 = $_POST['jmlKonsen4'];
-    //     $jmlKonsen5 = $_POST['jmlKonsen5'];
-    //     $jmlKonsen6 = $_POST['jmlKonsen6'];
-    //     $jmlKonsen7 = $_POST['jmlKonsen7'];
-    //     $overfeed = $_POST['overfeed'];
-    //     $overfeedjt = $_POST['overfeed2'];
-    //     $overfeedjk = $_POST['overfeed3'];
-    
-    //     $simpanSql = "UPDATE db_finishing.tbl_produksi SET 
-    //             `shift`='$shift',
-    //             `shift2`='$shift2',
-    //             `buyer`='$buyer',
-    //             `no_item`='$item',
-    //             `no_warna`='$nowarna',
-    //             `jenis_bahan`='$bahan',
-    //             `kondisi_kain`='$kain',
-    //             `panjang`='$qty2',
-    //             `panjang_h`='$qty3',
-    //             `no_gerobak`='$gerobak',
-    //             `no_mesin`='$mesin',
-    //             `nama_mesin`='$nmmesin',
-    //             `langganan`='$langganan',
-    //             `no_order`='$order',
-    //             `jenis_kain`='$jenis_kain',
-    //             `warna`='$warna',
-    //             `lot`='$lot',
-    //             `rol`='$rol',
-    //             `qty`='$qty',
-    //             `proses`='$proses',
-    //             `jam_in`='$jam_in',
-    //             `jam_out`='$jam_out',
-    //             `tgl_proses_in`='$tgl_proses_in',
-    //             `tgl_proses_out`='$tgl_proses_out',
-    //             `stop_l`='$mulai',
-    //             `stop_l2`='$mulai2',
-    //             `stop_l3`='$mulai3',
-    //             `stop_r`='$selesai',
-    //             `stop_r2`='$selesai2',
-    //             `stop_r3`='$selesai3',
-    //             `tgl_stop_l`='$tgl_stop_m',
-    //             `tgl_stop_l2`='$tgl_stop_m2',
-    //             `tgl_stop_l3`='$tgl_stop_m3',
-    //             `tgl_stop_r`='$tgl_stop_s',
-    //             `tgl_stop_r2`='$tgl_stop_s2',
-    //             `tgl_stop_r3`='$tgl_stop_s3',
-    //             `kd_stop`='$kd',
-    //             `kd_stop2`='$kd2',
-    //             `kd_stop3`='$kd3',
-    //             `acc_staff`='$acc_kain',
-    //             `catatan`='$catatan',
-    //             `suhu`='$suhu',
-    //             `speed`='$speed',
-    //             `omt`='$omt',
-    //             `vmt`='$vmt',
-    //             `t_vmt`='$vmt_time',
-    //             `buka_rantai`='$buka',
-    //             `overfeed`='$overfeed',
-    //             `overfeedjt`='$overfeedjt',
-    //             `overfeedjk`='$overfeedjk',
-    //             `lebar`='$lebar',
-    //             `gramasi`='$gramasi',
-    //             `lebar_h`='$hlebar',
-    //             `gramasi_h`='$hgramasi',
-    //             `ph_larut`='$phlarutan',
-    //             `chemical_1`='$chemical1',
-    //             `chemical_2`='$chemical2',
-    //             `chemical_3`='$chemical3',
-    //             `chemical_4`='$chemical4',
-    //             `chemical_5`='$chemical5',
-    //             `chemical_6`='$chemical6',
-    //             `chemical_7`='$chemical7',
-    //             `konsen_1`='$jmlKonsen1',
-    //             `konsen_2`='$jmlKonsen2',
-    //             `konsen_3`='$jmlKonsen3',
-    //             `konsen_4`='$jmlKonsen4',
-    //             `konsen_5`='$jmlKonsen5',
-    //             `konsen_6`='$jmlKonsen6',
-    //             `konsen_7`='$jmlKonsen7',
-    //             `tgl_update`='$tgl'
-    //         WHERE `id`='$_POST[id]'";
-    //     sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
-    
-    //     // Refresh form
-    //     echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
-    // } else 
     if (isset($_POST['btnSimpan'])) {
         if ($_POST['nokk'] != "") {
             $nokk = $_POST['nokk'];
@@ -622,37 +456,27 @@
             echo "xError: " . $e->getMessage();
         }
 
-        //Simpan ke schedule
-        // $posisi = strpos($langganan, "/");
-        // $cus = substr($langganan, 0, $posisi);
-        // $byr = substr($langganan, ($posisi - 1), 100);
-        // $sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.tbl_schedule SET
-        //     nokk='$nokk',
-        //     nodemand='$demand',
-        //     langganan='$cus',
-        //     buyer='$byr',
-        //     no_order='$order',
-        //     no_hanger='$item',
-        //     no_item='$item',
-        //     jenis_kain='$jenis_kain',
-        //     lebar='$lebar',
-        //     gramasi='$gramasi',
-        //     warna='$warna',
-        //     no_warna='$nowarna',
-        //     bruto='$qty',
-        //     lot='$lot',
-        //     rol='$rol',
-        //     shift='$shift',
-        //     g_shift='$shift2',
-        //     no_mesin='$mesin',
-        //     proses='$proses',
-        //     revisi='0',
-        //     tgl_masuk=now(),
-        //     personil='Operator Fin',
-        //     target='0',
-        //     catatan='data diinput dari finishing',
-        //     tgl_update=now(),
-        //     tampil='1'");
+        
+        if($_GET['kklanjutan'] != '1'){
+            //Ubah nomor urut otomatis jika berhasil simpan
+            $mesin = $_POST['no_mesin'];
+            $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+                                SET nourut = nourut - 1
+                                WHERE
+                                    status = 'SCHEDULE'
+                                    AND no_mesin = '$mesin'
+                                    AND nourut <> 0 
+                                    AND NOT EXISTS (
+                                        SELECT 1
+                                        FROM db_finishing.tbl_produksi b
+                                        WHERE
+                                            b.nokk = db_finishing.tbl_schedule_new.nokk
+                                            AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+                                            AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+                                            AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+                                    )";
+            sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+        }
     
         // // Refresh form
         echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";

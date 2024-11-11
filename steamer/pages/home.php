@@ -135,24 +135,12 @@
 				$anddemand = "";
 			}
 			// CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
-			$q_cekshedule = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new WHERE nokk = '$idkk' $anddemand AND NOT nourut = 0");
+			$q_cekshedule = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new WHERE nokk = '$idkk' $anddemand AND nourut = 1");
 			$row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
-			if (empty($row_cekschedule['nourut']) and $_GET['demand']) {
+			if($row_cekschedule['nourut'] != '1'){
 				echo "<script>
 								swal({
-									title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan NOMOR URUT yang tepat.',   
-									text: 'Klik Ok untuk input data kembali',
-									type: 'warning',
-								}).then((result) => {
-									if (result.value) {
-										window.location.href = 'http://online.indotaichen.com/finishing2-new/steamer/?typekk=SCHEDULE'; 
-									}
-								});
-							</script>";
-			} elseif (empty($row_cekschedule['group_shift']) and $_GET['demand']) {
-				echo "<script>
-								swal({
-									title: 'Silakan hubungi pemimpin (leader) Anda untuk pengaturan GROUP SHIFT yang tepat.',   
+									title: 'Harus No Urut `1`.',   
 									text: 'Klik Ok untuk input data kembali',
 									type: 'warning',
 								}).then((result) => {
@@ -759,7 +747,27 @@
 				exit();
 
 			}
-	
+			
+			if($_GET['kklanjutan'] != '1'){
+				//Ubah nomor urut otomatis jika berhasil simpan
+				$mesin = $_POST['no_mesin'];
+				$nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+									SET nourut = nourut - 1
+									WHERE
+										status = 'SCHEDULE'
+										AND no_mesin = '$mesin'
+										AND nourut <> 0 
+										AND NOT EXISTS (
+											SELECT 1
+											FROM db_finishing.tbl_produksi b
+											WHERE
+												b.nokk = db_finishing.tbl_schedule_new.nokk
+												AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+												AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+												AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+										)";
+				sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+			}
 			//echo "Data successfully inserted!";
 			// Refresh form
 			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
