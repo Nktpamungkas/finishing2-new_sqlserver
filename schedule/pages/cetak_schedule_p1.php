@@ -403,7 +403,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 									<td valign="top" style="height: 0.27in;">
 										<div align="center"><?=  $value2['nourut']; ?></div>
 									</td>
-									<td align="center" valign="top">
+									<td align="left" valign="top">
 										<?php 
 											$data_langganan = $value2['langganan'];
 
@@ -449,7 +449,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 												$dataUnique_jenis_kain = array_unique($Array_jenis_kain);
 												
 												// Gabungkan kembali menjadi string
-												$dataClean_jenis_kain = implode(', ', $dataUnique_jenis_kain);
+												$dataClean_jenis_kain = implode(',<br> ', $dataUnique_jenis_kain);
 												
 												echo $dataClean_jenis_kain; // Output: DOM2401663
 											?>
@@ -565,12 +565,20 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 										?>
 									</td>
 									<td align="center" valign="top">
-										<?php echo cek($value2['roll']); ?>
+										<?php 
+											$data = cek($value2['roll']);
+											// Pisahkan data berdasarkan karakter tertentu (misalnya, spasi atau koma) dan tampilkan setiap item pada baris baru
+											$dataArray = explode(' ', $data); // Ubah pemisahan sesuai dengan karakter yang diinginkan
+											foreach ($dataArray as $item) {
+												echo $item . '<br>';
+											}
+										?>
 									</td>
-									<td align="right" valign="top">
+
+									<td align="center" valign="top">
 										<?php echo $value2['qty_order']; ?>
 									</td>
-									<td align="right" valign="top">
+									<td align="left" valign="top">
 									<?php 
 										$data_proses = $value2['proses'];
 
@@ -614,10 +622,11 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 											$dataUnique_personil = array_unique($Array_personil);
 											
 											// Gabungkan kembali menjadi string
-											$dataClean_personil = implode(', ', $dataUnique_personil);
+											$dataClean_personil = implode(',<br>', $dataUnique_personil);
 											
 											echo $dataClean_personil; // Output: DOM2401663
 										?>
+										<br>
 										<br>
 										<?php 
 											$data_kondisikain = $value2['kondisikain'];
@@ -633,6 +642,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 											
 											echo $dataClean_kondisikain; // Output: DOM2401663
 										?>
+										<br>
 										<br>
 										<?php 
 											$data_catatan = $value2['catatan'];
