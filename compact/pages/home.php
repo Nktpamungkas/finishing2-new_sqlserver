@@ -493,9 +493,29 @@
             }
 
             if($_GET['kklanjutan'] != '1'){
-                //Ubah nomor urut otomatis jika berhasil simpan
-                $mesin = $_POST['no_mesin'];
-                $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+                // cek kondisi jika nourut 1 masih ada nokk dan nodemand
+				$cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
+                                    WHERE
+                                        status = 'SCHEDULE'
+                                        AND no_mesin = '$mesin'
+                                        AND nourut <> 0
+                                        AND nourut = 1
+                                        AND NOT EXISTS (
+                                                SELECT 1
+                                                FROM db_finishing.tbl_produksi b
+                                                WHERE
+                                                        b.nokk = db_finishing.tbl_schedule_new.nokk
+                                                        AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+                                                        AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+                                                        AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+                                                        )
+                                    ORDER BY nourut ASC";
+                $exec_nourut	= sqlsrv_query($con, $cek_nourut);
+                $result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
+
+                if(empty($result_nourut)){
+                    //Ubah nomor urut otomatis jika berhasil simpan
+                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
                                     SET nourut = nourut - 1
                                     WHERE
                                         status = 'SCHEDULE'
@@ -510,7 +530,9 @@
                                                 AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
                                                 AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
                                         )";
-                sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+                    sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+                }
+                
             }
         
             echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
