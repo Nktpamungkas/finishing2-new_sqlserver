@@ -146,7 +146,17 @@
                 $anddemand = "";
             }
             // CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
-            $q_cekshedule = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new WHERE nokk = '$idkk' $anddemand AND nourut = 1");
+            $q_cekshedule = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] a
+														WHERE 
+														NOT EXISTS (
+																	SELECT 1
+																	FROM db_finishing.[tbl_produksi] b
+																	WHERE b.nokk = a.nokk 
+																	AND b.demandno = a.nodemand 
+																	AND b.nama_mesin = a.operation
+																	AND b.no_mesin = a.no_mesin
+																) 
+														AND nokk = '$idkk' $anddemand AND  nourut = 1");
             $row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
             if($row_cekschedule['nourut'] != '1'){
                 echo "<script>
@@ -611,7 +621,16 @@
                                 required>
                                 <option value="" disabled selected>Pilih Nomor Demand</option>
                                 <?php
-                                $sql_ITXVIEWKK_demand = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new WHERE nokk = '$idkk'");
+                                $sql_ITXVIEWKK_demand = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
+                                                                                WHERE nokk = '$idkk' AND nourut = '1' 
+                                                                                AND NOT EXISTS (
+                                                                                            SELECT 1
+                                                                                            FROM db_finishing.[tbl_produksi] b
+                                                                                            WHERE b.nokk = a.nokk 
+                                                                                            AND b.demandno = a.nodemand 
+                                                                                            AND b.nama_mesin = a.operation
+                                                                                            AND b.no_mesin = a.no_mesin
+                                                                                        ) ");
                                 while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)):
                                     ?>
                                     <?php if ($_GET['kklanjutan']): ?>
@@ -684,6 +703,7 @@
                                             c.nokk = a.nokk 
                                             AND c.demandno = a.nodemand 
                                             AND c.nama_mesin = a.operation
+                                            AND c.no_mesin = a.no_mesin
                                         )
                                 AND";
                             }
@@ -694,7 +714,8 @@
                                                             WHERE
                                                             $wherecekproses
                                                                 nokk = '$idkk' 
-                                                                AND NOT nourut = 0");
+                                                                AND NOT nourut = 0
+                                                            AND a.nourut = 1");
 
                             if ($_GET['typekk'] == 'NOW') {
                                 $if_operation = "$_GET[operation]";
