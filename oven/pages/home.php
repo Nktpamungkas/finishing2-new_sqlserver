@@ -146,19 +146,21 @@
 																) 
 														AND nokk = '$idkk' $anddemand AND  nourut = 1");
             $row_cekschedule = sqlsrv_fetch_array($q_cekshedule, SQLSRV_FETCH_ASSOC);
-            if($row_cekschedule['nourut'] != '1'){
-                echo "<script>
-								swal({
-									title: 'Harus No Urut `1`.',   
-									text: 'Klik Ok untuk input data kembali',
-									type: 'warning',
-								}).then((result) => {
-									if (result.value) {
-										window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
-									}
-								});
-							</script>";
-            } else {
+            if($_GET['kklanjutan'] == '1'){
+                if($row_cekschedule['nourut'] != '1'){
+                    echo "<script>
+                                    swal({
+                                        title: 'Harus No Urut `1`.',   
+                                        text: 'Klik Ok untuk input data kembali',
+                                        type: 'warning',
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            window.location.href = 'http://10.0.5.25/finishing2-new/oven/?typekk=SCHEDULE'; 
+                                        }
+                                    });
+                                </script>";
+                }
+            }else{
                 if ($_GET['operation']) {
                     $andoperation = "AND operation = '$_GET[operation]'";
                 } else {
@@ -567,16 +569,20 @@
                             required>
                             <option value="" disabled selected>Pilih Nomor Demand</option>
                             <?php
+                                if ($_GET['kklanjutan'] == '1') {
+                                    $nourut = "";
+                                }else{
+                                    $nourut = "AND nourut = '1' AND NOT EXISTS (
+                                                                    SELECT 1
+                                                                    FROM db_finishing.[tbl_produksi] b
+                                                                    WHERE b.nokk = a.nokk 
+                                                                    AND b.demandno = a.nodemand 
+                                                                    AND b.nama_mesin = a.operation
+                                                                    AND b.no_mesin = a.no_mesin
+                                                                )";
+                                }
                                 $sql_ITXVIEWKK_demand = db2_exec($conn_db2, "SELECT * FROM db_finishing.tbl_schedule_new a
-                                                                                WHERE nokk = '$idkk' AND nourut = '1' 
-                                                                                AND NOT EXISTS (
-                                                                                            SELECT 1
-                                                                                            FROM db_finishing.[tbl_produksi] b
-                                                                                            WHERE b.nokk = a.nokk 
-                                                                                            AND b.demandno = a.nodemand 
-                                                                                            AND b.nama_mesin = a.operation
-                                                                                            AND b.no_mesin = a.no_mesin
-                                                                                        ) ");
+                                                                                WHERE nokk = '$idkk' $nourut ");
                                 while ($r_demand = db2_fetch_assoc($sql_ITXVIEWKK_demand)):
                                     ?>
                             <option value="<?= $r_demand['DEMAND']; ?>" <?php if ($r_demand['DEMAND'] == $_GET['demand']) {
