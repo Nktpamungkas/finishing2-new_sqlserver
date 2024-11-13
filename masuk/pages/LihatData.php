@@ -78,7 +78,7 @@ include('../koneksi.php');
 }
 /* Tambahkan animasi ke elemen <tr> dengan kelas "blink" */
 .blink {
-    animation: blink 1s infinite; /* Berkedip setiap 1 detik */
+    animation: blink 2.5s infinite; /* Berkedip setiap 1 detik */
 }
 </style>
 

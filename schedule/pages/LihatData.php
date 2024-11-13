@@ -79,7 +79,7 @@ include('../koneksi.php');
 		}
 		/* Tambahkan animasi ke elemen <tr> dengan kelas "blink" */
 		.blink {
-			animation: blink 1s infinite; /* Berkedip setiap 1 detik */
+			animation: blink 2.5s infinite; /* Berkedip setiap 1 detik */
 		}
 	</style>
 </head>
@@ -540,7 +540,7 @@ include('../koneksi.php');
 				$row_cekposisikk = db2_fetch_assoc($q_cekposisikk);
 				?>
 
-				<tr <?php if ($row_cekposisikk['STATUS_OPERATION']) { if(TRIM($row_cekposisikk['MACHINECODE']) != TRIM($row_schedule['no_mesin'])){ echo 'style="background-color: #F19CBB" class="blink"'; } } ?>">
+				<tr <?php if ($row_cekposisikk['STATUS_OPERATION'] == 'Closed') { if(TRIM($row_cekposisikk['MACHINECODE']) != TRIM($row_schedule['no_mesin'])){ echo 'style="background-color: #F19CBB" class="blink"'; } } ?>>
 					<td style="border:1px solid;vertical-align:middle; text-align: center;">
 						<?= TRIM($row_cekposisikk['MACHINECODE']) . '<br>' . substr(TRIM($row_cekposisikk['MACHINECODE']), -5, 2) . substr(TRIM($row_cekposisikk['MACHINECODE']), -2); ?><br>
 						<?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
