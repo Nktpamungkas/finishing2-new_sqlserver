@@ -376,7 +376,7 @@
 
                 if(empty($result_nourut)){
                     //Ubah nomor urut otomatis jika berhasil simpan
-                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new	
                                     SET nourut = nourut - 1
                                     WHERE
                                         status = 'SCHEDULE'

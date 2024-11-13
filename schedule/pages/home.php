@@ -648,24 +648,24 @@ if (empty($_SESSION['usr'])) {
 							<strong style="color: red;">No Urut :</strong>
 							<select name="no_urut" class="form-control select2" id="no_urut">
 								<option value="">Pilih</option>
-								<?php
+								<?php 
+								//no urut di buka untuk memunculkan semuah no urut yang sebelumnya no urut yg tampil adalah no urut yang belum terpakai 
 								// Use SQL Server syntax for querying with schema db_finishing
-								$q_nourut = sqlsrv_query($con, "SELECT
-																STRING_AGG(CONVERT(VARCHAR, nourut), ',') AS nourut
-															FROM
-																db_finishing.tbl_schedule_new 
-															WHERE
-																nokk = ? 
-																AND nodemand = ?", array($row_kkmasuk['nokk'], $row_kkmasuk['nodemand']));
+								// $q_nourut = sqlsrv_query($con, "SELECT
+								// 								STRING_AGG(CONVERT(VARCHAR, nourut), ',') AS nourut
+								// 							FROM
+								// 								db_finishing.tbl_schedule_new 
+								// 							WHERE
+								// 								nokk = ? 
+								// 								AND nodemand = ?", array($row_kkmasuk['nokk'], $row_kkmasuk['nodemand']));
 
-								$data_nourut = sqlsrv_fetch_array($q_nourut, SQLSRV_FETCH_ASSOC);
+								// $data_nourut = sqlsrv_fetch_array($q_nourut, SQLSRV_FETCH_ASSOC);
 
-
-								if ($data_nourut['nourut']) {
-									$sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut WHERE no_urut NOT IN (" . $data_nourut['nourut'] . ") ORDER BY no_urut ASC");
-								} else {
+								// if ($data_nourut['nourut']) {
+									// $sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut WHERE no_urut NOT IN (" . $data_nourut['nourut'] . ") ORDER BY no_urut ASC");
+								// } else {
 									$sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut ORDER BY no_urut ASC");
-								}
+								// }
 
 								while ($rK = sqlsrv_fetch_array($sqlKap, SQLSRV_FETCH_ASSOC)) {
 								?>
