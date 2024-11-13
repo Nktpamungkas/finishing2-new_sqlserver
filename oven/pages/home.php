@@ -465,6 +465,7 @@
 
         
         if($_GET['kklanjutan'] != '1'){
+            $mesin = $_POST['no_mesin'];
             // cek kondisi jika nourut 1 masih ada nokk dan nodemand
             $cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
                                 WHERE
