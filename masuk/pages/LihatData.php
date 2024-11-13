@@ -71,6 +71,15 @@ include('../koneksi.php');
 .modal-content button {
     margin-right: 10px;
 }
+/* Definisikan animasi berkedip */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+/* Tambahkan animasi ke elemen <tr> dengan kelas "blink" */
+.blink {
+    animation: blink 1s infinite; /* Berkedip setiap 1 detik */
+}
 </style>
 
 <body>
@@ -369,11 +378,15 @@ include('../koneksi.php');
                         $row_cekposisikk    = db2_fetch_assoc($q_cekposisikk);
                     ?>
                     <?php // if($row_cekposisikk['STATUS_OPERATION'] == 'Closed') : ?>
-                        <tr>
+				        <tr <?php if (empty($row_cekposisikk['STATUS_OPERATION'])) { echo 'style="background-color: #F19CBB" class="blink"'; } ?>>
                             <td style="border:1px solid;vertical-align:middle; text-align: center;">
-                                <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
-                                <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
-                                <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
+                                <?php if ($row_cekposisikk['STATUS_OPERATION']) : ?>
+                                    <?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
+                                    <?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
+                                    <?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
+                                <?php else : ?>
+                                    <b>OPERATION TIDAK DITEMUKAN</b>
+                                <?php endif; ?>
                             </td>
                             <td style="border:1px solid;vertical-align:middle; text-align: center;">
                                 <?= $row_tblmasuk['nama_mesin'] ?></td>

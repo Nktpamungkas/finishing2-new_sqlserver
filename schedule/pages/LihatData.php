@@ -71,6 +71,16 @@ include('../koneksi.php');
 		.modal-content button {
 			margin-right: 10px;
 		}
+
+		/* Definisikan animasi berkedip */
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0; }
+		}
+		/* Tambahkan animasi ke elemen <tr> dengan kelas "blink" */
+		.blink {
+			animation: blink 1s infinite; /* Berkedip setiap 1 detik */
+		}
 	</style>
 </head>
 
@@ -479,7 +489,8 @@ include('../koneksi.php');
 															CASE
 																WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
 																ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
-															END AS GEROBAK 
+															END AS GEROBAK,
+															iptip.MACHINECODE 
 														FROM 
 															PRODUCTIONDEMANDSTEP p 
 														LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -523,13 +534,15 @@ include('../koneksi.php');
 															p.PRODUCTIONDEMANDCODE,
 															iptip.LONGDESCRIPTION,
 															iptop.LONGDESCRIPTION,
-															a.VALUEBOOLEAN
+															a.VALUEBOOLEAN,
+															iptip.MACHINECODE
 														ORDER BY p.STEPNUMBER ASC");
 				$row_cekposisikk = db2_fetch_assoc($q_cekposisikk);
 				?>
 
-				<tr>
+				<tr <?php if ($row_cekposisikk['STATUS_OPERATION']) { if(TRIM($row_cekposisikk['MACHINECODE']) != TRIM($row_schedule['no_mesin'])){ echo 'style="background-color: #F19CBB" class="blink"'; } } ?>">
 					<td style="border:1px solid;vertical-align:middle; text-align: center;">
+						<?= TRIM($row_cekposisikk['MACHINECODE']) . '<br>' . substr(TRIM($row_cekposisikk['MACHINECODE']), -5, 2) . substr(TRIM($row_cekposisikk['MACHINECODE']), -2); ?><br>
 						<?= $row_cekposisikk['STATUS_OPERATION']; ?><br>
 						<?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
 						<?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
