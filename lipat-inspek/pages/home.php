@@ -352,49 +352,6 @@
 					WHERE id='$_POST[id]'";
 			sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
 
-			if($_GET['kklanjutan'] != '1'){
-				$mesin = $_POST['no_mesin'];
-                // cek kondisi jika nourut 1 masih ada nokk dan nodemand
-				$cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0
-                                        AND nourut = 1
-                                        AND NOT EXISTS (
-                                                SELECT 1
-                                                FROM db_finishing.tbl_produksi b
-                                                WHERE
-                                                        b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                        AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                        AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                        AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                                        )
-                                    ORDER BY nourut ASC";
-                $exec_nourut	= sqlsrv_query($con, $cek_nourut);
-                $result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
-
-                if(empty($result_nourut)){
-                    //Ubah nomor urut otomatis jika berhasil simpan
-                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
-                                    SET nourut = nourut - 1
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0 
-                                        AND NOT EXISTS (
-                                            SELECT 1
-                                            FROM db_finishing.tbl_produksi b
-                                            WHERE
-                                                b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                        )";
-                    sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
-                }
-                
-            }
 
 			// Refresh form
 			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
@@ -561,114 +518,49 @@
 
 			insertIntoTable($con,'db_finishing.tbl_produksi',$dataInsert);
 
-			// $simpanSql = "INSERT INTO db_finishing.[tbl_produksi] SET 
-			// nokk='$nokk',
-			// demandno='$demand',
-			// shift='$shift',
-			// shift2='$shift2',
-			// buyer='$buyer',
-			// no_item='$item',
-			// no_warna='$nowarna',
-			// jenis_bahan='$bahan',
-			// kondisi_kain='$kain',
-			// panjang='$qty2',
-			// panjang_h='$qty3',
-			// no_gerobak='$gerobak',
-			// no_mesin='$mesin',
-			// nama_mesin='$nmmesin',
-			// langganan='$langganan',
-			// no_order='$order',
-			// jenis_kain='$jenis_kain',
-			// warna='$warna',
-			// lot='$lot',
-			// rol='$rol',
-			// qty='$qty',
-			// proses='$proses',
-			// jam_in='$jam_in',
-			// jam_out='$jam_out',
-			// tgl_proses_in='$tgl_proses_in',
-			// tgl_proses_out='$tgl_proses_out',
-			// stop_l='$mulai',
-			// stop_l2='$mulai2',
-			// stop_l3='$mulai3',
-			// stop_r='$selesai',
-			// stop_r2='$selesai2',
-			// stop_r3='$selesai3',
-			// tgl_stop_l='$tgl_stop_m',
-			// tgl_stop_l2='$tgl_stop_m2',
-			// tgl_stop_l3='$tgl_stop_m3',
-			// tgl_stop_r='$tgl_stop_s',
-			// tgl_stop_r2='$tgl_stop_s2',
-			// tgl_stop_r3='$tgl_stop_s3',
-			// kd_stop='$kd',
-			// kd_stop2='$kd2',
-			// kd_stop3='$kd3',
-			// tgl_buat=now(),
-			// tgl_pro=now(),
-			// acc_staff='$acc_kain',
-			// catatan='$catatan',
-			// suhu='$suhu',
-			// speed='$speed',
-			// omt='$omt',
-			// vmt='$vmt',
-			// t_vmt='$vmt_time',
-			// buka_rantai='$buka',
-			// overfeed='$overfeed',
-			// lebar='$lebar',
-			// gramasi='$gramasi',
-			// lebar_h='$hlebar',
-			// gramasi_h='$hgramasi',
-			// ph_larut='$phlarutan',
-			// chemical_1='$chemical1',
-			// chemical_2='$chemical2',
-			// chemical_3='$chemical3',
-			// chemical_4='$chemical4',
-			// chemical_5='$chemical5',
-			// konsen_1='$jmlKonsen1',
-			// konsen_2='$jmlKonsen2',
-			// konsen_3='$jmlKonsen3',
-			// konsen_4='$jmlKonsen4',
-			// konsen_5='$jmlKonsen5',
-			// jns_mesin='$jnsmesin',
-			// tgl_update='$tgl'";
+			if($_GET['kklanjutan'] != '1'){
+                $mesin = $_POST['no_mesin'];
+                // cek kondisi jika nourut 1 masih ada nokk dan nodemand
+				$cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
+                                    WHERE
+                                        status = 'SCHEDULE'
+                                        AND no_mesin = '$mesin'
+                                        AND nourut <> 0
+                                        AND nourut = 1
+                                        AND NOT EXISTS (
+                                                SELECT 1
+                                                FROM db_finishing.tbl_produksi b
+                                                WHERE
+                                                        b.nokk = db_finishing.tbl_schedule_new.nokk
+                                                        AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+                                                        AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+                                                        AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+                                                        )
+                                    ORDER BY nourut ASC";
+                $exec_nourut	= sqlsrv_query($con, $cek_nourut);
+                $result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
 
-			// sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
-
-			//Simpan ke schedule
-			$posisi = strpos($langganan, "/");
-			$cus = substr($langganan, 0, $posisi);
-			$byr = substr($langganan, ($posisi + 1), 100);
-			
-			// $sqlData = sqlsrv_query($con, "INSERT INTO db_finishing.[tbl_schedule] SET
-			// 	nokk='$nokk',
-			// 	nodemand='$demand',
-			// 	langganan='$cus',
-			// 	buyer='$byr',
-			// 	no_order='$order',
-			// 	no_hanger='$item',
-			// 	no_item='$item',
-			// 	jenis_kain='$jenis_kain',
-			// 	lebar='$lebar',
-			// 	gramasi='$gramasi',
-			// 	warna='$warna',
-			// 	no_warna='$nowarna',
-			// 	bruto='$qty',
-			// 	lot='$lot',
-			// 	rol='$rol',
-			// 	shift='$shift',
-			// 	g_shift='$shift2',
-			// 	no_mesin='$mesin',
-			// 	proses='$proses',
-			// 	revisi='0',
-			// 	tgl_masuk=now(),
-			// 	personil='Operator Fin',
-			// 	target='0',
-			// 	catatan='data diinput dari finishing',
-			// 	tgl_update=now(),
-			// 	tampil='1'");
-
-			// Refresh form
-			// echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiSimpan'>";
+                if(empty($result_nourut)){
+                    //Ubah nomor urut otomatis jika berhasil simpan
+                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+                                    SET nourut = nourut - 1
+                                    WHERE
+                                        status = 'SCHEDULE'
+                                        AND no_mesin = '$mesin'
+                                        AND nourut <> 0 
+                                        AND NOT EXISTS (
+                                            SELECT 1
+                                            FROM db_finishing.tbl_produksi b
+                                            WHERE
+                                                b.nokk = db_finishing.tbl_schedule_new.nokk
+                                                AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+                                                AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+                                                AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+                                        )";
+                    sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+                }
+                
+            }
 		}
 	?>
 	<form id="form1" name="form1" method="post" action="">

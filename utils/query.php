@@ -29,7 +29,7 @@ function insertIntoTable($conn, $table, $data) {
             throw new Exception(print_r(sqlsrv_errors(), true));
         }
 
-        // echo "Data inserted successfully!";
+        echo "Data inserted successfully!";
         
     } catch (Exception $e) {
         // Handle the exception and echo the error message
