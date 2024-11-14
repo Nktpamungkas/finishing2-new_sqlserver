@@ -659,16 +659,20 @@
                             <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
+									if ($_GET['kklanjutan'] == '1') {
+										$nourut = "AND NOT nourut = '0'";
+									}else{
+										$nourut = "AND nourut = '1' AND NOT EXISTS (
+																		SELECT 1
+																		FROM db_finishing.[tbl_produksi] b
+																		WHERE b.nokk = a.nokk 
+																		AND b.demandno = a.nodemand 
+																		AND b.nama_mesin = a.operation
+																		AND b.no_mesin = a.no_mesin
+																	)";
+									}
                                     $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
-                                                                                WHERE nokk = '$idkk' AND nourut = '1' 
-                                                                                AND NOT EXISTS (
-                                                                                            SELECT 1
-                                                                                            FROM db_finishing.[tbl_produksi] b
-                                                                                            WHERE b.nokk = a.nokk 
-                                                                                            AND b.demandno = a.nodemand 
-                                                                                            AND b.nama_mesin = a.operation
-                                                                                            AND b.no_mesin = a.no_mesin
-                                                                                        ) ");
+                                                                                WHERE nokk = '$idkk' $nourut ");
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
                                 ?>
                                     <?php
