@@ -130,20 +130,18 @@
 														AND nokk = '$idkk' $anddemand AND  nourut = 1");
 
 				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule);
-				if($_GET['kklanjutan'] == '1'){
-					if($row_cekschedule['nourut'] != '1'){
-						echo     "<script>
-									swal({
-										title:  'Harus No Urut `1`.',
-										text: 'Klik Ok untuk input data kembali',
-										type: 'warning',
-									}).then((result) => {
-										if (result.value) {
-											window.location.href = 'http://online.indotaichen.com/finishing2-new/lipat-inspek/?typekk=SCHEDULE'; 
-										}
-									});
-								</script>";
-					}
+				if($row_cekschedule['nourut'] != '1'){
+					echo     "<script>
+								swal({
+									title:  'Harus No Urut `1`.',
+									text: 'Klik Ok untuk input data kembali',
+									type: 'warning',
+								}).then((result) => {
+									if (result.value) {
+										window.location.href = 'http://online.indotaichen.com/finishing2-new/lipat-inspek/?typekk=SCHEDULE'; 
+									}
+								});
+							</script>";
 				}else{
 					if($_GET['operation']){
                         $andoperation   = "AND operation = '$_GET[operation]'";
@@ -159,6 +157,27 @@
                         $row_kkmasuk    = sqlsrv_fetch_array($q_kkmasuk);
                         include_once("../now.php");
                     }else{
+						// Query Asli di mysql nya
+						// $q_kkmasuk		= sqlsrv_query($con, "SELECT
+						// 											*
+						// 										FROM
+						// 											db_finishing.[tbl_schedule_new] a
+						// 										WHERE
+						// 											NOT EXISTS (
+						// 													SELECT 1
+						// 													FROM
+						// 															db_finishing..[tbl_produksi] b
+						// 													WHERE
+						// 															b.nokk = a.nokk 
+						// 															AND b.demandno = a.nodemand 
+						// 															AND b.nama_mesin = a.operation
+						// 															AND b.no_mesin = a.no_mesin
+						// 											) 
+						// 											AND NOT a.nourut = 0 AND NOT group_shift IS NULL
+						// 											AND nokk = '$idkk' $anddemand 
+						// 										ORDER BY
+						// 											CONCAT(SUBSTR(TRIM(a.no_mesin), -5,2), SUBSTR(TRIM(a.no_mesin), -2)) ASC, a.nourut ASC");
+
 						$q_kkmasuk		= sqlsrv_query($con, " SELECT *
 											FROM db_finishing.[tbl_schedule_new] a
 											WHERE NOT EXISTS (
@@ -640,20 +659,16 @@
                             <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
-									if ($_GET['kklanjutan'] == '1') {
-										$nourut = "";
-									}else{
-										$nourut = "AND nourut = '1' AND NOT EXISTS (
-																		SELECT 1
-																		FROM db_finishing.[tbl_produksi] b
-																		WHERE b.nokk = a.nokk 
-																		AND b.demandno = a.nodemand 
-																		AND b.nama_mesin = a.operation
-																		AND b.no_mesin = a.no_mesin
-																	)";
-									}
                                     $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
-                                                                                WHERE nokk = '$idkk' $nourut ");
+                                                                                WHERE nokk = '$idkk' AND nourut = '1' 
+                                                                                AND NOT EXISTS (
+                                                                                            SELECT 1
+                                                                                            FROM db_finishing.[tbl_produksi] b
+                                                                                            WHERE b.nokk = a.nokk 
+                                                                                            AND b.demandno = a.nodemand 
+                                                                                            AND b.nama_mesin = a.operation
+                                                                                            AND b.no_mesin = a.no_mesin
+                                                                                        ) ");
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
                                 ?>
                                     <?php
