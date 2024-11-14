@@ -130,7 +130,7 @@
 														AND nokk = '$idkk' $anddemand AND  nourut = 1");
 
 				$row_cekschedule = sqlsrv_fetch_array($q_cekshedule);
-				if($row_cekschedule['nourut'] != '1'){
+				if($row_cekschedule['nourut'] != '1' && $_GET['kklanjutan'] != '1'){
 					echo     "<script>
 								swal({
 									title:  'Harus No Urut `1`.',
