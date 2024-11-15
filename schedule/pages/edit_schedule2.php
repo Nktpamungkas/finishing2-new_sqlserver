@@ -5,8 +5,8 @@ if (empty($_SESSION['usr'])) {
     exit;
 }
 
-include('../koneksi.php'); 
- // Pastikan koneksi.php sudah benar
+include('../koneksi.php');
+// Pastikan koneksi.php sudah benar
 
 // Menangani form submit untuk menampilkan data
 $data = [];
@@ -50,6 +50,10 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
     $nourut = $_POST['nourut'];  // Mengambil array nourut dari form
     $ids = $_POST['id'];  // Mengambil array id
     $no_mesin_baru = $_POST['no_mesin_baru'];  // Mengambil array no_mesin_baru
+    $operations = $_POST['operation'];  // Mengambil array no_mesin_baru
+    $prosess = $_POST['proses'];  // Mengambil array no_mesin_baru
+    $group_shifts = $_POST['group_shift'];  // Mengambil array no_mesin_baru
+    $catatans = $_POST['catatan'];  // Mengambil array no_mesin_baru
 
     // Proses update untuk setiap baris data
     for ($i = 0; $i < count($nourut); $i++) {
@@ -57,14 +61,19 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
         $new_nourut = $nourut[$i];
         $id = $ids[$i];
         $new_no_mesin = $no_mesin_baru[$i];
+        $operations = $operations[$i];
+        $prosess = $prosess[$i];
+        $group_shifts = $group_shifts[$i];
+        $catatans = $catatans[$i];
 
         // Query untuk memperbarui nomor urut dan nomor mesin
         $update_query = "UPDATE db_finishing.tbl_schedule_new 
-                         SET nourut = ?, no_mesin = ? 
-                         WHERE id = ?";
+                 SET nourut = ?, no_mesin = ?, operation = ?, proses = ?, group_shift = ?, catatan = ? 
+                 WHERE id = ?";
 
-        // Menyiapkan parameter query
-        $params = array($new_nourut, $new_no_mesin, $id);
+// Menyiapkan parameter query
+$params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts, $catatans, $id);
+
 
         // Menjalankan query
         $stmt = sqlsrv_query($con, $update_query, $params);
@@ -91,38 +100,40 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Schedule</title>
     <link rel="stylesheet" type="text/css" href="../css/datatable.css" />
-	<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css" />
-	<script src="../js/jquery.js" type="text/javascript"></script>
-	<script src="../js/jquery.dataTables.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.css" />
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="../js/jquery.dataTables.js" type="text/javascript"></script>
     <script>
-		$(document).ready(function () {
-			$('#datatables').dataTable({
-				"sScrollY": "500px",
-				"sScrollX": "100%",
-				"bScrollCollapse": false,
-				"bPaginate": false,
-				"bJQueryUI": true,
-				"bSort": false
-			});
-		})
+        $(document).ready(function() {
+            $('#datatables').dataTable({
+                "sScrollY": "500px",
+                "sScrollX": "100%",
+                "bScrollCollapse": false,
+                "bPaginate": false,
+                "bJQueryUI": true,
+                "bSort": false
+            });
+        })
 
-		$(document).ready(function () {
-			$('#datatables_rangkuman').dataTable({
-				"sScrollY": "100px",
-				"sScrollX": "100%",
-				"bScrollCollapse": false,
-				"bPaginate": false,
-				"bJQueryUI": true,
-				"bSort": false
-			});
-		})
-	</script>
+        $(document).ready(function() {
+            $('#datatables_rangkuman').dataTable({
+                "sScrollY": "100px",
+                "sScrollX": "100%",
+                "bScrollCollapse": false,
+                "bPaginate": false,
+                "bJQueryUI": true,
+                "bSort": false
+            });
+        })
+    </script>
 </head>
+
 <body>
     <!-- Tabel untuk menampilkan data -->
     <?php if (!empty($data)): ?>
@@ -148,7 +159,7 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
                     <?php foreach ($data as $index => $row): ?>
                         <tr>
                             <td style="text-align: center;">
-                                <input type="number" name="nourut[]" value="<?= htmlspecialchars($row['nourut']) ?>" min="1" max="30" />
+                                <input type="number" name="nourut[]" value="<?= htmlspecialchars($row['nourut']) ?>" min="1" max="30" style="width: 35px;" />
                                 <input type="hidden" name="id[]" value="<?= htmlspecialchars($row['id']) ?>" />
                             </td>
                             <td style="text-align: center;">
@@ -171,17 +182,83 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
                                     ?>
                                     <?php while ($row_mesin = sqlsrv_fetch_array($q_mesin, SQLSRV_FETCH_ASSOC)): ?>
                                         <option value="<?= $row_mesin['no_mesin']; ?>" <?php if ($row_mesin['no_mesin'] == $_GET['no_mesin']) {
-                                            echo 'SELECTED';
-                                        } ?>>
-                                            <?= $row_mesin['no_mesin']; ?> (<?= $row_mesin['singaktan_mesin']; ?>	<?= $row_mesin['nomesin']; ?>)
+                                                                                            echo 'SELECTED';
+                                                                                        } ?>>
+                                            <?= $row_mesin['no_mesin']; ?> (<?= $row_mesin['singaktan_mesin']; ?> <?= $row_mesin['nomesin']; ?>)
                                         </option>
                                     <?php endwhile; ?>
                                 </select>
                             </td>
-                            <td style="text-align: center;"></td>
-                            <td style="text-align: center;"></td>
-                            <td style="text-align: center;"></td>
-                            <td style="text-align: center;"></td>
+                            <td style="text-align: center;">
+    <select name="operation[]" id="operation" style="width: 100px;">
+        <option value="">Pilih</option>
+        <option value=""><?= $row['operation']; ?></option>
+        <?php
+            // Query untuk mengambil daftar operation berdasarkan production order dan demand code
+            // $qry1 = db2_exec($conn_db2, "SELECT DISTINCT 
+            //                                 p.STEPNUMBER,
+            //                                 TRIM(o.OPERATIONGROUPCODE) AS DEPT,
+            //                                 CASE
+            //                                     WHEN TRIM(w.PRODRESERVATIONLINKGROUPCODE) IS NOT NULL THEN TRIM(w.PRODRESERVATIONLINKGROUPCODE)
+            //                                     ELSE TRIM(w.OPERATIONCODE)
+            //                                 END AS OPERATIONCODE,	
+            //                                 p.LONGDESCRIPTION
+            //                             FROM WORKCENTERANDOPERATTRIBUTES w
+            //                             LEFT JOIN OPERATION o ON o.CODE = w.OPERATIONCODE 
+            //                             LEFT JOIN PRODUCTIONDEMANDSTEP p ON p.OPERATIONCODE = o.CODE 
+            //                             WHERE NOT w.LONGDESCRIPTION = 'JANGAN DIPAKE'
+            //                             AND TRIM(o.OPERATIONGROUPCODE) = 'FIN'
+            //                             AND p.PRODUCTIONORDERCODE = '$row[nokk]' 
+            //                             AND p.PRODUCTIONDEMANDCODE = '$row[nodemand]'
+            //                             ORDER BY p.STEPNUMBER ASC");
+
+            // Loop untuk menampilkan setiap opsi dari hasil query operation
+            // while ($r = db2_fetch_assoc($qry1)) {
+                // Cek apakah operation saat ini cocok dengan operasi yang sudah ada di $row['operation']
+                // $selected = ($row['operation']) ? "SELECTED" : "";
+                // echo $r['OPERATIONCODE'];
+            // }
+        ?>
+    </select>
+</td>
+
+
+                            <td style="text-align: center;">
+                                <select name="proses[]" id="proses" style="width: 150px;" >
+                                    <option value="">Pilih</option>
+                                    <?php
+                                    $qry1 = sqlsrv_query($con, "SELECT proses, jns FROM db_finishing.tbl_proses ORDER BY id ASC");
+
+                                    if ($qry1 === false) {
+                                        die(print_r(sqlsrv_errors(), true));
+                                    }
+                                    while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
+                                        $proses_value = htmlspecialchars($r['proses'] . " (" . $r['jns'] . ")");
+                                        $selected = ($row['proses'] === $proses_value) ? "selected" : "";
+                                    ?>
+                                        <option value="<?= $proses_value; ?>" <?= $selected; ?>>
+                                            <?= $proses_value; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td style="text-align: center;">
+                                <select name="group_shift[]" class="form-control select2" >
+                                    <option value="">Pilih</option>
+                                    <option value="A" <?php if ("A" == $row['group_shift']) {
+                                                            echo "SELECTED";
+                                                        } ?>>A</option>
+                                    <option value="B" <?php if ("B" == $row['group_shift']) {
+                                                            echo "SELECTED";
+                                                        } ?>>B</option>
+                                    <option value="C" <?php if ("C" == $row['group_shift']) {
+                                                            echo "SELECTED";
+                                                        } ?>>C</option>
+                                </select>
+                            </td>
+                            <td style="text-align: center;">
+                            <textarea name="catatan[]" cols="10" rows="1" id="catatan"><?= $row['catatan']; ?>
+                            </textarea></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nokk']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nodemand']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['no_order']) ?></td>
@@ -200,4 +277,5 @@ if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
     <?php endif; ?>
 
 </body>
+
 </html>
