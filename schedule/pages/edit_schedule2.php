@@ -5,7 +5,8 @@ if (empty($_SESSION['usr'])) {
     exit;
 }
 
-include('../koneksi.php');  // Pastikan koneksi.php sudah benar
+include('../koneksi.php'); 
+ // Pastikan koneksi.php sudah benar
 
 // Menangani form submit untuk menampilkan data
 $data = [];
