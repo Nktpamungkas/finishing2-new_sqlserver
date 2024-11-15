@@ -45,41 +45,40 @@ if (isset($_GET['no_mesin'])) {
     }
 }
 
-// Memperbarui data nomor urut dan nomor mesin setelah form disubmit
-if (isset($_POST['nourut']) && isset($_POST['no_mesin_baru'])) {
-    $nourut = $_POST['nourut'];  // Mengambil array nourut dari form
-    $ids = $_POST['id'];  // Mengambil array id
-    $no_mesin_baru = $_POST['no_mesin_baru'];  // Mengambil array no_mesin_baru
-    $operations = $_POST['operation'];  // Mengambil array no_mesin_baru
-    $prosess = $_POST['proses'];  // Mengambil array no_mesin_baru
-    $group_shifts = $_POST['group_shift'];  // Mengambil array no_mesin_baru
-    $catatans = $_POST['catatan'];  // Mengambil array no_mesin_baru
 
-    // Proses update untuk setiap baris data
+if (isset($_POST['SimpanPerubahan'])) {
+    $nourut             = $_POST['nourut'];
+    $id                 = $_POST['id']; 
+    $no_mesin_baru      = $_POST['no_mesin_baru'];
+    $operation         = $_POST['operation'];
+    $proses            = $_POST['proses'];
+    $group_shift       = $_POST['group_shift'];
+    $catatan           = $_POST['catatan'];
+
     for ($i = 0; $i < count($nourut); $i++) {
-        // Ambil nilai dari array
-        $new_nourut = $nourut[$i];
-        $id = $ids[$i];
-        $new_no_mesin = $no_mesin_baru[$i];
-        $operations = $operations[$i];
-        $prosess = $prosess[$i];
-        $group_shifts = $group_shifts[$i];
-        $catatans = $catatans[$i];
+        $nouruts        = $nourut[$i];
+        $no_mesin_barus = $no_mesin_baru[$i];
+        $operations     = $operation[$i];
+        $prosess        = $proses[$i];
+        $group_shifts   = $group_shift[$i];
+        $catatans       = $catatan[$i];
+        $ids            = $id[$i];
 
-        // Query untuk memperbarui nomor urut dan nomor mesin
         $update_query = "UPDATE db_finishing.tbl_schedule_new 
-                 SET nourut = ?, no_mesin = ?, operation = ?, proses = ?, group_shift = ?, catatan = ? 
-                 WHERE id = ?";
+                            SET 
+                                nourut = '$nouruts', 
+                                no_mesin = '$no_mesin_barus', 
+                                operation = '$operations', 
+                                proses = '$prosess', 
+                                group_shift = '$group_shifts',
+                                catatan = '$catatans' 
+                            WHERE 
+                            id = '$ids'";
 
-// Menyiapkan parameter query
-$params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts, $catatans, $id);
-
-
-        // Menjalankan query
-        $stmt = sqlsrv_query($con, $update_query, $params);
+        $stmt = sqlsrv_query($con, $update_query);
 
         if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true));  // Menampilkan error jika query gagal
+            die(print_r(sqlsrv_errors(), true));  
         }
     }
 
@@ -96,6 +95,34 @@ $params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts
             });
           </script>";
 }
+
+// elseif (isset($_POST['btnKembali'])){
+//     sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
+
+//     echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
+// }
+
+// ACTIVE LOCK
+// if (!isset($_POST['btnKembali'])){ 
+//     if($_GET['activelock'] == 'true'){
+//         $check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
+//         $dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
+
+//         if(empty($dataMain_activeLock)){
+//             $insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nama_mesin,
+//                                                                             user_lock,
+//                                                                             ipaddress,
+//                                                                             creationdatetime,
+//                                                                             id_schedule)
+//                                                             VALUES ('$row_kkmasuk[nama_mesin]',
+//                                                             '$_SESSION[usr]',
+//                                                             '$_SERVER[REMOTE_ADDR]',
+//                                                             GETDATE(),
+//                                                             '$_GET[id]')";
+//             $exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
+//         }
+//     }
+// }
 ?>
 
 <!DOCTYPE html>
@@ -190,39 +217,36 @@ $params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts
                                 </select>
                             </td>
                             <td style="text-align: center;">
-    <select name="operation[]" id="operation" style="width: 100px;">
-        <option value="">Pilih</option>
-        <option value=""><?= $row['operation']; ?></option>
-        <?php
-            // Query untuk mengambil daftar operation berdasarkan production order dan demand code
-            // $qry1 = db2_exec($conn_db2, "SELECT DISTINCT 
-            //                                 p.STEPNUMBER,
-            //                                 TRIM(o.OPERATIONGROUPCODE) AS DEPT,
-            //                                 CASE
-            //                                     WHEN TRIM(w.PRODRESERVATIONLINKGROUPCODE) IS NOT NULL THEN TRIM(w.PRODRESERVATIONLINKGROUPCODE)
-            //                                     ELSE TRIM(w.OPERATIONCODE)
-            //                                 END AS OPERATIONCODE,	
-            //                                 p.LONGDESCRIPTION
-            //                             FROM WORKCENTERANDOPERATTRIBUTES w
-            //                             LEFT JOIN OPERATION o ON o.CODE = w.OPERATIONCODE 
-            //                             LEFT JOIN PRODUCTIONDEMANDSTEP p ON p.OPERATIONCODE = o.CODE 
-            //                             WHERE NOT w.LONGDESCRIPTION = 'JANGAN DIPAKE'
-            //                             AND TRIM(o.OPERATIONGROUPCODE) = 'FIN'
-            //                             AND p.PRODUCTIONORDERCODE = '$row[nokk]' 
-            //                             AND p.PRODUCTIONDEMANDCODE = '$row[nodemand]'
-            //                             ORDER BY p.STEPNUMBER ASC");
-
-            // Loop untuk menampilkan setiap opsi dari hasil query operation
-            // while ($r = db2_fetch_assoc($qry1)) {
-                // Cek apakah operation saat ini cocok dengan operasi yang sudah ada di $row['operation']
-                // $selected = ($row['operation']) ? "SELECTED" : "";
-                // echo $r['OPERATIONCODE'];
-            // }
-        ?>
-    </select>
-</td>
-
-
+                                <select name="operation[]" id="operation" style="width: 100px;">
+                                    <option value="">Pilih</option>
+                                    <?php
+                                    $qry1 = db2_exec($conn_db2, "SELECT
+                                                                        DISTINCT 
+                                                                        p.STEPNUMBER,
+                                                                    --	p.GROUPSTEPNUMBER,
+                                                                        TRIM(o.OPERATIONGROUPCODE) AS DEPT,
+                                                                        CASE
+                                                                            WHEN TRIM(w.PRODRESERVATIONLINKGROUPCODE) IS NOT NULL THEN TRIM(w.PRODRESERVATIONLINKGROUPCODE)
+                                                                            ELSE TRIM(w.OPERATIONCODE)
+                                                                        END AS OPERATIONCODE,	
+                                                                        p.LONGDESCRIPTION
+                                                                    FROM
+                                                                        WORKCENTERANDOPERATTRIBUTES w
+                                                                    LEFT JOIN OPERATION o ON o.CODE = w.OPERATIONCODE 
+                                                                    LEFT JOIN PRODUCTIONDEMANDSTEP p ON p.OPERATIONCODE = o.CODE 
+                                                                    WHERE
+                                                                        NOT w.LONGDESCRIPTION = 'JANGAN DIPAKE'
+                                                                        AND TRIM(o.OPERATIONGROUPCODE) = 'FIN'
+                                                                        AND p.PRODUCTIONORDERCODE  = '$row[nokk]' 
+                                                                        AND p.PRODUCTIONDEMANDCODE = '$row[nodemand]'
+                                                                    ORDER BY 
+                                                                        p.STEPNUMBER ASC");
+                                    while ($r = db2_fetch_assoc($qry1)) {
+                                        ?>
+                                        <option value="<?php echo $r['OPERATIONCODE']; ?>" <?php if ($row['operation'] == $r['OPERATIONCODE']) { echo "SELECTED"; } ?>><?php echo $r['OPERATIONCODE']; ?> <?php echo $r['LONGDESCRIPTION']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
                             <td style="text-align: center;">
                                 <select name="proses[]" id="proses" style="width: 150px;" >
                                     <option value="">Pilih</option>
@@ -257,8 +281,8 @@ $params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts
                                 </select>
                             </td>
                             <td style="text-align: center;">
-                            <textarea name="catatan[]" cols="10" rows="1" id="catatan"><?= $row['catatan']; ?>
-                            </textarea></td>
+                                <textarea name="catatan[]" cols="10" rows="1" id="catatan"><?= $row['catatan']; ?></textarea>
+                            </td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nokk']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nodemand']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['no_order']) ?></td>
@@ -270,7 +294,8 @@ $params = array($new_nourut, $new_no_mesin, $operations, $prosess, $group_shifts
                 </tbody>
             </table>
             <br>
-            <button class="art-button" id="button" style="background-color: #ff004c; color: #ffffff;" type="submit">Simpan Perubahan</button>
+            <button class="art-button" id="SimpanPerubahan" name="SimpanPerubahan" style="background-color: #ff004c; color: #ffffff;" type="submit">Simpan Perubahan</button>
+            <input type="submit" name="btnKembali" id="btnKembali" value="Kembali" class="art-button" />
         </form>
     <?php else: ?>
         <p>No data available. Please select a machine.</p>

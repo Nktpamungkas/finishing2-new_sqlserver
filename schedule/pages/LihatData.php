@@ -547,10 +547,11 @@ include('../koneksi.php');
 						<?= $row_cekposisikk['OP1']; ?> - <?= $row_cekposisikk['OP2']; ?><br>
 						<?= $row_cekposisikk['MULAI']; ?> - <?= $row_cekposisikk['SELESAI']; ?>
 					</td>
-					<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_schedule['nourut']; ?>
-					</td>
+					<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_schedule['nourut']; ?></td>
 					<td style="border:1px solid;vertical-align:middle; text-align: center;">
-						<?= TRIM($row_schedule['no_mesin']) . '<br>' . substr(TRIM($row_schedule['no_mesin']), -5, 2) . substr(TRIM($row_schedule['no_mesin']), -2); ?>
+						<a href="?p=edit_schedule2&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true&no_mesin=<?= $row_schedule['no_mesin'] ?>" target="_blank">
+							<?= TRIM($row_schedule['no_mesin']) . '<br>' . substr(TRIM($row_schedule['no_mesin']), -5, 2) . substr(TRIM($row_schedule['no_mesin']), -2); ?>
+						</a>
 					</td>
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['proses'] ?></td>
 					<td style="border:1px solid;vertical-align:middle; color:red;"><?= $row_schedule['catatan'] ?></td>
@@ -598,8 +599,7 @@ include('../koneksi.php');
 
 					<td style="border:1px solid;vertical-align:middle;">
 						<?php if ($_SESSION['usr'] != 'husni'): ?>
-							<a href="?p=edit_schedule&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true" class="button" target="_blank">Edit1</a>
-							<a href="?p=edit_schedule2&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true&no_mesin=<?= $row_schedule['no_mesin'] ?>" class="button" target="_blank">Edit</a>
+							<a href="?p=edit_schedule&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true" class="button" target="_blank">Edit</a>
 							<button class="button" style="background-color: #ff004c; color: #ffffff;" onclick="showConfirmation(<?= $row_schedule['id'] ?>);">Hapus</button>
 						<?php endif; ?>
 					</td>
