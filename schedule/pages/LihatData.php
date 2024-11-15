@@ -598,10 +598,8 @@ include('../koneksi.php');
 
 					<td style="border:1px solid;vertical-align:middle;">
 						<?php if ($_SESSION['usr'] != 'husni'): ?>
-							<a href="?p=edit_schedule&id=<?= $row_schedule['id']; ?>&typekk=NOW" class="button"
-								target="_blank">Edit</a>
-							<button class="button" style="background-color: #ff004c; color: #ffffff;"
-								onclick="showConfirmation(<?= $row_schedule['id'] ?>);">Hapus</button>
+							<a href="?p=edit_schedule&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true" class="button" target="_blank">Edit</a>
+							<button class="button" style="background-color: #ff004c; color: #ffffff;" onclick="showConfirmation(<?= $row_schedule['id'] ?>);">Hapus</button>
 						<?php endif; ?>
 					</td>
 					<td style="border:1px solid;vertical-align:middle; text-align: center;">
