@@ -600,6 +600,8 @@ include('../koneksi.php');
 						<?php if ($_SESSION['usr'] != 'husni'): ?>
 							<a href="?p=edit_schedule&id=<?= $row_schedule['id']; ?>&typekk=NOW" class="button"
 								target="_blank">Edit</a>
+								<a href="?p=edit_schedule2" class="button"
+								target="_blank">Edit2</a>
 							<button class="button" style="background-color: #ff004c; color: #ffffff;"
 								onclick="showConfirmation(<?= $row_schedule['id'] ?>);">Hapus</button>
 						<?php endif; ?>
