@@ -57,30 +57,75 @@ include('../koneksi.php');
 			width: 100%;
 			height: 100%;
 			overflow: auto;
-			background-color: rgba(0, 0, 0, 0.5);
+			background-color: rgba(0, 0, 0, 0.7);
 		}
 
 		.modal-content {
-			background-color: #fefefe;
-			margin: 15% auto;
+			background-color: #fff;
+			margin: 10% auto;
 			padding: 20px;
-			border: 1px solid #888;
-			width: 20%;
+			border-radius: 8px;
+			width: 30%;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			animation: fadeIn 0.5s;
+			font-size: 2rem;
+			size: 20px;
 		}
 
-		.modal-content button {
-			margin-right: 10px;
+		.modal-header h2 {
+			margin: 0;
+			color: #333;
+			font-size: 1.8rem; /* Ukuran judul lebih besar */
 		}
 
-		/* Definisikan animasi berkedip */
-		@keyframes blink {
-			0%, 100% { opacity: 1; }
-			50% { opacity: 0; }
+		.modal-body p {
+			font-size: 1.2rem; /* Ukuran teks lebih besar */
+			color: #555;
+			margin: 20px 0;
+			line-height: 1.6; /* Spasi antar baris */
 		}
-		/* Tambahkan animasi ke elemen <tr> dengan kelas "blink" */
-		.blink {
-			animation: blink 2.5s infinite; /* Berkedip setiap 1 detik */
+
+		.modal-footer {
+			text-align: right;
 		}
+
+		.modal-footer button {
+			padding: 10px 20px;
+			margin-left: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		#yesButton {
+			background-color: #007BFF;
+			color: white;
+		}
+
+		#yesButton:hover {
+			background-color: #0056b3;
+		}
+
+		#noButton {
+			background-color: #e0e0e0;
+			color: black;
+		}
+
+		#noButton:hover {
+			background-color: #c0c0c0;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: scale(0.9);
+			}
+			to {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
 	</style>
 </head>
 
@@ -652,15 +697,17 @@ include('../koneksi.php');
 	</table>
 	<div id="confirmation-modal" class="modal">
 		<div class="modal-content">
-			<p>Are you sure you want to delete this item?</p>
-			<button id="confirm-delete-button">Yes</button>
-			<button onclick="closeModal()">No</button>
+			<h1>Menghapus data Schedule akan berdampak pada penghapusan data terkait di KK Masuk. Apakah Anda yakin ingin melanjutkan ??</h1>
+			<button id="deleteAllButton">Ya, hapus juga di KK Masuk</button>
+			<button id="confirm-delete-button">Tidak, jangan hapus di KK Masuk</button>
+			<button onclick="closeModal()">Cancel</button>
 		</div>
 	</div>
 	<script>
 		function showConfirmation(id) {
 			document.getElementById('confirmation-modal').style.display = 'block';
 			document.getElementById('confirm-delete-button').setAttribute('data-id', id);
+			document.getElementById('deleteAllButton').setAttribute('data-id', id);
 		}
 
 		function closeModal() {
@@ -671,7 +718,40 @@ include('../koneksi.php');
 			var id = this.getAttribute('data-id');
 			confirmDelete(id);
 		});
+		
+		document.getElementById('deleteAllButton').addEventListener('click', function () {
+			var id = this.getAttribute('data-id');
+			confirmDeleteAll(id);
+		});
 
+		function confirmDeleteAll(id) {
+			$.ajax({
+				url: '?p=delete_schedule_all',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				success: function (response) {
+					// Tampilkan pesan sukses atau gagal
+					swal({
+						title: 'Data deleted successfully.',
+						text: 'Klik Ok untuk input data kembali',
+						type: 'warning',
+					}).then((result) => {
+						if (result.value) {
+							window.location.href =
+								'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';
+						}
+					});
+					closeModal();
+				},
+				error: function (xhr, status, error) {
+					// Tampilkan pesan kesalahan jika terjadi error
+					alert('Failed to delete item. Please try again later.');
+				}
+			});
+		}
+		
 		function confirmDelete(id) {
 			$.ajax({
 				url: '?p=delete_schedule',

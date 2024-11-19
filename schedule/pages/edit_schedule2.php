@@ -94,13 +94,11 @@ if (isset($_POST['SimpanPerubahan'])) {
                 }
             });
           </script>";
-}
-
-// elseif (isset($_POST['btnKembali'])){
+}elseif (isset($_POST['btnKembali'])){
 //     sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
 
-//     echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
-// }
+    echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
+}
 
 // ACTIVE LOCK
 // if (!isset($_POST['btnKembali'])){ 
