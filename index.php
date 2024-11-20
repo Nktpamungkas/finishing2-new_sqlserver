@@ -9,7 +9,7 @@
 ini_set("error_reporting", 1);
 session_start();
 include_once ('koneksi.php');
-$timeout = 480; // Set timeout menit
+$timeout = 900; // Set 15 menit
 $logout_redirect_url = "login.php"; // Set logout URL
 
 $timeout = $timeout * 60; // Ubah menit ke detik
