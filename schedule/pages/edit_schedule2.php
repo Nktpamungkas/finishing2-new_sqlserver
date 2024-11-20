@@ -6,7 +6,24 @@ if (empty($_SESSION['usr'])) {
 }
 
 include('../koneksi.php');
-// Pastikan koneksi.php sudah benar
+// Membuat query untuk CEK DATA DAN INSERT DATA 
+// Memastikan bahwa id dan no_mesin tersedia
+if (isset($_GET['id']) && isset($_GET['no_mesin'])) {
+    $id_schedule = $_GET['id'];
+    $no_mesin = $_GET['no_mesin'];
+    
+    // Cek apakah data sudah ada di active_lock
+    $check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$id_schedule'");
+    $dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
+
+    if (empty($dataMain_activeLock)) {
+        // Jika belum ada, insert data baru
+        $insertMain_activeLock = "INSERT INTO db_finishing.active_lock (user_lock, ipaddress, creationdatetime, id_schedule, no_mesin)
+                                   VALUES ('$_SESSION[usr]', '$_SERVER[REMOTE_ADDR]', GETDATE(), '$id_schedule', '$no_mesin')";
+        $exec_activeLock = sqlsrv_query($con, $insertMain_activeLock) or die("Gagal insert active lock" . sqlsrv_errors());
+    }
+}
+
 
 // Menangani form submit untuk menampilkan data
 $data = [];
@@ -130,27 +147,15 @@ if (isset($_POST['SimpanPerubahan'])) {
     echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
 }
 
-// ACTIVE LOCK
-// if (!isset($_POST['btnKembali'])){ 
-//     if($_GET['activelock'] == 'true'){
-//         $check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
-//         $dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
-
-//         if(empty($dataMain_activeLock)){
-//             $insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nama_mesin,
-//                                                                             user_lock,
-//                                                                             ipaddress,
-//                                                                             creationdatetime,
-//                                                                             id_schedule)
-//                                                             VALUES ('$row_kkmasuk[nama_mesin]',
-//                                                             '$_SESSION[usr]',
-//                                                             '$_SERVER[REMOTE_ADDR]',
-//                                                             GETDATE(),
-//                                                             '$_GET[id]')";
-//             $exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
-//         }
-//     }
-// }
+// DELET DATA active_lock
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['btnKembali'])) {
+        // Menghapus data dari tabel active_lock
+        $id_schedule = $_GET['id']; // Ambil id dari parameter GET
+        $deleteMain_activeLock = "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$id_schedule'";
+        $exec_delete = sqlsrv_query($con, $deleteMain_activeLock) or die("Gagal hapus active lock" . sqlsrv_errors());
+    }
+}
 ?>
 
 <!DOCTYPE html>
