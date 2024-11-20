@@ -266,7 +266,7 @@ if (empty($_SESSION['usr'])) {
             });
           </script>";
 	}elseif (isset($_POST['btnKembali'])){
-        sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
+        // sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
 
 		echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
 	}
@@ -274,32 +274,32 @@ if (empty($_SESSION['usr'])) {
 
 	<!-- ACTIVE LOCK -->
 	<?php
-		if (!isset($_POST['btnKembali'])){ 
-			if($_GET['activelock'] == 'true'){
-				$check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
-				$dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
+		// if (!isset($_POST['btnKembali'])){ 
+		// 	if($_GET['activelock'] == 'true'){
+		// 		$check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
+		// 		$dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
 
-				if(empty($dataMain_activeLock)){
-					$insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nokk,
-																					nodemand,
-																					operation,
-																					nama_mesin,
-																					user_lock,
-																					ipaddress,
-																					creationdatetime,
-																					id_schedule)
-																	VALUES ('$row_kkmasuk[nokk]',
-																	'$row_kkmasuk[nodemand]',
-																	'$row_kkmasuk[operation]',
-																	'$row_kkmasuk[nama_mesin]',
-																	'$_SESSION[usr]',
-																	'$_SERVER[REMOTE_ADDR]',
-																	GETDATE(),
-																	'$_GET[id]')";
-					$exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
-				}
-			}
-		}
+		// 		if(empty($dataMain_activeLock)){
+		// 			$insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nokk,
+		// 																			nodemand,
+		// 																			operation,
+		// 																			nama_mesin,
+		// 																			user_lock,
+		// 																			ipaddress,
+		// 																			creationdatetime,
+		// 																			id_schedule)
+		// 															VALUES ('$row_kkmasuk[nokk]',
+		// 															'$row_kkmasuk[nodemand]',
+		// 															'$row_kkmasuk[operation]',
+		// 															'$row_kkmasuk[nama_mesin]',
+		// 															'$_SESSION[usr]',
+		// 															'$_SERVER[REMOTE_ADDR]',
+		// 															GETDATE(),
+		// 															'$_GET[id]')";
+		// 			$exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
+		// 		}
+		// 	}
+		// }
 	?>
 
 	<form id="form1" name="form1" method="post" action="">
