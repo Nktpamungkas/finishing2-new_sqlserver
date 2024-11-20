@@ -159,6 +159,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="../../styles_cetak.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="refresh" content="60">
 	<title>Cetak Schedule</title>
 	<script>
 		// set portrait orientation
