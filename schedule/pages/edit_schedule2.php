@@ -13,7 +13,7 @@ $data = [];
 $mesin = '';  // Variabel untuk menyimpan mesin yang dipilih
 
 // Menangani filter mesin
-if (isset($_GET['no_mesin'])) {
+if (isset($_GET['no_mesin']) && $_GET['nourut'] != '0') {
     $mesin = $_GET['no_mesin'];  // Mendapatkan pilihan mesin dari dropdown
 
     // Query SQL untuk mengambil data berdasarkan no_mesin
@@ -21,6 +21,36 @@ if (isset($_GET['no_mesin'])) {
               WHERE status = 'SCHEDULE'
               AND no_mesin = ?
               AND nourut <> 0
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM db_finishing.tbl_produksi b
+                  WHERE b.nokk = db_finishing.tbl_schedule_new.nokk
+                  AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+                  AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+                  AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+              )
+              ORDER BY nourut ASC";
+
+    // Menjalankan query dengan parameter
+    $params = array($mesin);
+    $result = sqlsrv_query($con, $query, $params);
+
+    if ($result === false) {
+        die(print_r(sqlsrv_errors(), true)); // Menampilkan error jika query gagal
+    }
+
+    // Menyimpan hasil query dalam array
+    while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+}elseif(isset($_GET['no_mesin']) && $_GET['nourut'] == '0'){
+    $mesin = $_GET['no_mesin'];  // Mendapatkan pilihan mesin dari dropdown
+
+    // Query SQL untuk mengambil data berdasarkan no_mesin
+    $query = "SELECT * FROM db_finishing.tbl_schedule_new
+              WHERE status = 'SCHEDULE'
+              AND no_mesin = ?
+              AND nourut = 0
               AND NOT EXISTS (
                   SELECT 1
                   FROM db_finishing.tbl_produksi b

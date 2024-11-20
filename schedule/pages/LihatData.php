@@ -594,7 +594,7 @@ include('../koneksi.php');
 					</td>
 					<td style="border:1px solid;vertical-align:middle; text-align: center;"><?= $row_schedule['nourut']; ?></td>
 					<td style="border:1px solid;vertical-align:middle; text-align: center;">
-						<a href="?p=edit_schedule2&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true&no_mesin=<?= $row_schedule['no_mesin'] ?>" target="_blank">
+						<a href="?p=edit_schedule2&id=<?= $row_schedule['id']; ?>&typekk=NOW&activelock=true&no_mesin=<?= $row_schedule['no_mesin'] ?>&nourut=<?= $row_schedule['nourut']; ?>" target="_blank">
 							<?= TRIM($row_schedule['no_mesin']) . '<br>' . substr(TRIM($row_schedule['no_mesin']), -5, 2) . substr(TRIM($row_schedule['no_mesin']), -2); ?>
 						</a>
 					</td>
