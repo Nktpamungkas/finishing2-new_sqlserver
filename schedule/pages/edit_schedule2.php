@@ -128,6 +128,7 @@ if (isset($_POST['SimpanPerubahan'])) {
             die(print_r(sqlsrv_errors(), true));  
         }
     }
+    sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
 
     // Setelah update, memberikan pesan sukses dan refresh data
     echo "<script>
@@ -142,20 +143,11 @@ if (isset($_POST['SimpanPerubahan'])) {
             });
           </script>";
 }elseif (isset($_POST['btnKembali'])){
-//     sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
+    sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
 
     echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
 }
 
-// DELET DATA active_lock
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['btnKembali'])) {
-        // Menghapus data dari tabel active_lock
-        $id_schedule = $_GET['id']; // Ambil id dari parameter GET
-        $deleteMain_activeLock = "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$id_schedule'";
-        $exec_delete = sqlsrv_query($con, $deleteMain_activeLock) or die("Gagal hapus active lock" . sqlsrv_errors());
-    }
-}
 ?>
 
 <!DOCTYPE html>
