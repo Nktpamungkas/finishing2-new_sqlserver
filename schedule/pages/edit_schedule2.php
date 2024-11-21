@@ -199,6 +199,8 @@ if (isset($_POST['SimpanPerubahan'])) {
                         <td style="text-align: center;">Proses</td>
                         <td style="text-align: center;">Group Shift</td>
                         <td style="text-align: center;">Catatan</td>
+                        <td style="text-align: center;">Lebar x Gramasi</td>
+                        <td style="text-align: center;">Hanger</td>
                         <td style="text-align: center;">No KK</td>
                         <td style="text-align: center;">No. Demand</td>
                         <td style="text-align: center;">No Order</td>
@@ -308,6 +310,12 @@ if (isset($_POST['SimpanPerubahan'])) {
                             <td style="text-align: center;">
                                 <textarea name="catatan[]" cols="10" rows="1" id="catatan"><?= $row['catatan']; ?></textarea>
                             </td>
+                            <td style="text-align: center;"><?= htmlspecialchars($row['lebar'].' x '. $row['gramasi']); ?></td>
+                            <?php
+                             $hanger = db2_exec($conn_db2, "SELECT TRIM(SUBCODE02)||'-' || TRIM(SUBCODE03) AS HANGER FROM PRODUCTIONDEMAND p WHERE p.CODE = '$row[nodemand]'");
+                             $resultHanger = db2_fetch_assoc($hanger)
+                            ?>
+                            <td style="text-align: center;"><?= htmlspecialchars($resultHanger['HANGER']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nokk']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nodemand']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['no_order']) ?></td>
