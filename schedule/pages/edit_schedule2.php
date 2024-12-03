@@ -213,7 +213,7 @@ if (isset($_POST['SimpanPerubahan'])) {
                     <?php foreach ($data as $index => $row): ?>
                         <tr>
                             <td style="text-align: center;">
-                                <input type="number" name="nourut[]" value="<?= htmlspecialchars($row['nourut']) ?>" min="1" max="30" style="width: 35px;" />
+                                <input type="number" name="nourut[]" value="<?= htmlspecialchars($row['nourut']) ?>" min="0" max="30" style="width: 35px;" />
                                 <input type="hidden" name="id[]" value="<?= htmlspecialchars($row['id']) ?>" />
                             </td>
                             <td style="text-align: center;">
