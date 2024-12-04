@@ -433,12 +433,12 @@ if (empty($_SESSION['usr'])) {
 						<td width="1%">:</td>
 						<td colspan="">
 							<input name="qty" type="text" id="qty" size="5" value="<?= $row_kkmasuk['qty_order']; ?>"
-								placeholder="0.00" />
+								placeholder="0.00" required />
 
 							<strong>Panjang (Yard)</strong>
 
 							<input name="qty2" type="text" id="qty2" size="8" value="<?= $row_kkmasuk['qty_order_yd']; ?>"
-								placeholder="0.00">
+								placeholder="0.00" required>
 						</td>
 					</tr>
 					<tr>
