@@ -657,7 +657,8 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 											// Gabungkan kembali menjadi string
 											$dataClean_catatan = implode(', ', $dataUnique_catatan);
 											
-											echo $dataClean_catatan; // Output: DOM2401663
+											echo '<span style="color:red;">'.$dataClean_catatan.'</span>'; // Output: DOM2401663
+
 										?>
 										<br>
 									</td>
