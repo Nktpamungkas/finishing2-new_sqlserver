@@ -695,8 +695,8 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					</tr>
 					<tr>
 						<td>Jabatan</td>
-						<td align="center">Staff Schedule</td>
-						<td align="center">Ast. SPV</td>
+						<td align="center">Staff</td>
+						<td align="center">SUPERVISOR</td>
 						<td align="center"> Ast. Manager</td>
 					</tr>
 					<tr>
