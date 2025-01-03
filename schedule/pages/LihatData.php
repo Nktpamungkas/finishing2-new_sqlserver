@@ -760,22 +760,33 @@ include('../koneksi.php');
 					id: id
 				},
 				success: function (response) {
-					// Tampilkan pesan sukses atau gagal
-					swal({
-						title: 'Data deleted successfully.',
-						text: 'Klik Ok untuk input data kembali',
-						type: 'warning',
-					}).then((result) => {
-						if (result.value) {
-							window.location.href =
-								'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';
-						}
-					});
+					var data = JSON.parse(response);
+					if (data.status === "success") {
+						swal({
+							title: 'Success',
+							text: data.message,
+							type: 'success',
+						}).then((result) => {
+							if (result.value) {
+								window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';
+							}
+						});
+					} else {
+						swal({
+							title: 'Error',
+							text: data.message,
+							type: 'error',
+						});
+					}
 					closeModal();
 				},
 				error: function (xhr, status, error) {
 					// Tampilkan pesan kesalahan jika terjadi error
-					alert('Failed to delete item. Please try again later.');
+					swal({
+						title: 'Error',
+						text: 'Failed to delete item. Please try again later.',
+						type: 'error',
+					});
 				}
 			});
 		}

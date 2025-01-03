@@ -1035,7 +1035,7 @@
                                                             FROM
                                                                 RESOURCES r
                                                             WHERE
-                                                                SUBSTR(CODE, 1,4) = 'P3ST' $where_schedule
+                                                                SUBSTR(CODE, 1,4) = 'P3SM' $where_schedule
                                                             ORDER BY 
                                                                 SUBSTR(CODE, 6,2) 
                                                             ASC");
@@ -1094,7 +1094,7 @@
                     <td colspan="2"><select name="proses" id="proses" required>
                             <option value="">Pilih</option>
                             <?php
-                            $qry1 = sqlsrv_query($con, "SELECT proses, jns FROM db_finishing.tbl_proses WHERE ket='stenter' ORDER BY proses ASC");
+                            $qry1 = sqlsrv_query($con, "SELECT proses, jns FROM db_finishing.tbl_proses WHERE ket='steamer' ORDER BY proses ASC");
                             while ($r = sqlsrv_fetch_array($qry1)) {
                             ?>
                             <option value="<?php echo $r['proses'] . " (" . $r['jns'] . ")"; ?>" <?php if ($row_kkmasuk['proses'] == $r['proses'] . " (" . $r['jns'] . ")") {
