@@ -97,19 +97,23 @@ if (isset($_POST['SimpanPerubahan'])) {
     $nourut             = $_POST['nourut'];
     $id                 = $_POST['id']; 
     $no_mesin_baru      = $_POST['no_mesin_baru'];
-    $operation         = $_POST['operation'];
-    $proses            = $_POST['proses'];
-    $group_shift       = $_POST['group_shift'];
-    $catatan           = $_POST['catatan'];
+    $operation          = $_POST['operation'];
+    $proses             = $_POST['proses'];
+    $group_shift        = $_POST['group_shift'];
+    $catatan            = $_POST['catatan'];
+    $qty_order          = $_POST['qty_order'];
+    $qty_order_yd       = $_POST['qty_order_yd'];
 
     for ($i = 0; $i < count($nourut); $i++) {
-        $nouruts        = $nourut[$i];
-        $no_mesin_barus = $no_mesin_baru[$i];
-        $operations     = $operation[$i];
-        $prosess        = $proses[$i];
-        $group_shifts   = $group_shift[$i];
-        $catatans       = $catatan[$i];
-        $ids            = $id[$i];
+        $nouruts            = $nourut[$i];
+        $no_mesin_barus     = $no_mesin_baru[$i];
+        $operations         = $operation[$i];
+        $prosess            = $proses[$i];
+        $group_shifts       = $group_shift[$i];
+        $catatans           = $catatan[$i];
+        $qty_orders         = $qty_order[$i];
+        $qty_order_yds      = $qty_order_yd[$i];
+        $ids                = $id[$i];
 
         $update_query = "UPDATE db_finishing.tbl_schedule_new 
                             SET 
@@ -118,7 +122,9 @@ if (isset($_POST['SimpanPerubahan'])) {
                                 operation = '$operations', 
                                 proses = '$prosess', 
                                 group_shift = '$group_shifts',
-                                catatan = '$catatans' 
+                                catatan = '$catatans',
+                                qty_order = '$qty_orders',
+                                qty_order_yd = '$qty_order_yds'
                             WHERE 
                             id = '$ids'";
 
@@ -199,6 +205,8 @@ if (isset($_POST['SimpanPerubahan'])) {
                         <td style="text-align: center;">Proses</td>
                         <td style="text-align: center;">Group Shift</td>
                         <td style="text-align: center;">Catatan</td>
+                        <td style="text-align: center;">Quantity (Kg)</td>
+                        <td style="text-align: center;">Panjang (Yard)</td>
                         <td style="text-align: center;">Lebar x Gramasi</td>
                         <td style="text-align: center;">Hanger</td>
                         <td style="text-align: center;">No KK</td>
@@ -309,6 +317,12 @@ if (isset($_POST['SimpanPerubahan'])) {
                             </td>
                             <td style="text-align: center;">
                                 <textarea name="catatan[]" cols="10" rows="1" id="catatan"><?= $row['catatan']; ?></textarea>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="text" name="qty_order[]" value="<?= $row['qty_order'] ?>" style="width: 60px;" />
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="text" name="qty_order_yd[]" value="<?= $row['qty_order_yd'] ?>" style="width: 60px;" />
                             </td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['lebar'].' x '. $row['gramasi']); ?></td>
                             <?php

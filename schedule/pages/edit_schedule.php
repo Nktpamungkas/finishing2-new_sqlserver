@@ -41,29 +41,29 @@ if (empty($_SESSION['usr'])) {
 
 		}
 
-		$(document).ready(function () {
-			$('#proses_in').change(function () {
+		$(document).ready(function() {
+			$('#proses_in').change(function() {
 				var jam_proses_in = document.getElementById('proses_in').value;
 				if (jam_proses_in.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI PROSES tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai').change(function () {
+			$('#stop_mulai').change(function() {
 				var jam_stop_mulai = document.getElementById('stop_mulai').value;
 				if (jam_stop_mulai.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai2').change(function () {
+			$('#stop_mulai2').change(function() {
 				var jam_stop_mulai2 = document.getElementById('stop_mulai2').value;
 				if (jam_stop_mulai2.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_mulai3').change(function () {
+			$('#stop_mulai3').change(function() {
 				var jam_stop_mulai3 = document.getElementById('stop_mulai3').value;
 				if (jam_stop_mulai3.substring(0, 2) >= 24) {
 					alert("Waktu pada MULAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
@@ -71,28 +71,28 @@ if (empty($_SESSION['usr'])) {
 			});
 
 
-			$('#proses_out').change(function () {
+			$('#proses_out').change(function() {
 				var jam_proses_out = document.getElementById('proses_out').value;
 				if (jam_proses_out.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI PROSES tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai').change(function () {
+			$('#stop_selesai').change(function() {
 				var jam_stop_selesai = document.getElementById('stop_selesai').value;
 				if (jam_stop_selesai.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 1 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai2').change(function () {
+			$('#stop_selesai2').change(function() {
 				var jam_stop_selesai2 = document.getElementById('stop_selesai2').value;
 				if (jam_stop_selesai2.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 2 tidak boleh melebihi batas 1 hari.");
 				}
 			});
 
-			$('#stop_selesai3').change(function () {
+			$('#stop_selesai3').change(function() {
 				var jam_stop_selesai3 = document.getElementById('stop_selesai3').value;
 				if (jam_stop_selesai3.substring(0, 2) >= 24) {
 					alert("Waktu pada SELESAI STOP MESIN 3 tidak boleh melebihi batas 1 hari.");
@@ -124,14 +124,14 @@ if (empty($_SESSION['usr'])) {
 <body>
 	<?php
 	// Aktifkan laporan error untuk debugging
-	ini_set("error_reporting",1 );
+	ini_set("error_reporting", 1);
 	session_start();
 	include('../koneksi.php'); // Pastikan koneksi.php sudah benar
-	
+
 	function nourut()
 	{
 		global $con; // Mengakses variabel $con dari luar fungsi
-	
+
 		$format = date("ymd");
 		// Menyiapkan query dengan parameter untuk mencegah SQL injection
 		$sql = "SELECT TOP 1 nokk 
@@ -225,6 +225,8 @@ if (empty($_SESSION['usr'])) {
                       catatan = ?, 
                       proses = ?, 
                       operation = ?, 
+                      qty_order = ?, 
+                      qty_order_yd = ?, 
                       lastupdatedatetime = ?, 
                       lastupdatedateuser = ?
                   WHERE id = ?";
@@ -237,6 +239,8 @@ if (empty($_SESSION['usr'])) {
 			$_POST['catatan'],
 			$_POST['proses'],
 			$_POST['operation'],
+			$_POST['qty'],
+			$_POST['qty2'],
 			$lastupdatedatetime,
 			$_SESSION['usr'],
 			$_GET['id']
@@ -265,8 +269,8 @@ if (empty($_SESSION['usr'])) {
                 }
             });
           </script>";
-	}elseif (isset($_POST['btnKembali'])){
-        // sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
+	} elseif (isset($_POST['btnKembali'])) {
+		// sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'") or die("Gagal hapus" . sqlsrv_errors());
 
 		echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
 	}
@@ -274,32 +278,32 @@ if (empty($_SESSION['usr'])) {
 
 	<!-- ACTIVE LOCK -->
 	<?php
-		// if (!isset($_POST['btnKembali'])){ 
-		// 	if($_GET['activelock'] == 'true'){
-		// 		$check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
-		// 		$dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
+	// if (!isset($_POST['btnKembali'])){ 
+	// 	if($_GET['activelock'] == 'true'){
+	// 		$check_activeLock = sqlsrv_query($con, "SELECT * FROM db_finishing.active_lock WHERE id_schedule = '$_GET[id]'");
+	// 		$dataMain_activeLock = sqlsrv_fetch_array($check_activeLock, SQLSRV_FETCH_ASSOC);
 
-		// 		if(empty($dataMain_activeLock)){
-		// 			$insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nokk,
-		// 																			nodemand,
-		// 																			operation,
-		// 																			nama_mesin,
-		// 																			user_lock,
-		// 																			ipaddress,
-		// 																			creationdatetime,
-		// 																			id_schedule)
-		// 															VALUES ('$row_kkmasuk[nokk]',
-		// 															'$row_kkmasuk[nodemand]',
-		// 															'$row_kkmasuk[operation]',
-		// 															'$row_kkmasuk[nama_mesin]',
-		// 															'$_SESSION[usr]',
-		// 															'$_SERVER[REMOTE_ADDR]',
-		// 															GETDATE(),
-		// 															'$_GET[id]')";
-		// 			$exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
-		// 		}
-		// 	}
-		// }
+	// 		if(empty($dataMain_activeLock)){
+	// 			$insertMain_activeLock = "INSERT INTO db_finishing.active_lock (nokk,
+	// 																			nodemand,
+	// 																			operation,
+	// 																			nama_mesin,
+	// 																			user_lock,
+	// 																			ipaddress,
+	// 																			creationdatetime,
+	// 																			id_schedule)
+	// 															VALUES ('$row_kkmasuk[nokk]',
+	// 															'$row_kkmasuk[nodemand]',
+	// 															'$row_kkmasuk[operation]',
+	// 															'$row_kkmasuk[nama_mesin]',
+	// 															'$_SESSION[usr]',
+	// 															'$_SERVER[REMOTE_ADDR]',
+	// 															GETDATE(),
+	// 															'$_GET[id]')";
+	// 			$exec_activeLock = sqlsrv_query($con, $insertMain_activeLock)  or die("Gagal insert active lock" . sqlsrv_errors());
+	// 		}
+	// 	}
+	// }
 	?>
 
 	<form id="form1" name="form1" method="post" action="">
@@ -317,12 +321,12 @@ if (empty($_SESSION['usr'])) {
 							style="background-color: #BBBBBB;">
 							<option value="" disabled selected>-Pilih Tipe Kartu Kerja-</option>
 							<option value="KKLama" <?php if ($_GET['typekk'] == "KKLama") {
-								echo "SELECTED";
-							} ?>>KK Lama
+														echo "SELECTED";
+													} ?>>KK Lama
 							</option>
 							<option value="NOW" <?php if ($_GET['typekk'] == "NOW") {
-								echo "SELECTED";
-							} ?>>KK NOW
+													echo "SELECTED";
+												} ?>>KK NOW
 							</option>
 							</select=>
 					</td>
@@ -350,16 +354,26 @@ if (empty($_SESSION['usr'])) {
 					</td>
 
 
-					<td width="14%"><strong>Quantity (Kg)</strong></td>
+					<td width="14%" style="color: red;"><strong>Quantity (Kg)</strong></td>
 					<td width="1%">:</td>
 					<td colspan="">
-						<input name="qty" type="text" id="qty" size="5" value="<?= $row_kkmasuk['qty_order']; ?>"
+						<!-- yang lama -->
+						<!-- <input name="qty" type="text" id="qty" size="5" value="<?= $row_kkmasuk['qty_order']; ?>"
 							placeholder="0.00" disabled style="background-color: #BBBBBB;">
 
 						<strong>Panjang (Yard)</strong>
 
 						<input name="qty2" type="text" id="qty2" size="8" value="<?= $row_kkmasuk['qty_order_yd']; ?>"
-							placeholder="0.00" onfocus="jumlah();" disabled style="background-color: #BBBBBB;">
+							placeholder="0.00" onfocus="jumlah();" disabled style="background-color: #BBBBBB;"> -->
+						<!-- yang laman -->
+
+						<input name="qty" type="text" id="qty" size="5" value="<?= $row_kkmasuk['qty_order']; ?>"
+							placeholder="0.00">
+
+						<strong style="color: red;">Panjang (Yard)</strong>
+
+						<input name="qty2" type="text" id="qty2" size="8" value="<?= $row_kkmasuk['qty_order_yd']; ?>"
+							placeholder="0.00">
 					</td>
 				</tr>
 				<tr>
@@ -448,10 +462,10 @@ if (empty($_SESSION['usr'])) {
 																				SUBSTR(CODE, 6,2) 
 																			ASC");
 							while ($row_nomormesin = db2_fetch_assoc($q_nomormesin)) {
-								?>
+							?>
 								<option value="<?= $row_nomormesin['CODE']; ?>" <?php if ($row_nomormesin['CODE'] == $row_kkmasuk['no_mesin']) {
-									  echo "SELECTED";
-								  } ?>><?= $row_nomormesin['CODE']; ?> - <?= $row_nomormesin['LONGDESCRIPTION']; ?></option>
+																					echo "SELECTED";
+																				} ?>><?= $row_nomormesin['CODE']; ?> - <?= $row_nomormesin['LONGDESCRIPTION']; ?></option>
 							<?php } ?>
 						</select>
 
@@ -460,7 +474,7 @@ if (empty($_SESSION['usr'])) {
 							<option value="">Pilih</option>
 							<?php
 							while ($row_namamesin = db2_fetch_assoc($q_namamesin)) {
-								?>
+							?>
 								<option value="<?php echo $row_namamesin['WORKCENTERCODE']; ?>" SELECTED>
 									<?php echo $row_namamesin['WORKCENTERCODE']; ?> -
 									<?php echo $row_namamesin['LONGDESCRIPTION']; ?></option>
@@ -504,7 +518,7 @@ if (empty($_SESSION['usr'])) {
 							while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
 								$proses_value = htmlspecialchars($r['proses'] . " (" . $r['jns'] . ")");
 								$selected = ($row_kkmasuk['proses'] === $proses_value) ? "selected" : "";
-								?>
+							?>
 								<option value="<?= $proses_value; ?>" <?= $selected; ?>>
 									<?= $proses_value; ?>
 								</option>
@@ -554,10 +568,10 @@ if (empty($_SESSION['usr'])) {
                                                             ORDER BY 
                                                                 p.STEPNUMBER ASC");
 							while ($r = db2_fetch_assoc($qry1)) {
-								?>
+							?>
 								<option value="<?php echo $r['OPERATIONCODE']; ?>" <?php if ($row_kkmasuk['operation'] == $r['OPERATIONCODE']) {
-									   echo "SELECTED";
-								   } ?>><?php echo $r['OPERATIONCODE']; ?> 	<?php echo $r['LONGDESCRIPTION']; ?></option>
+																						echo "SELECTED";
+																					} ?>><?php echo $r['OPERATIONCODE']; ?> <?php echo $r['LONGDESCRIPTION']; ?></option>
 							<?php } ?>
 						</select>
 
@@ -567,10 +581,10 @@ if (empty($_SESSION['usr'])) {
 							<?php
 							$sqlKap = sqlsrv_query($con, "SELECT no_urut FROM db_finishing.tbl_urut ORDER BY no_urut ASC");
 							while ($rK = sqlsrv_fetch_array($sqlKap)) {
-								?>
+							?>
 								<option value="<?php echo $rK['no_urut']; ?>" <?php if ($rK['no_urut'] == $row_kkmasuk['nourut']) {
-									   echo "SELECTED";
-								   } ?>><?php echo $rK['no_urut']; ?></option>
+																					echo "SELECTED";
+																				} ?>><?php echo $rK['no_urut']; ?></option>
 							<?php } ?>
 						</select>
 					</td>
@@ -593,14 +607,14 @@ if (empty($_SESSION['usr'])) {
 						<select name="g_shift" class="form-control select2">
 							<option value="">Pilih</option>
 							<option value="A" <?php if ("A" == $row_kkmasuk['group_shift']) {
-								echo "SELECTED";
-							} ?>>A</option>
+													echo "SELECTED";
+												} ?>>A</option>
 							<option value="B" <?php if ("B" == $row_kkmasuk['group_shift']) {
-								echo "SELECTED";
-							} ?>>B</option>
+													echo "SELECTED";
+												} ?>>B</option>
 							<option value="C" <?php if ("C" == $row_kkmasuk['group_shift']) {
-								echo "SELECTED";
-							} ?>>C</option>
+													echo "SELECTED";
+												} ?>>C</option>
 						</select>
 					</td>
 				</tr>
