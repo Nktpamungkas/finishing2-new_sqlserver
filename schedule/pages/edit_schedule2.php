@@ -103,6 +103,7 @@ if (isset($_POST['SimpanPerubahan'])) {
     $catatan            = $_POST['catatan'];
     $qty_order          = $_POST['qty_order'];
     $qty_order_yd       = $_POST['qty_order_yd'];
+    $rol                = $_POST['rol']; 
 
     for ($i = 0; $i < count($nourut); $i++) {
         $nouruts            = $nourut[$i];
@@ -113,6 +114,7 @@ if (isset($_POST['SimpanPerubahan'])) {
         $catatans           = $catatan[$i];
         $qty_orders         = $qty_order[$i];
         $qty_order_yds      = $qty_order_yd[$i];
+        $rols               = $rol[$i]; 
         $ids                = $id[$i];
 
         $update_query = "UPDATE db_finishing.tbl_schedule_new 
@@ -124,7 +126,8 @@ if (isset($_POST['SimpanPerubahan'])) {
                                 group_shift = '$group_shifts',
                                 catatan = '$catatans',
                                 qty_order = '$qty_orders',
-                                qty_order_yd = '$qty_order_yds'
+                                qty_order_yd = '$qty_order_yds',
+                                roll = '$rols'
                             WHERE 
                             id = '$ids'";
 
@@ -207,6 +210,7 @@ if (isset($_POST['SimpanPerubahan'])) {
                         <td style="text-align: center;">Catatan</td>
                         <td style="text-align: center;">Quantity (Kg)</td>
                         <td style="text-align: center;">Panjang (Yard)</td>
+                        <td style="text-align: center;">Roll</td>
                         <td style="text-align: center;">Lebar x Gramasi</td>
                         <td style="text-align: center;">Hanger</td>
                         <td style="text-align: center;">No KK</td>
@@ -323,6 +327,9 @@ if (isset($_POST['SimpanPerubahan'])) {
                             </td>
                             <td style="text-align: center;">
                                 <input type="text" name="qty_order_yd[]" value="<?= $row['qty_order_yd'] ?>" style="width: 60px;" />
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="text" name="rol[]" value="<?= $row['roll'] ?>" style="width: 60px;" />
                             </td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['lebar'].' x '. $row['gramasi']); ?></td>
                             <?php

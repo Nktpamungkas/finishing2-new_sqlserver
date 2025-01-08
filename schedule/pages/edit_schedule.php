@@ -227,6 +227,7 @@ if (empty($_SESSION['usr'])) {
                       operation = ?, 
                       qty_order = ?, 
                       qty_order_yd = ?, 
+                      roll = ?, 
                       lastupdatedatetime = ?, 
                       lastupdatedateuser = ?
                   WHERE id = ?";
@@ -241,6 +242,7 @@ if (empty($_SESSION['usr'])) {
 			$_POST['operation'],
 			$_POST['qty'],
 			$_POST['qty2'],
+			$_POST['rol'], 
 			$lastupdatedatetime,
 			$_SESSION['usr'],
 			$_GET['id']
@@ -407,8 +409,12 @@ if (empty($_SESSION['usr'])) {
 						<h4>Roll</h4>
 					</td>
 					<td>:</td>
-					<td><input name="rol" type="text" id="rol" size="3" placeholder="0" pattern="[0-9]{1,}"
-							value="<?= $row_kkmasuk['roll']; ?>" disabled style="background-color: #BBBBBB;"></td>
+					<td>
+						<!-- <input name="rol" type="text" id="rol" size="3" placeholder="0" pattern="[0-9]{1,}"
+							value="<?= $row_kkmasuk['roll']; ?>" disabled style="background-color: #BBBBBB;"> -->
+						<input name="rol" type="text" id="rol" size="3" placeholder="0" pattern="[0-9]{1,}"
+							value="<?= $row_kkmasuk['roll']; ?>">
+					</td>
 				</tr>
 				<tr>
 					<td valign="top" scope="row">
