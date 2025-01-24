@@ -1,7 +1,7 @@
 <?php
-ini_set("error_reporting", 1);
-session_start();
-include('../koneksi.php');
+    ini_set("error_reporting", 1);
+    session_start();
+    include '../koneksi.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,11 +11,8 @@ include('../koneksi.php');
   <title>Laporan Produksi Finishing</title>
   <script>
     function ganti() {
-
       var lprn = document.forms['form1']['jns'].value;
-      if (lprn == "Produksi Finishing") {
-        window.location.href = "?p=home";
-      } else if (lprn == "Adm Finishing") {
+      if (lprn == "Adm Finishing") {
         window.location.href = "?p=home2";
       } else if (lprn == "Detail In-Out") {
         window.location.href = "?p=home3";
@@ -23,10 +20,13 @@ include('../koneksi.php');
         window.location.href = "?p=home4";
       } else if (lprn == "Detail Proses") {
         window.location.href = "?p=home5";
+      } else if (lprn == "Stoppage Mesin") {
+        window.location.href = "?p=home6";
       }else if (lprn == "Produksi Finishing NOW"){
         window.location.href = "?p=home7";
+      }else if (lprn == "Kartu Stock Obat"){
+        window.location.href = "?p=home8";
       }
-
     }
   </script>
 </head>
@@ -39,8 +39,8 @@ include('../koneksi.php');
           <div align="center"><strong>LAPORAN STOPPAGE MESIN</strong></div>
           </div>
           <?php
-          $user_name = $_SESSION['username'];
-          date_default_timezone_set('Asia/Jakarta');
+              $user_name = $_SESSION['username'];
+              date_default_timezone_set('Asia/Jakarta');
           $tgl = date("Y-M-d h:i:s A");
           echo $tgl; ?><br />
         </td>
@@ -57,6 +57,8 @@ include('../koneksi.php');
             <!-- <option value="Grafik">Grafik</option> -->
             <!-- <option value="Detail Proses">Detail Proses</option> -->
             <option value="Stoppage Mesin" selected="selected">Stoppage Mesin</option>
+            <option value="Kartu Stock Obat">Kartu Stock Obat</option>
+
           </select>
         </td>
       </tr>
@@ -65,24 +67,24 @@ include('../koneksi.php');
         <td>:</td>
         <td><select name="jnsmesin" id="jnsmesin" onChange="window.location='?p=home6&jns='+this.value" required>
             <option value="">Pilih</option>
-            <option value="belah" <?php if ($_GET['jns'] == "belah") {
-                                    echo "SELECTED";
-                                  } ?>>Belah</option>
-            <option value="compact" <?php if ($_GET['jns'] == "compact") {
-                                      echo "SELECTED";
-                                    } ?>>Compact</option>
-            <option value="lipat" <?php if ($_GET['jns'] == "lipat") {
-                                    echo "SELECTED";
-                                  } ?>>Lipat</option>
-            <option value="oven" <?php if ($_GET['jns'] == "oven") {
-                                    echo "SELECTED";
-                                  } ?>>Oven</option>
-            <option value="stenter" <?php if ($_GET['jns'] == "stenter") {
-                                      echo "SELECTED";
-                                    } ?>>Stenter</option>
-            <option value="steamer" <?php if ($_GET['jns'] == "steamer") {
-                                      echo "SELECTED";
-                                    } ?>>Steamer</option>
+            <option value="belah"                                                                   <?php if ($_GET['jns'] == "belah") {
+                                                                       echo "SELECTED";
+                                                                   }?>>Belah</option>
+            <option value="compact"                                                                       <?php if ($_GET['jns'] == "compact") {
+                                                                           echo "SELECTED";
+                                                                       }?>>Compact</option>
+            <option value="lipat"                                                                   <?php if ($_GET['jns'] == "lipat") {
+                                                                       echo "SELECTED";
+                                                                   }?>>Lipat</option>
+            <option value="oven"                                                                 <?php if ($_GET['jns'] == "oven") {
+                                                                     echo "SELECTED";
+                                                                 }?>>Oven</option>
+            <option value="stenter"                                                                       <?php if ($_GET['jns'] == "stenter") {
+                                                                           echo "SELECTED";
+                                                                       }?>>Stenter</option>
+            <option value="steamer"                                                                       <?php if ($_GET['jns'] == "steamer") {
+                                                                           echo "SELECTED";
+                                                                       }?>>Steamer</option>
           </select></td>
       </tr>
       <tr valign="middle">
@@ -102,10 +104,11 @@ include('../koneksi.php');
         <td><select name="nama_mesin" id="nama_mesin" onchange="myFunction();">
             <option value="">Pilih</option>
             <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
-            while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
-            ?>
+                while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
+                ?>
               <option value="<?php echo $r['no_mesin']; ?>"><?php echo $r['no_mesin']; ?></option>
-            <?php } ?>
+            <?php
+            }?>
           </select></td>
       </tr>
       <tr>

@@ -8,7 +8,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Laporan Produksi Finishing</title>
+  <title>Kartu Stock Obat / Chemical Finishing</title>
   <script>
     function ganti() {
       var lprn = document.forms['form1']['jns'].value;
@@ -32,11 +32,11 @@
 </head>
 
 <body>
-  <form id="form1" name="form1" method="post" action="index.php?p=reports">
+  <form id="form1" name="form1" method="post" action="pages/stoppage-cetak.php" target="_blank">
     <table width="470" border="0">
       <tr>
         <td colspan="3">
-          <div align="center"><strong>LAPORAN PRODUKSI FINISHING</strong></div>
+          <div align="center"><strong>LAPORAN STOPPAGE MESIN</strong></div>
           </div>
           <?php
               $user_name = $_SESSION['username'];
@@ -50,22 +50,20 @@
         <td>:</td>
         <td><label for="jns"></label>
           <select name="jns" id="jns" onchange="ganti();">
-            <option value="Produksi Finishing" selected="selected">Produksi Finishing</option>
+            <option value="Produksi Finishing">Produksi Finishing</option>
             <option value="Produksi Finishing NOW">Produksi Finishing NOW</option>
             <!-- <option value="Adm Finishing">Adm Finishing</option> -->
             <!-- <option value="Detail In-Out">Detail In-Out</option> -->
             <!-- <option value="Grafik">Grafik</option> -->
             <!-- <option value="Detail Proses">Detail Proses</option> -->
-            <option value="Stoppage Mesin">Stoppage Mesin</option>
-            <option value="Kartu Stock Obat">Kartu Stock Obat</option>
+            <option value="Stoppage Mesin" selected="selected">Stoppage Mesin</option>
           </select>
         </td>
       </tr>
       <tr valign="middle">
         <td><strong>Jenis Mesin</strong></td>
         <td>:</td>
-        <td>
-          <select name="jnsmesin" id="jnsmesin" onChange="window.location='?p=home&jns='+this.value" required>
+        <td><select name="jnsmesin" id="jnsmesin" onChange="window.location='?p=home6&jns='+this.value" required>
             <option value="">Pilih</option>
             <option value="belah"                                                                   <?php if ($_GET['jns'] == "belah") {
                                                                        echo "SELECTED";
@@ -85,8 +83,7 @@
             <option value="steamer"                                                                       <?php if ($_GET['jns'] == "steamer") {
                                                                            echo "SELECTED";
                                                                        }?>>Steamer</option>
-          </select>
-        </td>
+          </select></td>
       </tr>
       <tr valign="middle">
         <td width="127"><strong>Tanggal Awal</strong></td>
@@ -104,8 +101,8 @@
         <td>:</td>
         <td><select name="nama_mesin" id="nama_mesin" onchange="myFunction();">
             <option value="">Pilih</option>
-            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE jenis LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
-                while ($r = sqlsrv_fetch_array($qry1)) {
+            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
+                while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
                 ?>
               <option value="<?php echo $r['no_mesin']; ?>"><?php echo $r['no_mesin']; ?></option>
             <?php
