@@ -104,7 +104,7 @@
                     <tr>
                         <td>No. Form</td>
                         <td>:</td>
-                        <td>19-08B</td>
+                        <td>19-08</td>
                     </tr>
                     <tr>
                         <td>No. Revisi</td>
@@ -114,7 +114,7 @@
                     <tr>
                         <td>Tgl. Terbit</td>
                         <td>:</td>
-                        <td>29-12-18</td>
+                        <td>27 Februari 2006</td>
                     </tr>
                 </table>
             </td>
@@ -123,51 +123,29 @@
     <br>
     <table>
         <tr>
-            <td>Nama barang</td>
+            <td>Nama Barang</td>
             <td>:</td>
             <td><?php echo $d_stock_transaction['NAMA_BARANG']; ?></td>
         </tr>
         <tr>
-            <td>Satuan</td>
+            <td>Type / Ukuran</td>
             <td>:</td>
             <td><?php echo $d_stock_transaction['SATUAN']; ?></td>
-        </tr>
-        <tr>
-            <td>Stock Minimum</td>
-            <td>:</td>
-            <?php
-                $q_min_stok = db2_exec($conn1, "SELECT * FROM ITEMWAREHOUSELINK WHERE ITEMTYPECODE ='SPR'
-                                                                                        AND SUBCODE01 = 'DIT'
-                                                                                        AND TRIM(SUBCODE01) || '-' ||
-                                                                                            TRIM(SUBCODE02) || '-' ||
-                                                                                            TRIM(SUBCODE03) || '-' ||
-                                                                                            TRIM(SUBCODE04) || '-' ||
-                                                                                            TRIM(SUBCODE05) || '-' ||
-                                                                                            TRIM(SUBCODE06)  = '$kode_barang'
-                                                                                    AND LOGICALWAREHOUSECODE = 'M231'");
-                $row_min_stok = db2_fetch_assoc($q_min_stok);
-            ?>
-            <td><?php echo number_format($row_min_stok['SAFETYSTOCK'], 0); ?></td>
-        </tr>
-        <tr>
-            <td>Kelompok</td>
-            <td>:</td>
-            <td>...</td>
         </tr>
     </table>
     <br>
     <table border="1" width="100%" style="border-collapse: collapse;">
         <thead>
             <tr>
-                <td align="center">Tgl.</td>
+                <td align="center">Nama Supplier</td>
                 <td align="center">Stock Awal</td>
-                <td align="center">Quantity Penerimaan</td>
-                <td align="center">Quantity Pengeluaran</td>
+                <td align="center">Tanggal Masuk</td>
+                <td align="center">Jumlah</td>
+                <td align="center">Tanggal Keluar</td>
+                <td align="center">Jumlah</td>
                 <td align="center">Stock Akhir</td>
-                <td align="center">Surat Jalan/Bon Pengambilan barang</td>
-                <td align="center">Nama</td>
-                <td align="center">Paraf</td>
                 <td align="center">Keterangan</td>
+                <td align="center">Tanda Tangan Pemakai</td>
             </tr>
         </thead>
         <tbody>
