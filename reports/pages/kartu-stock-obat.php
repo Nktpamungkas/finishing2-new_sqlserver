@@ -17,6 +17,9 @@
     $nama_obat = $_POST['nama_obat'];
 
     $kode_obat_value = explode('-', $kode_obat);
+    $DECOSUBCODE01   = $kode_obat_value[0];
+    $DECOSUBCODE02   = $kode_obat_value[1];
+    $DECOSUBCODE03   = $kode_obat_value[2];
 
     // Deklarasi Awal
     $header_nama_barang = null;
@@ -62,15 +65,54 @@
     //     ],
     // ];
 
-    // Execution query header
-    $query_header       = "";
-    $exec_query_header  = db2_exec($conn1, $query_header);
-    $fetch_query_header = db2_fetch_assoc($exec_query_header);
+    // Execution query data
+    $query_data = "SELECT * FROM STOCKTRANSACTION WHERE
+        (TEMPLATECODE ='304'
+        OR TEMPLATECODE ='120')
+        AND LOGICALWAREHOUSECODE ='M512'
+        AND DECOSUBCODE01 ='$DECOSUBCODE01'
+        AND DECOSUBCODE02 ='$DECOSUBCODE02'
+        AND DECOSUBCODE03 ='$DECOSUBCODE03'
+        AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'";
 
-    // Execution query header
-    $query_data       = "";
-    $exec_query_data  = db2_exec($conn1, $query_data);
-    $fetch_query_data = db2_fetch_assoc($exec_query_data);
+    $exec_query_data = db2_exec($conn1, $query_data);
+    // $fetch_query_data = db2_fetch_assoc($exec_query_data);
+    // print_r($fetch_query_data);
+
+    while ($row = db2_fetch_assoc($exec_query_data)) {
+        $nama_supplier        = '';
+        $stock_awal           = '';
+        $tanggal_masuk        = '';
+        $jumlah_masuk         = '';
+        $tanggal_keluar       = '';
+        $jumlah_keluar        = '';
+        $stock_akhir          = '';
+        $keterangan           = '';
+        $tanda_tangan_pemakai = '';
+
+        if ($row['TEMPLATECODE'] === '304') {
+            $tanggal_masuk = $row['TRANSACTIONDATE'];
+            $jumlah_masuk  = intval($row['USERPRIMARYQUANTITY']);
+        } else if ($row['TEMPLATECODE'] === '120') {
+            $tanggal_keluar = $row['TRANSACTIONDATE'];
+            $jumlah_keluar  = intval($row['USERPRIMARYQUANTITY']);
+        }
+
+        // Lanjutin dibawah sini
+
+        $data[] = [
+            'nama_supplier'        => $nama_supplier,
+            'stock_awal'           => $stock_awal,
+            'tanggal_masuk'        => $tanggal_masuk,
+            'jumlah_masuk'         => $jumlah_masuk,
+            'tanggal_keluar'       => $tanggal_keluar,
+            'jumlah_keluar'        => $jumlah_keluar,
+            'stock_akhir'          => $stock_akhir,
+            'keterangan'           => $keterangan,
+            'tanda_tangan_pemakai' => $tanda_tangan_pemakai,
+        ];
+
+    }
 
 ?>
 <!DOCTYPE html>
