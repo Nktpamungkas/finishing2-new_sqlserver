@@ -73,7 +73,8 @@
         AND DECOSUBCODE01 ='$DECOSUBCODE01'
         AND DECOSUBCODE02 ='$DECOSUBCODE02'
         AND DECOSUBCODE03 ='$DECOSUBCODE03'
-        AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'";
+        AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'
+        ORDER BY TRANSACTIONDATE ASC";
 
     $exec_query_data = db2_exec($conn1, $query_data);
     // $fetch_query_data = db2_fetch_assoc($exec_query_data);
@@ -95,7 +96,7 @@
             $jumlah_masuk  = intval($row['USERPRIMARYQUANTITY']);
         } else if ($row['TEMPLATECODE'] === '120') {
             $tanggal_keluar = $row['TRANSACTIONDATE'];
-            $jumlah_keluar  = intval($row['USERPRIMARYQUANTITY']);
+            $jumlah_keluar  = $row['USERPRIMARYQUANTITY'] / 1000;
         }
 
         // Lanjutin dibawah sini
