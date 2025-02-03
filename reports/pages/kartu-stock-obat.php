@@ -74,6 +74,7 @@
         AND DECOSUBCODE02 ='$DECOSUBCODE02'
         AND DECOSUBCODE03 ='$DECOSUBCODE03'
         AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'
+        AND CREATIONDATETIME > '2024-01-15 13:00:00'
         ORDER BY TRANSACTIONDATE ASC";
 
     $exec_query_data = db2_exec($conn1, $query_data);
@@ -99,7 +100,7 @@
             $jumlah_keluar  = $row['USERPRIMARYQUANTITY'] / 1000;
         }
 
-        // Lanjutin dibawah sini
+        $keterangan = $row['ORDERCODE'];
 
         $data[] = [
             'nama_supplier'        => $nama_supplier,
