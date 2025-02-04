@@ -222,15 +222,15 @@
     <table border="1" width="100%" style="border-collapse: collapse;">
         <thead>
             <tr>
-                <td align="center" style="width: 7%;">Nama Supplier</td>
-                <td align="center" style="width: 10%;">Stock Awal</td>
-                <td align="center" style="width: 12%;">Tanggal Masuk</td>
-                <td align="center" style="width: 10%;">Jumlah</td>
-                <td align="center" style="width: 12%;">Tanggal Keluar</td>
-                <td align="center" style="width: 10%;">Jumlah</td>
-                <td align="center" style="width: 10%;">Stock Akhir</td>
-                <td align="center" style="width: 15%;">Keterangan</td>
-                <td align="center" style="width: 10%;">Tanda Tangan Pemakai</td>
+                <td align="center" style="width: 7%; font-weight: bold;">Nama Supplier</td>
+                <td align="center" style="width: 10%; font-weight: bold;">Stock Awal</td>
+                <td align="center" style="width: 12%; font-weight: bold;">Tanggal Masuk</td>
+                <td align="center" style="width: 10%; font-weight: bold;">Jumlah</td>
+                <td align="center" style="width: 12%; font-weight: bold;">Tanggal Keluar</td>
+                <td align="center" style="width: 10%; font-weight: bold;">Jumlah</td>
+                <td align="center" style="width: 10%; font-weight: bold;">Stock Akhir</td>
+                <td align="center" style="width: 15%; font-weight: bold;">Keterangan</td>
+                <td align="center" style="width: 10%; font-weight: bold;">Tanda Tangan Pemakai</td>
             </tr>
         </thead>
         <tbody>
