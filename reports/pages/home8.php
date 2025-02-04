@@ -32,18 +32,20 @@
 </head>
 
 <body>
-  <form id="form1" name="form1" method="post" action="pages/stoppage-cetak.php" target="_blank">
+  <form id="form1" name="form1" method="post" action="pages/kartu-stock-obat.php" target="_blank">
     <table width="470" border="0">
       <tr>
         <td colspan="3">
-          <div align="center"><strong>LAPORAN STOPPAGE MESIN</strong></div>
+          <div align="center"><strong>Kartu Stock Obat / Chemical Finishing</strong></div>
+          <br>
           </div>
           <?php
               $user_name = $_SESSION['username'];
               date_default_timezone_set('Asia/Jakarta');
-          $tgl = date("Y-M-d h:i:s A");
-          echo $tgl; ?><br />
+              $tgl = date("Y-M-d h:i:s A");
+          echo $tgl; ?>
         </td>
+        <br>
       </tr>
       <tr>
         <td><strong>Jenis Laporan</strong></td>
@@ -56,34 +58,34 @@
             <!-- <option value="Detail In-Out">Detail In-Out</option> -->
             <!-- <option value="Grafik">Grafik</option> -->
             <!-- <option value="Detail Proses">Detail Proses</option> -->
-            <option value="Stoppage Mesin" selected="selected">Stoppage Mesin</option>
+            <option value="Stoppage Mesin">Stoppage Mesin</option>
+            <option value="Kartu Stock Obat" selected="selected">Kartu Stock Obat</option>
+
           </select>
         </td>
       </tr>
       <tr valign="middle">
-        <td><strong>Jenis Mesin</strong></td>
+        <td><strong>Nama Obat</strong></td>
         <td>:</td>
-        <td><select name="jnsmesin" id="jnsmesin" onChange="window.location='?p=home6&jns='+this.value" required>
-            <option value="">Pilih</option>
-            <option value="belah"                                                                   <?php if ($_GET['jns'] == "belah") {
-                                                                       echo "SELECTED";
-                                                                   }?>>Belah</option>
-            <option value="compact"                                                                       <?php if ($_GET['jns'] == "compact") {
-                                                                           echo "SELECTED";
-                                                                       }?>>Compact</option>
-            <option value="lipat"                                                                   <?php if ($_GET['jns'] == "lipat") {
-                                                                       echo "SELECTED";
-                                                                   }?>>Lipat</option>
-            <option value="oven"                                                                 <?php if ($_GET['jns'] == "oven") {
-                                                                     echo "SELECTED";
-                                                                 }?>>Oven</option>
-            <option value="stenter"                                                                       <?php if ($_GET['jns'] == "stenter") {
-                                                                           echo "SELECTED";
-                                                                       }?>>Stenter</option>
-            <option value="steamer"                                                                       <?php if ($_GET['jns'] == "steamer") {
-                                                                           echo "SELECTED";
-                                                                       }?>>Steamer</option>
-          </select></td>
+        <td>
+            <?php
+                $sql  = "SELECT kode, name FROM db_finishing.tbl_obat ORDER BY kode";
+                $stmt = sqlsrv_query($con, $sql);
+
+                if ($stmt === false) {
+                    die(print_r(sqlsrv_errors(), true));
+                }
+            ?>
+
+            <select name="nama_obat" id="nama_obat" required>
+                <option value="">Pilih</option>
+                  <?php
+                      while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                          echo '<option value="' . $row['kode'] . '">(' . $row['kode'] . ') ' . $row['name'] . '</option>';
+                      }
+                  ?>
+            </select>
+        </td>
       </tr>
       <tr valign="middle">
         <td width="127"><strong>Tanggal Awal</strong></td>
@@ -95,31 +97,6 @@
         <td><strong>Tanggal Akhir</strong></td>
         <td>:</td>
         <td width="280"><input name="akhir" type="text" id="akhir" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;" size="14" required="required" /><a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.form1.akhir);return false;"><img src="../calender/calender.jpeg" alt="" name="popcal" width="30" height="25" id="popcal" style="border:none" align="absmiddle" border="0" /></a></td>
-      </tr>
-      <tr>
-        <td><strong>Mesin</strong></td>
-        <td>:</td>
-        <td><select name="nama_mesin" id="nama_mesin" onchange="myFunction();">
-            <option value="">Pilih</option>
-            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
-                while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
-                ?>
-              <option value="<?php echo $r['no_mesin']; ?>"><?php echo $r['no_mesin']; ?></option>
-            <?php
-            }?>
-          </select></td>
-      </tr>
-      <tr>
-        <td><strong>Shift</strong></td>
-        <td>:</td>
-        <td><label for="shift"></label>
-          <select name="shift" id="shift">
-            <option value="ALL">ALL</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </select>
-        </td>
       </tr>
       <tr>
         <td colspan="3"><input type="submit" name="button" id="button" value="Lihat Data" class="art-button" /> <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'" class="art-button" /></td>
