@@ -84,6 +84,11 @@
 
     // Stock Awal
 
+    if ($tglawal == '2025-01-15') {
+        $total_masuk  = 0;
+        $total_keluar = 0;
+    }
+
     $stock_awal = ($stock_awal_db + $total_masuk) - $total_keluar;
 
     $informasi = 'Informasi akumulasi stock awal dari 2025-01-15 - ' . $tglawal . ', stock awal db : ' . $stock_awal_db .
