@@ -14,67 +14,74 @@ include("../../koneksi.php");
 
 <body>
     <?php
-    if (isset($_POST['btnHapus'])) {
-        $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id='$_POST[id]'";
-        sqlsrv_query($con, $hapusSql) or die("Gagal hapus" . sqlsrv_errors());
+        if (isset($_POST['btnHapus'])) {
+            $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id='$_POST[id]'";
+            sqlsrv_query($con, $hapusSql) or die("Gagal hapus" . sqlsrv_errors());
 
-        // Refresh form
-        echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiHapus'>";
-    }
-
-    if (isset($_POST['btnSimpan'])) {
-        $nama = str_replace("'", "", $_POST['nama']);
-        $jabatan = str_replace("'", "", $_POST['jabatan']);
-
-        $simpanSql = "INSERT INTO db_finishing.tbl_staff (nama, jabatan) VALUES (?, ?)";
-
-        $params = array($nama, $jabatan);
-
-        $stmt = sqlsrv_query($con, $simpanSql, $params);
-
-        if ($stmt === false) {
-            die("Gagal Simpan: " . print_r(sqlsrv_errors(), true));
+            // Refresh form
+            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiHapus'>";
         }
 
-        // Refresh form
-        echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiSimpan'>";
-    }
+        if (isset($_POST['btnSimpan'])) {
+            $nama = str_replace("'", "", $_POST['nama']);
+            $jabatan = str_replace("'", "", $_POST['jabatan']);
 
-    if (isset($_POST['btnUbah'])) {
-        $nama = str_replace("'", "", $_POST['nama']);
-        $jabatan = str_replace("'", "", $_POST['jabatan']);
-        $simpanSql = "UPDATE db_finishing.tbl_staff SET 
-	`nama`='$nama',
-	`jabatan`='$jabatan'
-	WHERE `id`='$_POST[id]'";
-        sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
+            $simpanSql = "INSERT INTO db_finishing.tbl_staff (nama, jabatan) VALUES (?, ?)";
 
-        // Refresh form
-        echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiUbah'>";
-    }
+            $params = array($nama, $jabatan);
+
+            $stmt = sqlsrv_query($con, $simpanSql, $params);
+
+            if ($stmt === false) {
+                die("Gagal Simpan: " . print_r(sqlsrv_errors(), true));
+            }
+
+            // Refresh form
+            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiSimpan'>";
+        }
+
+        if (isset($_POST['btnUbah'])) {
+            $nama = str_replace("'", "", $_POST['nama']);
+            $jabatan = str_replace("'", "", $_POST['jabatan']);
+            $simpanSql = "UPDATE db_finishing.tbl_staff SET 
+                                            `nama`='$nama',
+                                            `jabatan`='$jabatan'
+                                            WHERE `id`='$_POST[id]'";
+            sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
+
+            // Refresh form
+            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiUbah'>";
+        }
+        
+        if (isset($_POST['btnHapus'])){
+            $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id='$_POST[id]'";
+            sqlsrv_query($con, $hapusSql) or die("Gagal hapus" . sqlsrv_errors());
+
+            // Refresh form
+            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiHapus'>";
+        }
     ?>
     <?php
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        $recordsPerPage = 10;
 
-    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-    $recordsPerPage = 10;
+        $offset = ($page - 1) * $recordsPerPage;
 
-    $offset = ($page - 1) * $recordsPerPage;
+        $nama = isset($_GET['nama']) ? $_GET['nama'] : '';
+        $sql = "SELECT TOP 1 * FROM db_finishing.tbl_staff WHERE nama = ?";
+        $params = array($nama);
+        $qtampil = sqlsrv_query($con, $sql, $params);
+        $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
+        $rc = sqlsrv_num_rows($qtampil);
 
-    $nama = isset($_GET['nama']) ? $_GET['nama'] : '';
-    $sql = "SELECT TOP 1 * FROM db_finishing.tbl_staff WHERE nama = ?";
-    $params = array($nama);
-    $qtampil = sqlsrv_query($con, $sql, $params);
-    $rt = sqlsrv_fetch_array($qtampil, SQLSRV_FETCH_ASSOC);
-    $rc = sqlsrv_num_rows($qtampil);
+        $sqlTable = "SELECT * FROM db_finishing.tbl_staff ORDER BY id ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        $paramsTable = array($offset, $recordsPerPage);
+        $qry = sqlsrv_query($con, $sqlTable, $paramsTable);
 
-    $sqlTable = "SELECT * FROM db_finishing.tbl_staff ORDER BY id ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-    $paramsTable = array($offset, $recordsPerPage);
-    $qry = sqlsrv_query($con, $sqlTable, $paramsTable);
-
-    $totalRecordsQuery = "SELECT COUNT(*) as total FROM db_finishing.tbl_staff";
-    $totalRecordsResult = sqlsrv_query($con, $totalRecordsQuery);
-    $totalRecords = sqlsrv_fetch_array($totalRecordsResult)['total'];
-    $totalPages = ceil($totalRecords / $recordsPerPage);
+        $totalRecordsQuery = "SELECT COUNT(*) as total FROM db_finishing.tbl_staff";
+        $totalRecordsResult = sqlsrv_query($con, $totalRecordsQuery);
+        $totalRecords = sqlsrv_fetch_array($totalRecordsResult)['total'];
+        $totalPages = ceil($totalRecords / $recordsPerPage);
     ?>
 
     <form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
@@ -122,6 +129,7 @@ include("../../koneksi.php");
                 <th scope="row">No</th>
                 <th bgcolor="#0099CC">Nama</th>
                 <th>Jabatan</th>
+                <th>Opsi</th>
             </tr>
             <?php
             $no = $offset + 1;
@@ -129,13 +137,19 @@ include("../../koneksi.php");
 
             while ($r = sqlsrv_fetch_array($qry)) {
                 $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99';
-                ?>
+            ?>
                 <tr bgcolor="<?php echo $bgcolor; ?>">
                     <td align="center" scope="row"><?php echo $no; ?></td>
                     <td align="center"><?php echo $r['nama']; ?></td>
                     <td><?php echo $r['jabatan']; ?></td>
+                    <td align="center">
+                        <form method="POST" onsubmit="return confirmDelete()">
+                            <input type="hidden" name="id" id="id" value="<?= $r['id']; ?>">
+                            <input type="submit" name="btnHapus" id="btnHapus" value="Hapus">
+                        </form>
+                    </td>
                 </tr>
-                <?php $no++;
+            <?php $no++;
             } ?>
             <tr bgcolor="#0099CC">
                 <td scope="row">&nbsp;</td>
@@ -160,5 +174,10 @@ include("../../koneksi.php");
     </form>
 
 </body>
+<script>
+    function confirmDelete() {
+        return confirm("Apakah Anda yakin ingin menghapus data ini?");
+    }
+</script>
 
 </html>
