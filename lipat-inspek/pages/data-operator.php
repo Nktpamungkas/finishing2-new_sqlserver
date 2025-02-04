@@ -3,136 +3,99 @@ ini_set("error_reporting", 1);
 session_start();
 include("../../koneksi.php");
 ?>
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
+<html lang="id">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Staff Acc Keluar Kain</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #0099CC; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
+    <script>
+        function searchTable() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let rows = document.querySelectorAll("#dataTable tbody tr");
+            rows.forEach(row => {
+                let nama = row.cells[1].textContent.toLowerCase();
+                let jabatan = row.cells[2].textContent.toLowerCase();
+                row.style.display = (nama.includes(input) || jabatan.includes(input)) ? "" : "none";
+            });
+        }
+    </script>
 </head>
-
 <body>
     <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $id = $_POST['id'] ?? '';
+        $nama = str_replace("'", "", $_POST['nama'] ?? '');
+        $jabatan = str_replace("'", "", $_POST['jabatan'] ?? '');
+        
         if (isset($_POST['btnHapus'])) {
-            $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id='$_POST[id]'";
-            sqlsrv_query($con, $hapusSql) or die("Gagal hapus" . sqlsrv_errors());
-
-            // Refresh form
-            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiHapus'>";
+            $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id=?";
+            $stmt = sqlsrv_query($con, $hapusSql, array($id));
+            echo $stmt ? "<script>alert('Data berhasil dihapus!'); window.location.href='data-operator.php';</script>" 
+                      : "<script>alert('Gagal menghapus data!');</script>";
+        } elseif (isset($_POST['btnSimpan'])) {
+            $simpanSql = "INSERT INTO db_finishing.tbl_staff (nama, jabatan) VALUES (?, ?)";
+            $stmt = sqlsrv_query($con, $simpanSql, array($nama, $jabatan));
+            echo $stmt ? "<script>alert('Data berhasil disimpan!'); window.location.href='data-operator.php';</script>" 
+                      : "<script>alert('Gagal menyimpan data!');</script>";
+        } elseif (isset($_POST['btnUbah'])) {
+            $ubahSql = "UPDATE db_finishing.tbl_staff SET nama=?, jabatan=? WHERE id=?";
+            $stmt = sqlsrv_query($con, $ubahSql, array($nama, $jabatan, $id));
+            echo $stmt ? "<script>alert('Data berhasil diubah!'); window.location.href='data-operator.php';</script>" 
+                      : "<script>alert('Gagal mengubah data!');</script>";
         }
-        if (isset($_POST['btnSimpan'])) {
-            $nama = str_replace("'", "", $_POST['nama']);
-            $jabatan = str_replace("'", "", $_POST['jabatan']);
-            $simpanSql = "INSERT INTO db_finishing.tbl_staff(nama,jabatan)VALUES(?,?)";
-            $params = array($nama, $jabatan);
-            $stmt = sqlsrv_query($con, $simpanSql, $params);
-            if (!$stmt) {
-                echo "Gagal Simpan" . var_dump(sqlsrv_errors());
-            }
-
-            // Refresh form
-            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiSimpan'>";
-        }
-        if (isset($_POST['btnUbah'])) {
-            $nama = str_replace("'", "", $_POST['nama']);
-            $jabatan = str_replace("'", "", $_POST['jabatan']);
-            $simpanSql = "UPDATE 
-                                tbl_staff 
-                            SET 
-                                `nama`='$nama',
-                                `jabatan`='$jabatan'
-                            WHERE 
-                                `id`='$_POST[id]'";
-            sqlsrv_query($con, $simpanSql) or die("Gagal Ubah" . sqlsrv_errors());
-
-            // Refresh form
-            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiUbah'>";
-        }
-        if (isset($_POST['btnHapus'])){
-            $hapusSql = "DELETE FROM db_finishing.tbl_staff WHERE id='$_POST[id]'";
-            sqlsrv_query($con, $hapusSql) or die("Gagal hapus" . sqlsrv_errors());
-
-            // Refresh form
-            echo "<meta http-equiv='refresh' content='0; url=data-operator.php?status=Data Sudah DiHapus'>";
-        }
+    }
     ?>
-    <form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
-        <table width="100%" border="0">
+
+    <h2>Input Data Operator</h2>
+    <form method="POST">
+        <label for="nama">Nama:</label>
+        <input type="text" name="nama" id="nama" value="<?= $_GET['nama'] ?? ''; ?>" required>
+        <input type="hidden" name="id" value="<?= $_GET['id'] ?? ''; ?>">
+        
+        <label for="jabatan">Jabatan:</label>
+        <input type="text" name="jabatan" id="jabatan" value="<?= $_GET['jabatan'] ?? ''; ?>">
+        
+        <button type="submit" name="btnSimpan">Simpan</button>
+        <button type="submit" name="btnUbah">Ubah</button>
+    </form>
+
+    <h3>Data Detail Operator</h3>
+    <input type="text" id="search" onkeyup="searchTable()" placeholder="Cari nama atau jabatan...">
+    <table id="dataTable">
+        <thead>
             <tr>
-                <th colspan="3" scope="row">Input Data Operator</th>
-            </tr>
-            <tr>
-                <td colspan="3" align="center" scope="row">
-                    <font color="#FF0000"><?php echo $_GET['status']; ?></font>
-                </td>
-            </tr>
-            <?php $qtampil = sqlsrv_query($con, "SELECT TOP 1 * FROM db_finishing.tbl_staff WHERE nama='$_GET[nama]'", array(), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
-            $rt = sqlsrv_fetch_array($qtampil);
-            $rc = Sqlsrv_num_rows($qtampil);
-            ?>
-            <tr>
-                <td width="21%" scope="row">Nama</td>
-                <td width="1%">:</td>
-                <td width="78%"><label for="nama"></label>
-                    <input type="text" name="nama" id="nama" onchange="window.location='data-operator.php?nama='+this.value"
-                        value="<?php echo $_GET['nama']; ?>" required="required" />
-                    <input type="hidden" name="id" value="<?php echo $rt['id']; ?>" />
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" scope="row">Jabatan</td>
-                <td valign="top">:</td>
-                <td><label for="jabatan"></label>
-                    <input name="jabatan" type="text" id="jabatan" value="<?php echo $rt['jabatan']; ?>" size="45" />
-                </td>
-            </tr>
-            <tr>
-                <th colspan="3" scope="row"><?php if ($rc == 0) { ?><input type="submit" name="btnSimpan" id="btnSimpan"
-                            value="Simpan" /><?php } else { ?>
-                        <input type="submit" name="btnUbah" id="btnUbah" value="Ubah" />
-                        <input type="submit" name="btnHapus" id="btnHapus" value="Hapus" /><?php } ?>
-                    <input type="button" name="tutup" id="tutup" value="Tutup" onclick="window.close();" />
-                </th>
-            </tr>
-        </table>
-        <h3>Data Detail Operator</h3>
-        <table width="100%" border="0">
-            <tr bgcolor="#0099CC">
-                <th scope="row">No</th>
-                <th bgcolor="#0099CC">Nama</th>
+                <th>No</th>
+                <th>Nama</th>
                 <th>Jabatan</th>
                 <th>Opsi</th>
             </tr>
-            <?php
-            $qry = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_staff ORDER BY nama ASC");
-            $no = 1;
-            while ($r = sqlsrv_fetch_array($qry)) {
-                $bgcolor = ($c++ & 1) ? '#33CCFF' : '#FFCC99'; ?>
-                <tr bgcolor="<?php echo $bgcolor; ?>">
-                    <td align="center" scope="row"><?php echo $no; ?></td>
-                    <td align="center"><?php echo $r['nama']; ?></td>
-                    <td><?php echo $r['jabatan']; ?></td>
-                    <td align="center">
-                        <form method="POST" onsubmit="return confirmDelete()">
-                            <input type="hidden" name="id" id="id" value="<?= $r['id']; ?>">
-                            <input type="submit" name="btnHapus" id="btnHapus" value="Hapus">
-                        </form>
-                    </td>
-                </tr>
-            <?php $no++;
-            } ?>
-            <tr bgcolor="#0099CC">
-                <td scope="row">&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
-    </form>
+        </thead>
+        <tbody>
+        <?php
+        $qry = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_staff ORDER BY nama ASC");
+        $no = 1;
+        while ($r = sqlsrv_fetch_array($qry)) {
+        ?>
+        <tr>
+            <td><?= $no++; ?></td>
+            <td><?= htmlspecialchars($r['nama']); ?></td>
+            <td><?= htmlspecialchars($r['jabatan']); ?></td>
+            <td>
+                <form method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                    <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                    <button type="submit" name="btnHapus">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
 </body>
-<script>
-    function confirmDelete() {
-        return confirm("Apakah Anda yakin ingin menghapus data ini?");
-    }
-</script>
 </html>
