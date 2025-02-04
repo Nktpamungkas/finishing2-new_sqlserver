@@ -1,4 +1,6 @@
 <?php
+    include '../../koneksi.php';
+
     $hostname = "10.0.0.21";
                              // $database = "NOWTEST"; // SERVER NOW 20
     $database    = "NOWPRD"; // SERVER NOW 22
@@ -8,7 +10,7 @@
     $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
     // $conn1 = db2_pconnect($conn_string,'', '');
     $conn1 = db2_connect($conn_string, '', '');
-    ini_set("error_reporting", 0);
+    ini_set("error_reporting", 1);
 
     // Data Dari POST
     $tglawal   = $_POST['awal'];
@@ -22,48 +24,74 @@
     $DECOSUBCODE03   = $kode_obat_value[2];
 
     // Deklarasi Awal
+    $stock_awal    = 0;
+    $stock_akhir   = 0;
+    $stock_awal_db = 0;
+    $total_masuk   = 0;
+    $total_keluar  = 0;
+
     $header_nama_barang = null;
     $header_ukuran      = "0 Kg";
     $data               = [];
 
-    // $data = [
-    //     [
-    //         'nama_supplier'        => 'nama_supplier',
-    //         'stock_awal'           => 'stock_awal',
-    //         'tanggal_masuk'        => 'tanggal masuk',
-    //         'jumlah_masuk'         => 'jumlah masuk',
-    //         'tanggal_keluar'       => 'tanggal keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'stock_akhir'          => 'stock akhir',
-    //         'keterangan'           => 'keterangan',
-    //         'tanda_tangan_pemakai' => 'tanda tangan pemakai',
-    //     ],
-    //     [
-    //         'nama_supplier'        => 'nama_supplier',
-    //         'stock_awal'           => 'stock_awal',
-    //         'tanggal_masuk'        => 'tanggal masuk',
-    //         'jumlah_masuk'         => 'jumlah masuk',
-    //         'tanggal_keluar'       => 'tanggal keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'stock_akhir'          => 'stock akhir',
-    //         'keterangan'           => 'keterangan',
-    //         'tanda_tangan_pemakai' => 'tanda tangan pemakai',
-    //     ],
-    //     [
-    //         'nama_supplier'        => 'nama_supplier',
-    //         'stock_awal'           => 'stock_awal',
-    //         'tanggal_masuk'        => 'tanggal masuk',
-    //         'jumlah_masuk'         => 'jumlah masuk',
-    //         'tanggal_keluar'       => 'tanggal keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'jumlah_keluar'        => 'jumlah keluar',
-    //         'stock_akhir'          => 'stock akhir',
-    //         'keterangan'           => 'keterangan',
-    //         'tanda_tangan_pemakai' => 'tanda tangan pemakai',
-    //     ],
-    // ];
+    $query_stock_awal = sqlsrv_query($con, "SELECT stock_awal
+    FROM db_finishing.tbl_obat
+    WHERE kode='$kode_obat'");
+
+    $row_query_stock_awal = sqlsrv_fetch_array($query_stock_awal, SQLSRV_FETCH_ASSOC);
+
+    if ($row_query_stock_awal) {
+        $stock_awal_db = $row_query_stock_awal['stock_awal'];
+    }
+
+    // Total Masuk
+
+    $query_masuk = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
+    FROM STOCKTRANSACTION
+    WHERE (TEMPLATECODE ='304')
+    AND LOGICALWAREHOUSECODE ='M512'
+    AND DECOSUBCODE01 ='$DECOSUBCODE01'
+    AND DECOSUBCODE02 ='$DECOSUBCODE02'
+    AND DECOSUBCODE03 ='$DECOSUBCODE03'
+    AND TRANSACTIONDATE BETWEEN '2025-01-15' AND '$tglawal'
+    AND CREATIONDATETIME > '2025-01-15 13:00:00'";
+
+    $exec_query_masuk  = db2_exec($conn1, $query_masuk);
+    $fetch_query_masuk = db2_fetch_assoc($exec_query_masuk);
+
+    if ($fetch_query_masuk) {
+        $total_masuk = (float) $fetch_query_masuk['TOTAL'];
+    }
+
+    // Total Keluar
+
+    $query_keluar = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
+    FROM STOCKTRANSACTION
+    WHERE (TEMPLATECODE ='120')
+    AND LOGICALWAREHOUSECODE ='M512'
+    AND DECOSUBCODE01 ='$DECOSUBCODE01'
+    AND DECOSUBCODE02 ='$DECOSUBCODE02'
+    AND DECOSUBCODE03 ='$DECOSUBCODE03'
+    AND TRANSACTIONDATE BETWEEN '2025-01-15' AND '$tglawal'
+    AND CREATIONDATETIME > '2025-01-15 13:00:00'";
+
+    $exec_query_keluar  = db2_exec($conn1, $query_keluar);
+    $fetch_query_keluar = db2_fetch_assoc($exec_query_keluar);
+
+    if ($fetch_query_keluar) {
+        $total_keluar = (float) ($fetch_query_keluar['TOTAL'] / 1000);
+    }
+
+    // Stock Awal
+
+    $stock_awal = ($stock_awal_db + $total_masuk) - $total_keluar;
+
+    $informasi = 'Informasi akumulasi stock awal dari 2025-01-15 - ' . $tglawal . ', stock awal db : ' . $stock_awal_db .
+        ' total masuk: ' . $total_masuk .
+        ' total keluar: ' . $total_keluar .
+        ' stock awal: ' . $stock_awal;
+
+    // echo $informasi;
 
     // Execution query data
     $query_data = "SELECT * FROM STOCKTRANSACTION WHERE
@@ -74,33 +102,39 @@
         AND DECOSUBCODE02 ='$DECOSUBCODE02'
         AND DECOSUBCODE03 ='$DECOSUBCODE03'
         AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'
-        AND CREATIONDATETIME > '2024-01-15 13:00:00'
+        AND CREATIONDATETIME > '2025-01-15 13:00:00'
         ORDER BY TRANSACTIONDATE ASC";
 
     $exec_query_data = db2_exec($conn1, $query_data);
-    // $fetch_query_data = db2_fetch_assoc($exec_query_data);
-    // print_r($fetch_query_data);
 
     while ($row = db2_fetch_assoc($exec_query_data)) {
         $nama_supplier        = '';
-        $stock_awal           = '';
         $tanggal_masuk        = '';
         $jumlah_masuk         = '';
         $tanggal_keluar       = '';
         $jumlah_keluar        = '';
-        $stock_akhir          = '';
         $keterangan           = '';
         $tanda_tangan_pemakai = '';
 
+        // Tanggal Masuk , Tanggal Keluar, Jumlah Masuk, Jumlah Keluar
+
         if ($row['TEMPLATECODE'] === '304') {
             $tanggal_masuk = $row['TRANSACTIONDATE'];
-            $jumlah_masuk  = intval($row['USERPRIMARYQUANTITY']);
+            $jumlah_masuk  = (float) $row['USERPRIMARYQUANTITY'];
+
+            $stock_akhir = $stock_awal + $jumlah_masuk;
         } else if ($row['TEMPLATECODE'] === '120') {
             $tanggal_keluar = $row['TRANSACTIONDATE'];
-            $jumlah_keluar  = $row['USERPRIMARYQUANTITY'] / 1000;
+            $jumlah_keluar  = (float) ($row['USERPRIMARYQUANTITY'] / 1000);
+
+            $stock_akhir = $stock_awal - $jumlah_keluar;
         }
 
+        // Keterangan
+
         $keterangan = $row['ORDERCODE'];
+
+        // Array Data
 
         $data[] = [
             'nama_supplier'        => $nama_supplier,
@@ -114,24 +148,29 @@
             'tanda_tangan_pemakai' => $tanda_tangan_pemakai,
         ];
 
+        $stock_awal = $stock_akhir;
     }
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Stok Obat Finishing</title>
     <style>
         @page {
-            size: A4;
-            margin: 20mm;
+            margin: 0;
+            size: auto;
+        }
+
+        @media print {
+            body {
+                margin: 1cm;
+            }
         }
     </style>
 </head>
-
 <body>
     <table border="1" width="100%" style="border-collapse: collapse;">
         <tr>
@@ -183,7 +222,7 @@
     <table border="1" width="100%" style="border-collapse: collapse;">
         <thead>
             <tr>
-                <td align="center" style="width: 15%;">Nama Supplier</td>
+                <td align="center" style="width: 7%;">Nama Supplier</td>
                 <td align="center" style="width: 10%;">Stock Awal</td>
                 <td align="center" style="width: 12%;">Tanggal Masuk</td>
                 <td align="center" style="width: 10%;">Jumlah</td>
@@ -191,7 +230,7 @@
                 <td align="center" style="width: 10%;">Jumlah</td>
                 <td align="center" style="width: 10%;">Stock Akhir</td>
                 <td align="center" style="width: 15%;">Keterangan</td>
-                <td align="center" style="width: 12%;">Tanda Tangan Pemakai</td>
+                <td align="center" style="width: 10%;">Tanda Tangan Pemakai</td>
             </tr>
         </thead>
         <tbody>
