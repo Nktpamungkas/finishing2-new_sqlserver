@@ -108,7 +108,8 @@
     // List data
     $query_data = "SELECT * FROM STOCKTRANSACTION WHERE
         (TEMPLATECODE ='304'
-        OR TEMPLATECODE ='120')
+        OR TEMPLATECODE ='120'
+        OR TEMPLATECODE='OPN')
         AND LOGICALWAREHOUSECODE ='M512'
         AND DECOSUBCODE01 ='$DECOSUBCODE01'
         AND DECOSUBCODE02 ='$DECOSUBCODE02'
@@ -129,7 +130,7 @@
         $tanda_tangan_pemakai = '';
 
         // Tanggal Masuk , Tanggal Keluar, Jumlah Masuk, Jumlah Keluar
-        if ($row['TEMPLATECODE'] === '304') {
+        if ($row['TEMPLATECODE'] === '304' || $row['TEMPLATECODE'] === 'OPN') {
             $tanggal_masuk = $row['TRANSACTIONDATE'];
             $jumlah_masuk  = (float) $row['USERPRIMARYQUANTITY'];
 
