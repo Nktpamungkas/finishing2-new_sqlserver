@@ -164,15 +164,22 @@
     <title>Kartu Stok Obat Finishing</title>
     <style>
         @page {
-            margin: 0;
             size: auto;
+            margin: 2cm 1cm;
         }
 
         @media print {
             body {
-                margin: 1cm;
+                font-size: 12px;
+                -webkit-print-color-adjust: exact;
+                margin: 1cm 1cm 1cm 1cm;
+            }
+
+            td, th {
+                padding: 5px;
             }
         }
+
     </style>
 </head>
 <body>
