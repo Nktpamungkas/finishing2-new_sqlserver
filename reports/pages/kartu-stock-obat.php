@@ -247,16 +247,25 @@
         <tbody>
             <?php foreach ($data as $row): ?>
                 <tr>
-                    <td align="center"><?php echo $row['nama_supplier'] ?></td>
-                    <td align="center"><?php echo $row['stock_awal'] ?></td>
-                    <td align="center"><?php echo $row['tanggal_masuk'] ?></td>
-                    <td align="center"><?php echo $row['jumlah_masuk'] ?></td>
-                    <td align="center"><?php echo $row['tanggal_keluar'] ?></td>
-                    <td align="center"><?php echo $row['jumlah_keluar'] ?></td>
-                    <td align="center"><?php echo $row['stock_akhir'] ?></td>
-                    <td align="center"><?php echo $row['keterangan'] ?></td>
-                    <td align="center"><?php echo $row['tanda_tangan_pemakai'] ?></td>
+                    <td align="center"><?php echo $row['nama_supplier']; ?></td>
+                    <td align="center">
+                        <?php echo $row['stock_awal'] != '' ? number_format((float) $row['stock_awal'], 2, '.', '') : ''; ?>
+                    </td>
+                    <td align="center"><?php echo $row['tanggal_masuk']; ?></td>
+                    <td align="center">
+                        <?php echo $row['jumlah_masuk'] != '' ? number_format((float) $row['jumlah_masuk'], 2, '.', '') : ''; ?>
+                    </td>
+                    <td align="center"><?php echo $row['tanggal_keluar']; ?></td>
+                    <td align="center">
+                        <?php echo $row['jumlah_keluar'] != '' ? number_format((float) $row['jumlah_keluar'], 2, '.', '') : ''; ?>
+                    </td>
+                    <td align="center">
+                        <?php echo $row['stock_akhir'] != '' ? number_format((float) $row['stock_akhir'], 2, '.', '') : ''; ?>
+                    </td>
+                    <td align="center"><?php echo $row['keterangan']; ?></td>
+                    <td align="center"><?php echo $row['tanda_tangan_pemakai']; ?></td>
                 </tr>
+
             <?php endforeach; ?>
         </tbody>
     </table>
