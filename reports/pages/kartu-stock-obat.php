@@ -1,6 +1,9 @@
 <?php
+
+    // Koneksi SQL Server
     include '../../koneksi.php';
 
+    // Koneksi DB2
     $hostname = "10.0.0.21";
                              // $database = "NOWTEST"; // SERVER NOW 20
     $database    = "NOWPRD"; // SERVER NOW 22
@@ -10,7 +13,7 @@
     $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
     // $conn1 = db2_pconnect($conn_string,'', '');
     $conn1 = db2_connect($conn_string, '', '');
-    ini_set("error_reporting", 1);
+    ini_set("error_reporting", 0);
 
     // Data Dari POST
     $tglawal   = $_POST['awal'];
@@ -34,6 +37,7 @@
     $header_ukuran      = "0 Kg";
     $data               = [];
 
+    // Stock awal hasil correction tanggal 15 januari 2025
     $query_stock_awal = sqlsrv_query($con, "SELECT stock_awal
     FROM db_finishing.tbl_obat
     WHERE kode='$kode_obat'");
@@ -45,7 +49,6 @@
     }
 
     // Total Masuk
-
     $query_masuk = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
     FROM STOCKTRANSACTION
     WHERE (TEMPLATECODE ='304')
@@ -64,7 +67,6 @@
     }
 
     // Total Keluar
-
     $query_keluar = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
     FROM STOCKTRANSACTION
     WHERE (TEMPLATECODE ='120')
@@ -82,8 +84,7 @@
         $total_keluar = (float) ($fetch_query_keluar['TOTAL'] / 1000);
     }
 
-    // Stock Awal
-
+    // Stock awal kalkulasi
     if ($tglawal == '2025-01-15') {
         $total_masuk  = 0;
         $total_keluar = 0;
@@ -96,9 +97,10 @@
         ' total keluar: ' . $total_keluar .
         ' stock awal: ' . $stock_awal;
 
+    // Kalau mau makesure kalkulasi stock awal
     // echo $informasi;
 
-    // Execution query data
+    // List data
     $query_data = "SELECT * FROM STOCKTRANSACTION WHERE
         (TEMPLATECODE ='304'
         OR TEMPLATECODE ='120')
@@ -122,7 +124,6 @@
         $tanda_tangan_pemakai = '';
 
         // Tanggal Masuk , Tanggal Keluar, Jumlah Masuk, Jumlah Keluar
-
         if ($row['TEMPLATECODE'] === '304') {
             $tanggal_masuk = $row['TRANSACTIONDATE'];
             $jumlah_masuk  = (float) $row['USERPRIMARYQUANTITY'];
@@ -136,11 +137,9 @@
         }
 
         // Keterangan
-
         $keterangan = $row['ORDERCODE'];
 
         // Array Data
-
         $data[] = [
             'nama_supplier'        => $nama_supplier,
             'stock_awal'           => $stock_awal,
