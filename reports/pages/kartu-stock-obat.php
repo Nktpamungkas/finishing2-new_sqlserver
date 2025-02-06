@@ -169,35 +169,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Stok Obat Finishing</title>
     <style>
+        tr {
+            border-bottom: 1px solid black;
+        }
+
         @page {
             size: auto;
-            margin: 2cm 1cm;
+            margin: 0.5cm;
         }
 
         @media print {
+            thead {
+                display: table-header-group;
+            }
+
             body {
                 font-size: 12px;
                 -webkit-print-color-adjust: exact;
                 margin: 1cm 1cm 1cm 1cm;
-            }
-
-            td, th {
-                padding: 5px;
             }
         }
 
     </style>
 </head>
 <body>
-    <table border="1" width="100%" style="border-collapse: collapse;">
+<table border="1" width="100%" style="border-collapse: collapse;">
+    <thead>
         <tr>
             <td width="10%" align="center">
                 <img src="../../images/ITTI_Logo Option_Logogram ITTI.png" width="70">
             </td>
-            <td width="60%" align="center">
+            <td width="50%" align="center" colspan="5" >
                 <strong style="font-size:x-large;">KARTU STOK</strong>
             </td>
-            <td width="30%">
+            <td width="40%" colspan="3">
                 <table>
                     <tr>
                         <td>No. Form</td>
@@ -217,54 +222,53 @@
                 </table>
             </td>
         </tr>
-    </table>
-    <br>
-    <table>
         <tr>
-            <td>Nama Barang</td>
-            <td>:</td>
-            <td>
-                <?php echo $nama_obat ?>
+            <td colspan="9">
+                <table>
+                    <tr>
+                        <td>Nama Barang</td>
+                        <td>:</td>
+                        <td>
+                            <?php echo $nama_obat ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Type / Ukuran</td>
+                        <td>:</td>
+                        <td>
+                            <?php echo $kode_obat ?>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
-            <td>Type / Ukuran</td>
-            <td>:</td>
-            <td>
-                <?php echo $kode_obat ?>
-            </td>
+            <td align="center" style="width: 15%; font-weight: bold;">Nama Supplier</td>
+            <td align="center" style="width: 7%; font-weight: bold;">Stock Awal</td>
+            <td align="center" style="width: 12%; font-weight: bold;">Tanggal Masuk</td>
+            <td align="center" style="width: 8%; font-weight: bold;">Jumlah</td>
+            <td align="center" style="width: 12%; font-weight: bold;">Tanggal Keluar</td>
+            <td align="center" style="width: 8%; font-weight: bold;">Jumlah</td>
+            <td align="center" style="width: 7%; font-weight: bold;">Stock Akhir</td>
+            <td align="center" style="width: 10%; font-weight: bold;">Keterangan</td>
+            <td align="center" style="width: 5%; font-weight: bold;">Tanda Tangan Pemakai</td>
         </tr>
-    </table>
-    <br>
-    <table border="1" width="100%" style="border-collapse: collapse;">
-        <thead>
+    </thead>
+    <tbody>
+        <?php foreach ($data as $row): ?>
             <tr>
-                <td align="center" style="width: 7%; font-weight: bold;">Nama Supplier</td>
-                <td align="center" style="width: 10%; font-weight: bold;">Stock Awal</td>
-                <td align="center" style="width: 12%; font-weight: bold;">Tanggal Masuk</td>
-                <td align="center" style="width: 10%; font-weight: bold;">Jumlah</td>
-                <td align="center" style="width: 12%; font-weight: bold;">Tanggal Keluar</td>
-                <td align="center" style="width: 10%; font-weight: bold;">Jumlah</td>
-                <td align="center" style="width: 10%; font-weight: bold;">Stock Akhir</td>
-                <td align="center" style="width: 15%; font-weight: bold;">Keterangan</td>
-                <td align="center" style="width: 10%; font-weight: bold;">Tanda Tangan Pemakai</td>
+                <td align="center"><?php echo $row['nama_supplier']; ?></td>
+                <td align="center"><?php echo $row['stock_awal'] != '' ? formatNumber($row['stock_awal']) : ''; ?></td>
+                <td align="center"><?php echo $row['tanggal_masuk']; ?></td>
+                <td align="center"><?php echo $row['jumlah_masuk'] != '' ? formatNumber($row['jumlah_masuk']) : ''; ?></td>
+                <td align="center"><?php echo $row['tanggal_keluar']; ?></td>
+                <td align="center"><?php echo $row['jumlah_keluar'] != '' ? formatNumber($row['jumlah_keluar']) : ''; ?></td>
+                <td align="center"><?php echo $row['stock_akhir'] != '' ? formatNumber($row['stock_akhir']) : ''; ?></td>
+                <td align="center"><?php echo $row['keterangan']; ?></td>
+                <td align="center"><?php echo $row['tanda_tangan_pemakai']; ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($data as $row): ?>
-                <tr>
-                    <td align="center"><?php echo $row['nama_supplier']; ?></td>
-                    <td align="center"><?php echo $row['stock_awal'] != '' ? formatNumber($row['stock_awal']) : ''; ?></td>
-                    <td align="center"><?php echo $row['tanggal_masuk']; ?></td>
-                    <td align="center"><?php echo $row['jumlah_masuk'] != '' ? formatNumber($row['jumlah_masuk']) : ''; ?></td>
-                    <td align="center"><?php echo $row['tanggal_keluar']; ?></td>
-                    <td align="center"><?php echo $row['jumlah_keluar'] != '' ? formatNumber($row['jumlah_keluar']) : ''; ?></td>
-                    <td align="center"><?php echo $row['stock_akhir'] != '' ? formatNumber($row['stock_akhir']) : ''; ?></td>
-                    <td align="center"><?php echo $row['keterangan']; ?></td>
-                    <td align="center"><?php echo $row['tanda_tangan_pemakai']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 </body>
 </html>
