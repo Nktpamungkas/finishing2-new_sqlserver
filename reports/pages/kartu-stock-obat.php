@@ -116,11 +116,12 @@
         AND DECOSUBCODE03 ='$DECOSUBCODE03'
         AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'
         AND CREATIONDATETIME > '2025-01-15 13:00:00'
-        ORDER BY TRANSACTIONDATE ASC";
+        ORDER BY CREATIONDATETIME ASC";
 
     $exec_query_data = db2_exec($conn1, $query_data);
 
     while ($row = db2_fetch_assoc($exec_query_data)) {
+        // $nama_supplier = $row['CREATIONDATETIME'];
         $nama_supplier        = '';
         $tanggal_masuk        = '';
         $jumlah_masuk         = '';
