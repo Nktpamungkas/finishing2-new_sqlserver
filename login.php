@@ -17,7 +17,7 @@ if ($_POST) { //login user
     $_SESSION['lvl'] = $level;
     $r = sqlsrv_fetch_array($sql);
     $_SESSION['sts'] = $r['status'];
-    $_SESSION['dept'] = $r['dept'];
+    $_SESSION['dpt'] = $r['dept'];
     $_SESSION['start'] = time(); // Taking now logged in time.
     // Ending a session in 30 minutes from the starting time.
     $_SESSION['expire'] = $_SESSION['start'] + (300 * 60);
