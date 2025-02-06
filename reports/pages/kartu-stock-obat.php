@@ -2,7 +2,7 @@
 
     function formatNumber($number)
     {
-        return rtrim(rtrim(number_format($number, 2, '.', ''), '0'), '.');
+        return rtrim(rtrim(number_format($number, 3, '.', ''), '0'), '.');
     }
 
     // Koneksi SQL Server
