@@ -77,14 +77,16 @@
                 }
             ?>
 
-            <select name="nama_obat" id="nama_obat" required>
-                <option value="">Pilih</option>
-                  <?php
-                      while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                          echo '<option value="' . $row['kode'] . '">(' . $row['kode'] . ') ' . $row['name'] . '</option>';
-                      }
-                  ?>
+            <select name="kode_obat" id="kode_obat" required onchange="updateHiddenInput(this)">
+              <option value="">Pilih</option>
+              <?php
+                  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                      echo '<option value="' . $row['kode'] . '" data-name="' . $row['name'] . '">(' . $row['kode'] . ') ' . $row['name'] . '</option>';
+                  }
+              ?>
             </select>
+
+            <input type="hidden" name="nama_obat" id="nama_obat"/>
         </td>
       </tr>
       <tr valign="middle">
@@ -104,5 +106,12 @@
     </table>
   </form>
 </body>
-
 </html>
+
+<script>
+    function updateHiddenInput(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const nama_obat = document.getElementById('nama_obat');
+        nama_obat.value = selectedOption.getAttribute('data-name');
+    }
+</script>

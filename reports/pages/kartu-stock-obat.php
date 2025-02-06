@@ -1,4 +1,14 @@
 <?php
+
+    function formatNumber($number)
+    {
+        return rtrim(rtrim(number_format($number, 3, '.', ''), '0'), '.');
+    }
+
+    // Koneksi SQL Server
+    include '../../koneksi.php';
+
+    // Koneksi DB2
     $hostname = "10.0.0.21";
                              // $database = "NOWTEST"; // SERVER NOW 20
     $database    = "NOWPRD"; // SERVER NOW 22
@@ -10,101 +20,195 @@
     $conn1 = db2_connect($conn_string, '', '');
     ini_set("error_reporting", 0);
 
+    // Data Dari POST
     $tglawal   = $_POST['awal'];
     $tglakhir  = $_POST['akhir'];
+    $kode_obat = $_POST['kode_obat'];
     $nama_obat = $_POST['nama_obat'];
 
-?>
-<?php
-    $query = "SELECT
-                s.TRANSACTIONNUMBER,
-                s.TRANSACTIONDATE AS TGL,
-                s.TRANSACTIONTIME AS WAKTU,
-                p.LONGDESCRIPTION AS NAMA_BARANG,
-                CASE
-                    WHEN TRIM(s.BASEPRIMARYUOMCODE) = 'm' OR TRIM(s.BASEPRIMARYUOMCODE) = 'un' THEN floor(SUM(s.BASEPRIMARYQUANTITY))
-                    ELSE floor(SUM(s.USERPRIMARYQUANTITY))
-                END AS QTY,
-                CASE
-                    WHEN TRIM(s.BASEPRIMARYUOMCODE) = 'm' THEN s.BASEPRIMARYUOMCODE
-                    ELSE s.USERPRIMARYUOMCODE
-                END AS SATUAN,
-                CASE
-                    WHEN s.TEMPLATECODE = '101' THEN 'MASUK 101'
-                    WHEN s.TEMPLATECODE = 'OPN' THEN 'MASUK OPN'
-                    WHEN s.TEMPLATECODE = 'QCT' THEN 'MASUK QCT'
-                    WHEN s.TEMPLATECODE = '201' THEN 'KELUAR 201'
-                    WHEN s.TEMPLATECODE = '098' THEN 'KELUAR 098'
-                END AS TRANSAKSI,
-                CASE
-                    WHEN s.ORDERCODE IS NULL THEN s.TEMPLATECODE
-                    ELSE s.TEMPLATECODE || ' - ' || s.ORDERCODE
-                END	AS ORDERCODE_TEMPLATE
-            FROM
-                STOCKTRANSACTION s
-            LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = s.ITEMTYPECODE
-                                AND p.SUBCODE01 = s.DECOSUBCODE01
-                                AND p.SUBCODE02 = s.DECOSUBCODE02
-                                AND p.SUBCODE03 = s.DECOSUBCODE03
-                                AND p.SUBCODE04 = s.DECOSUBCODE04
-                                AND p.SUBCODE05 = s.DECOSUBCODE05
-                                AND p.SUBCODE06 = s.DECOSUBCODE06
-            WHERE
-                s.ITEMTYPECODE ='SPR'
-                AND s.DECOSUBCODE01 = 'DIT'
-                AND TRIM(s.DECOSUBCODE01) || '-' ||
-                    TRIM(s.DECOSUBCODE02) || '-' ||
-                    TRIM(s.DECOSUBCODE03) || '-' ||
-                    TRIM(s.DECOSUBCODE04) || '-' ||
-                    TRIM(s.DECOSUBCODE05) || '-' ||
-                    TRIM(s.DECOSUBCODE06)  = '$kode_barang'
-                AND (s.TEMPLATECODE = '101' OR s.TEMPLATECODE = 'OPN' OR s.TEMPLATECODE = 'QCT' OR s.TEMPLATECODE = '201' OR s.TEMPLATECODE = '098')
-                AND (s.TRANSACTIONDATE) BETWEEN '$date1' AND '$date2'
-            GROUP BY
-                s.TRANSACTIONNUMBER,
-                s.TRANSACTIONDATE,
-                s.TRANSACTIONTIME,
-                p.LONGDESCRIPTION,
-                s.USERPRIMARYUOMCODE,
-                s.BASEPRIMARYQUANTITY,
-                s.BASEPRIMARYUOMCODE,
-                s.TEMPLATECODE,
-                s.ORDERCODE
-            ORDER BY
-                s.TRANSACTIONNUMBER
-                -- s.TRANSACTIONDATE,
-                -- s.TRANSACTIONTIME
-            ASC";
-    $q_stock_transaction         = db2_exec($conn1, $query);
-    $q_stock_transaction_history = db2_exec($conn1, $query);
-?>
-<?php
-    $d_stock_transaction = db2_fetch_assoc($q_stock_transaction);
+    $kode_obat_value = explode('-', $kode_obat);
+    $DECOSUBCODE01   = $kode_obat_value[0];
+    $DECOSUBCODE02   = $kode_obat_value[1];
+    $DECOSUBCODE03   = $kode_obat_value[2];
+
+    // Deklarasi Awal
+    $stock_awal    = 0;
+    $stock_akhir   = 0;
+    $stock_awal_db = 0;
+    $total_masuk   = 0;
+    $total_keluar  = 0;
+
+    $header_nama_barang = null;
+    $header_ukuran      = "0 Kg";
+    $data               = [];
+
+    // Stock awal hasil correction tanggal 15 januari 2025
+    $query_stock_awal = sqlsrv_query($con, "SELECT stock_awal
+    FROM db_finishing.tbl_obat
+    WHERE kode='$kode_obat'");
+
+    $row_query_stock_awal = sqlsrv_fetch_array($query_stock_awal, SQLSRV_FETCH_ASSOC);
+
+    if ($row_query_stock_awal) {
+        $stock_awal_db = $row_query_stock_awal['stock_awal'];
+    }
+
+    // Total Masuk
+    $query_masuk = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
+    FROM STOCKTRANSACTION
+    WHERE (TEMPLATECODE ='304')
+    AND LOGICALWAREHOUSECODE ='M512'
+    AND DECOSUBCODE01 ='$DECOSUBCODE01'
+    AND DECOSUBCODE02 ='$DECOSUBCODE02'
+    AND DECOSUBCODE03 ='$DECOSUBCODE03'
+    AND TRANSACTIONDATE BETWEEN '2025-01-15' AND '$tglawal'
+    AND CREATIONDATETIME > '2025-01-15 13:00:00'";
+
+    $exec_query_masuk  = db2_exec($conn1, $query_masuk);
+    $fetch_query_masuk = db2_fetch_assoc($exec_query_masuk);
+
+    if ($fetch_query_masuk) {
+        $total_masuk = (float) $fetch_query_masuk['TOTAL'];
+    }
+
+    // Total Keluar
+    $query_keluar = "SELECT SUM(USERPRIMARYQUANTITY) AS TOTAL
+    FROM STOCKTRANSACTION
+    WHERE (TEMPLATECODE ='120')
+    AND LOGICALWAREHOUSECODE ='M512'
+    AND DECOSUBCODE01 ='$DECOSUBCODE01'
+    AND DECOSUBCODE02 ='$DECOSUBCODE02'
+    AND DECOSUBCODE03 ='$DECOSUBCODE03'
+    AND TRANSACTIONDATE BETWEEN '2025-01-15' AND '$tglawal'
+    AND CREATIONDATETIME > '2025-01-15 13:00:00'";
+
+    $exec_query_keluar  = db2_exec($conn1, $query_keluar);
+    $fetch_query_keluar = db2_fetch_assoc($exec_query_keluar);
+
+    if ($fetch_query_keluar) {
+        $total_keluar = (float) ($fetch_query_keluar['TOTAL'] / 1000);
+    }
+
+    // Stock awal kalkulasi
+    if ($tglawal == '2025-01-15') {
+        $total_masuk  = 0;
+        $total_keluar = 0;
+    }
+
+    $stock_awal = ($stock_awal_db + $total_masuk) - $total_keluar;
+
+    $informasi = 'Informasi akumulasi stock awal dari 2025-01-15 - ' . $tglawal . ', stock awal db : ' . $stock_awal_db .
+        ' total masuk: ' . $total_masuk .
+        ' total keluar: ' . $total_keluar .
+        ' stock awal: ' . $stock_awal;
+
+    // Kalau mau makesure kalkulasi stock awal
+    // echo $informasi;
+
+    // List data
+    $query_data = "SELECT * FROM STOCKTRANSACTION WHERE
+        (TEMPLATECODE ='304'
+        OR TEMPLATECODE ='120'
+        OR TEMPLATECODE='OPN')
+        AND LOGICALWAREHOUSECODE ='M512'
+        AND DECOSUBCODE01 ='$DECOSUBCODE01'
+        AND DECOSUBCODE02 ='$DECOSUBCODE02'
+        AND DECOSUBCODE03 ='$DECOSUBCODE03'
+        AND TRANSACTIONDATE BETWEEN '$tglawal' AND '$tglakhir'
+        AND CREATIONDATETIME > '2025-01-15 13:00:00'
+        ORDER BY CREATIONDATETIME ASC";
+
+    $exec_query_data = db2_exec($conn1, $query_data);
+
+    while ($row = db2_fetch_assoc($exec_query_data)) {
+        // $nama_supplier = $row['CREATIONDATETIME'];
+        $nama_supplier        = '';
+        $tanggal_masuk        = '';
+        $jumlah_masuk         = '';
+        $tanggal_keluar       = '';
+        $jumlah_keluar        = '';
+        $keterangan           = '';
+        $tanda_tangan_pemakai = '';
+
+        // Tanggal Masuk , Tanggal Keluar, Jumlah Masuk, Jumlah Keluar
+        if ($row['TEMPLATECODE'] === '304' || $row['TEMPLATECODE'] === 'OPN') {
+            $tanggal_masuk = $row['TRANSACTIONDATE'];
+            $jumlah_masuk  = (float) $row['USERPRIMARYQUANTITY'];
+
+            $stock_akhir = $stock_awal + $jumlah_masuk;
+        } else if ($row['TEMPLATECODE'] === '120') {
+            $tanggal_keluar = $row['TRANSACTIONDATE'];
+            $jumlah_keluar  = (float) ($row['USERPRIMARYQUANTITY'] / 1000);
+
+            $stock_akhir = $stock_awal - $jumlah_keluar;
+        }
+
+        // Keterangan
+        $keterangan = $row['ORDERCODE'];
+
+        // Array Data
+        $data[] = [
+            'nama_supplier'        => $nama_supplier,
+            'stock_awal'           => $stock_awal,
+            'tanggal_masuk'        => $tanggal_masuk,
+            'jumlah_masuk'         => $jumlah_masuk,
+            'tanggal_keluar'       => $tanggal_keluar,
+            'jumlah_keluar'        => $jumlah_keluar,
+            'stock_akhir'          => $stock_akhir,
+            'keterangan'           => $keterangan,
+            'tanda_tangan_pemakai' => $tanda_tangan_pemakai,
+        ];
+
+        $stock_awal = $stock_akhir;
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kartu Stok</title>
-</head>
+    <title>Kartu Stok Obat Finishing</title>
+    <style>
+        tr {
+            border-bottom: 1px solid black;
+        }
 
+        @page {
+            size: auto;
+            margin: 0.5cm;
+        }
+
+        @media print {
+            thead {
+                display: table-header-group;
+            }
+
+            body {
+                font-size: 12px;
+                -webkit-print-color-adjust: exact;
+                margin: 1cm 1cm 1cm 1cm;
+            }
+        }
+
+    </style>
+</head>
 <body>
-    <table border="1" width="100%" style="border-collapse: collapse;">
+<table border="1" width="100%" style="border-collapse: collapse;">
+    <thead>
         <tr>
             <td width="10%" align="center">
-                <img src="<?php echo base_url(); ?>assets\images\ITTI_Logo Option_Logogram ITTI.png" width="70">
+                <img src="../../images/ITTI_Logo Option_Logogram ITTI.png" width="70">
             </td>
-            <td width="60%" align="center">
+            <td width="50%" align="center" colspan="5" >
                 <strong style="font-size:x-large;">KARTU STOK</strong>
             </td>
-            <td width="30%">
+            <td width="40%" colspan="3">
                 <table>
                     <tr>
                         <td>No. Form</td>
                         <td>:</td>
-                        <td>19-08B</td>
+                        <td>19-08</td>
                     </tr>
                     <tr>
                         <td>No. Revisi</td>
@@ -114,188 +218,58 @@
                     <tr>
                         <td>Tgl. Terbit</td>
                         <td>:</td>
-                        <td>29-12-18</td>
+                        <td>27 Februari 2006</td>
                     </tr>
                 </table>
             </td>
         </tr>
-    </table>
-    <br>
-    <table>
         <tr>
-            <td>Nama barang</td>
-            <td>:</td>
-            <td><?php echo $d_stock_transaction['NAMA_BARANG']; ?></td>
+            <td colspan="9">
+                <table>
+                    <tr>
+                        <td>Nama Barang</td>
+                        <td>:</td>
+                        <td>
+                            <?php echo $nama_obat ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Type / Ukuran</td>
+                        <td>:</td>
+                        <td>
+                            <?php echo $kode_obat ?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
         </tr>
         <tr>
-            <td>Satuan</td>
-            <td>:</td>
-            <td><?php echo $d_stock_transaction['SATUAN']; ?></td>
+            <td align="center" style="width: 15%; font-weight: bold;">Nama Supplier</td>
+            <td align="center" style="width: 7%; font-weight: bold;">Stock Awal</td>
+            <td align="center" style="width: 12%; font-weight: bold;">Tanggal Masuk</td>
+            <td align="center" style="width: 8%; font-weight: bold;">Jumlah</td>
+            <td align="center" style="width: 12%; font-weight: bold;">Tanggal Keluar</td>
+            <td align="center" style="width: 8%; font-weight: bold;">Jumlah</td>
+            <td align="center" style="width: 7%; font-weight: bold;">Stock Akhir</td>
+            <td align="center" style="width: 10%; font-weight: bold;">Keterangan</td>
+            <td align="center" style="width: 5%; font-weight: bold;">Tanda Tangan Pemakai</td>
         </tr>
-        <tr>
-            <td>Stock Minimum</td>
-            <td>:</td>
-            <?php
-                $q_min_stok = db2_exec($conn1, "SELECT * FROM ITEMWAREHOUSELINK WHERE ITEMTYPECODE ='SPR'
-                                                                                        AND SUBCODE01 = 'DIT'
-                                                                                        AND TRIM(SUBCODE01) || '-' ||
-                                                                                            TRIM(SUBCODE02) || '-' ||
-                                                                                            TRIM(SUBCODE03) || '-' ||
-                                                                                            TRIM(SUBCODE04) || '-' ||
-                                                                                            TRIM(SUBCODE05) || '-' ||
-                                                                                            TRIM(SUBCODE06)  = '$kode_barang'
-                                                                                    AND LOGICALWAREHOUSECODE = 'M231'");
-                $row_min_stok = db2_fetch_assoc($q_min_stok);
-            ?>
-            <td><?php echo number_format($row_min_stok['SAFETYSTOCK'], 0); ?></td>
-        </tr>
-        <tr>
-            <td>Kelompok</td>
-            <td>:</td>
-            <td>...</td>
-        </tr>
-    </table>
-    <br>
-    <table border="1" width="100%" style="border-collapse: collapse;">
-        <thead>
+    </thead>
+    <tbody>
+        <?php foreach ($data as $row): ?>
             <tr>
-                <td align="center">Tgl.</td>
-                <td align="center">Stock Awal</td>
-                <td align="center">Quantity Penerimaan</td>
-                <td align="center">Quantity Pengeluaran</td>
-                <td align="center">Stock Akhir</td>
-                <td align="center">Surat Jalan/Bon Pengambilan barang</td>
-                <td align="center">Nama</td>
-                <td align="center">Paraf</td>
-                <td align="center">Keterangan</td>
+                <td align="center"><?php echo $row['nama_supplier']; ?></td>
+                <td align="center"><?php echo $row['stock_awal'] != '' ? formatNumber($row['stock_awal']) : ''; ?></td>
+                <td align="center"><?php echo $row['tanggal_masuk']; ?></td>
+                <td align="center"><?php echo $row['jumlah_masuk'] != '' ? formatNumber($row['jumlah_masuk']) : ''; ?></td>
+                <td align="center"><?php echo $row['tanggal_keluar']; ?></td>
+                <td align="center"><?php echo $row['jumlah_keluar'] != '' ? formatNumber($row['jumlah_keluar']) : ''; ?></td>
+                <td align="center"><?php echo $row['stock_akhir'] != '' ? formatNumber($row['stock_akhir']) : ''; ?></td>
+                <td align="center"><?php echo $row['keterangan']; ?></td>
+                <td align="center"><?php echo $row['tanda_tangan_pemakai']; ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php
-                $tanggal_hasil = date("Y-m-d", strtotime($date1 . " -1 day"));
-                $q_qtyawal     = db2_exec($conn1, "SELECT
-                                                    SUM(QTY_AWAL) AS QTYAWAL
-                                                FROM
-                                                (SELECT
-                                                    CASE
-                                                        WHEN s.TEMPLATECODE = '101' OR s.TEMPLATECODE = 'OPN' OR s.TEMPLATECODE = 'QCT' THEN
-                                                            CASE
-                                                                WHEN TRIM(s.BASEPRIMARYUOMCODE) = 'm' OR TRIM(s.BASEPRIMARYUOMCODE) = 'un' THEN floor(SUM(s.BASEPRIMARYQUANTITY))
-                                                                ELSE floor(SUM(s.USERPRIMARYQUANTITY))
-                                                            END
-                                                        WHEN s.TEMPLATECODE = '201' OR s.TEMPLATECODE = '098' THEN -
-                                                            CASE
-                                                                WHEN TRIM(s.BASEPRIMARYUOMCODE) = 'm' THEN floor(SUM(s.BASEPRIMARYQUANTITY))
-                                                                ELSE floor(SUM(s.USERPRIMARYQUANTITY))
-                                                            END
-                                                    END AS QTY_AWAL
-                                                FROM
-                                                    STOCKTRANSACTION s
-                                                LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = s.ITEMTYPECODE
-                                                                    AND p.SUBCODE01 = s.DECOSUBCODE01
-                                                                    AND p.SUBCODE02 = s.DECOSUBCODE02
-                                                                    AND p.SUBCODE03 = s.DECOSUBCODE03
-                                                                    AND p.SUBCODE04 = s.DECOSUBCODE04
-                                                                    AND p.SUBCODE05 = s.DECOSUBCODE05
-                                                                    AND p.SUBCODE06 = s.DECOSUBCODE06
-                                                WHERE
-                                                    s.ITEMTYPECODE ='SPR'
-                                                    AND s.DECOSUBCODE01 = 'DIT'
-                                                    AND TRIM(s.DECOSUBCODE01) || '-' ||
-                                                        TRIM(s.DECOSUBCODE02) || '-' ||
-                                                        TRIM(s.DECOSUBCODE03) || '-' ||
-                                                        TRIM(s.DECOSUBCODE04) || '-' ||
-                                                        TRIM(s.DECOSUBCODE05) || '-' ||
-                                                        TRIM(s.DECOSUBCODE06)  = '$kode_barang'
-                                                    AND (s.TEMPLATECODE = '101' OR s.TEMPLATECODE = 'OPN' OR s.TEMPLATECODE = 'QCT' OR s.TEMPLATECODE = '201' OR s.TEMPLATECODE = '098')
-                                                    AND (s.TRANSACTIONDATE) BETWEEN '2024-01-10' AND '$tanggal_hasil'
-                                                GROUP BY
-                                                    s.TEMPLATECODE,
-                                                    s.BASEPRIMARYUOMCODE)");
-                $row_qtyawal = db2_fetch_assoc($q_qtyawal);
-            ?>
-<?php $no = 1;while ($row_stock_transaction = db2_fetch_assoc($q_stock_transaction_history)): ?>
-            <tr>
-                <td align="center"><?php echo $row_stock_transaction['TGL']; ?></td> <!-- Tgl -->
-
-                <td align="center">
-                    <?php
-                        if ($no == 1) {
-                            // Pertama Kali Deklarasi Debit
-                            if ($row_qtyawal['QTYAWAL']) {
-                                echo $saldo = $row_qtyawal['QTYAWAL'];
-                            } else {
-                                echo $saldo = '';
-                            }
-                        } else {
-                            echo number_format($saldo);
-                        }
-                    ?>
-                </td> <!-- Stock Awal -->
-
-                <td align="center">
-                    <?php if (strpos($row_stock_transaction['TRANSAKSI'], 'MASUK') !== false): ?>
-<?php
-    echo $row_stock_transaction['QTY'];
-    $saldo_masuk = $row_stock_transaction['QTY'];
-?>
-<?php endif; ?>
-                </td> <!-- Quantity Penerimaan -->
-
-                <td align="center">
-                    <?php if (strpos($row_stock_transaction['TRANSAKSI'], 'KELUAR') !== false): ?>
-<?php
-    echo $row_stock_transaction['QTY'];
-    $saldo_keluar = $row_stock_transaction['QTY'];
-?>
-<?php endif; ?>
-                </td align="center"> <!-- Quantity Pengeluaran -->
-
-                <td align="center">
-                    <?php
-                        if ($no == 1) {
-                            // Pertama Kali Deklarasi Debit
-                            if ($row_qtyawal['QTYAWAL']) {
-                                if (strpos($row_stock_transaction['TRANSAKSI'], 'MASUK') !== false) {
-                                    $debit = $saldo + $row_stock_transaction['QTY'];
-                                    $saldo = $saldo + $row_stock_transaction['QTY'];
-                                    echo number_format($saldo);
-                                } elseif (strpos($row_stock_transaction['TRANSAKSI'], 'KELUAR') !== false) {
-                                    $debit = $saldo - $row_stock_transaction['QTY'];
-                                    $saldo = $saldo - $row_stock_transaction['QTY'];
-                                    echo number_format($saldo);
-                                }
-                            } else {
-                                $debit = $row_stock_transaction['QTY'];
-                                $saldo = $row_stock_transaction['QTY'];
-                                echo number_format($saldo);
-                            }
-                        } else {
-                            if (strpos($row_stock_transaction['TRANSAKSI'], 'MASUK') !== false) {
-                                // Jika ada STOK MASUK
-                                $debit = $debit + $row_stock_transaction['QTY'];
-                                $saldo = $saldo + $row_stock_transaction['QTY'];
-                                echo number_format($saldo);
-                            } elseif (strpos($row_stock_transaction['TRANSAKSI'], 'KELUAR') !== false) {
-                                // Jika ada STOK KELUAR
-                                $kredit = 0;
-                                $kredit = $kredit + $row_stock_transaction['QTY'];
-                                $saldo  = $saldo - $row_stock_transaction['QTY'];
-                                echo number_format($saldo);
-                            }
-                        }
-                    ?>
-                </td> <!-- Stock Akhir -->
-
-                <td align="center"><?php echo $row_stock_transaction['ORDERCODE_TEMPLATE']; ?></td> <!-- Surat Jalan/Bon Pengambilan barang -->
-                <td align="center">&nbsp;</td> <!-- Nama -->
-                <td align="center">&nbsp;</td> <!-- Paraf-->
-                <td align="center"><?php echo $row_stock_transaction['TRANSACTIONNUMBER']; ?></td> <!-- Keterangan -->
-            </tr>
-            <?php $no++; ?>
-<?php endwhile; ?>
-        </tbody>
-    </table>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 </body>
-
 </html>
