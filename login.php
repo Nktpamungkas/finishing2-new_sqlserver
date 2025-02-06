@@ -17,6 +17,7 @@ if ($_POST) { //login user
     $_SESSION['lvl'] = $level;
     $r = sqlsrv_fetch_array($sql);
     $_SESSION['sts'] = $r['status'];
+    $_SESSION['dept'] = $r['dept'];
     $_SESSION['start'] = time(); // Taking now logged in time.
     // Ending a session in 30 minutes from the starting time.
     $_SESSION['expire'] = $_SESSION['start'] + (300 * 60);
@@ -117,11 +118,11 @@ if ($_POST) { //login user
                   <table width="200" border="0" align="center">
                     <tr>
                       <td width="108" align="right">Username</td>
-                      <td width="76"><input name="username" type="text" id="username"></td>
+                      <td width="76"><input name="username" type="text" id="username" autocomplete="new-password"></td>
                     </tr>
                     <tr>
                       <td align="right">Password</td>
-                      <td><input name="password" type="password" id="password"></td>
+                      <td><input name="password" type="password" id="password" autocomplete="new-password"></td>
                     </tr>
                     <tr>
                       <td align="right">Level</td>

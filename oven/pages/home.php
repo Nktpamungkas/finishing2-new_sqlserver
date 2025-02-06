@@ -1315,7 +1315,7 @@
                     <td>:</td>
                     <td colspan="2"><select name="acc_kain" id="acc_kain" required>
                             <option value="">Pilih</option>
-                            <?php $qryacc = sqlsrv_query($con, "SELECT nama FROM db_finishing.tbl_staff ORDER BY id ASC");
+                            <?php $qryacc = sqlsrv_query($con, "SELECT nama FROM db_finishing.tbl_staff ORDER BY nama ASC");
                             while ($racc = sqlsrv_fetch_array($qryacc)) {
                                 ?>
                             <option value="<?php echo $racc['nama']; ?>" <?php if ($racc['nama'] == $rw['acc_staff']) {
