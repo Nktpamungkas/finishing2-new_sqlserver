@@ -93,10 +93,12 @@
             <div class="art-nav-inner">
                 <ul class="art-hmenu">
                     <li><a href="../index.php">Main</a></li>
-                    <li><a href="?typekk=NOW" class="active">Masuk</a></li>
-                    <?php if ($_SESSION['lvl'] == "ADM" && $_SESSION['dpt'] == "PPC") { ?>
-                        <li><a href="../schedule/?typekk=NOW">Schedule</a></li>
+                    <?php if ($_SESSION['lvl'] != "Operator") { ?>
+                        <li><a href="?typekk=NOW" class="active">Masuk </a></li>
                     <?php } ?>
+                    <?php if($_SESSION['dpt'] == 'PPC') : ?>
+                        <li><a href="../schedule/?typekk=NOW">Schedule</a></li>
+                    <?php endif; ?>
                     <li><a href="../statusmesin/">Status Mesin</a></li>
                     <!-- <li><a href="../belah-lipat/">Belah &amp; Lipat</a></li> -->
                     <!-- <li><a href="../oven/">Oven</a></li> -->
