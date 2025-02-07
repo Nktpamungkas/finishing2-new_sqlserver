@@ -198,7 +198,7 @@
     <thead>
         <tr>
             <td width="10%" align="center">
-                <img src="../../images/ITTI_Logo Option_Logogram ITTI.png" width="70">
+                <img src="../../images/logo-itti.png" width="70">
             </td>
             <td width="50%" align="center" colspan="5" >
                 <strong style="font-size:x-large;">KARTU STOK</strong>
