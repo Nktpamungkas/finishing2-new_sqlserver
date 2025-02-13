@@ -133,7 +133,12 @@
         // Tanggal Masuk , Tanggal Keluar, Jumlah Masuk, Jumlah Keluar
         if ($row['TEMPLATECODE'] === '304' || $row['TEMPLATECODE'] === 'OPN') {
             $tanggal_masuk = $row['TRANSACTIONDATE'];
-            $jumlah_masuk  = (float) $row['USERPRIMARYQUANTITY'];
+
+            if ($row['TEMPLATECODE'] === 'OPN') {
+                $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'] / 1000;
+            } else if ($row['TEMPLATECODE'] === '304') {
+                $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'];
+            }
 
             $stock_akhir = $stock_awal + $jumlah_masuk;
         } else if ($row['TEMPLATECODE'] === '120') {
