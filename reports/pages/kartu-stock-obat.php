@@ -18,7 +18,7 @@
     $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
     // $conn1 = db2_pconnect($conn_string,'', '');
     $conn1 = db2_connect($conn_string, '', '');
-    ini_set("error_reporting", 0);
+    ini_set("error_reporting", 1);
 
     // Data Dari POST
     $tglawal   = $_POST['awal'];
@@ -135,7 +135,11 @@
             $tanggal_masuk = $row['TRANSACTIONDATE'];
 
             if ($row['TEMPLATECODE'] === 'OPN') {
-                $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'] / 1000;
+                if ($row['USERPRIMARYUOMCODE'] === 'g  ') {
+                    $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'] / 1000;
+                } else if ($row['USERPRIMARYUOMCODE'] === 'kg ') {
+                    $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'];
+                }
             } else if ($row['TEMPLATECODE'] === '304') {
                 $jumlah_masuk = (float) $row['USERPRIMARYQUANTITY'];
             }
