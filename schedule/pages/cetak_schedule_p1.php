@@ -74,7 +74,7 @@ $query_schedule = "SELECT
 						STRING_AGG(TRIM(nokk), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
 						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
 						STRING_AGG(gramasi, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS gramasi,
-						STRING_AGG(personil, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS personil,
+						STRING_AGG ( CONCAT(personil, ' ', FORMAT(CAST(creationdatetime AS DATE), 'dd-MM')), ', ' ) WITHIN GROUP ( ORDER BY lebar ASC, no_order ASC, nodemand ASC ) AS personil,
 						STRING_AGG(catatan, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS catatan,
 						STRING_AGG(kondisikain, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS kondisikain
 					FROM
