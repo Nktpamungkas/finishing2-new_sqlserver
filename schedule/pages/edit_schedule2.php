@@ -216,6 +216,7 @@ if (isset($_POST['SimpanPerubahan'])) {
                         <td style="text-align: center;">No KK</td>
                         <td style="text-align: center;">No. Demand</td>
                         <td style="text-align: center;">No Order</td>
+                        <td style="text-align: center;">Delivery Actual</td>
                         <td style="text-align: center;">Nama Mesin</td>
                         <td style="text-align: center;">Langganan</td>
                         <td style="text-align: center;">Warna</td>
@@ -333,13 +334,25 @@ if (isset($_POST['SimpanPerubahan'])) {
                             </td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['lebar'].' x '. $row['gramasi']); ?></td>
                             <?php
-                             $hanger = db2_exec($conn_db2, "SELECT TRIM(SUBCODE02)||'-' || TRIM(SUBCODE03) AS HANGER FROM PRODUCTIONDEMAND p WHERE p.CODE = '$row[nodemand]'");
+                             $hanger = db2_exec($conn_db2, "SELECT TRIM(SUBCODE02)||'-' || TRIM(SUBCODE03) AS HANGER, ORIGDLVSALORDLINESALORDERCODE, ORIGDLVSALORDERLINEORDERLINE FROM PRODUCTIONDEMAND p WHERE p.CODE = '$row[nodemand]'");
                              $resultHanger = db2_fetch_assoc($hanger)
                             ?>
                             <td style="text-align: center;"><?= htmlspecialchars($resultHanger['HANGER']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nokk']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['nodemand']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['no_order']) ?></td>
+                            <?php
+                                $q_actual_delivery      = db2_exec($conn_db2, "SELECT
+                                                                                COALESCE(s2.CONFIRMEDDELIVERYDATE, s.CONFIRMEDDUEDATE) AS ACTUAL_DELIVERY
+                                                                            FROM
+                                                                                SALESORDER s 
+                                                                            LEFT JOIN SALESORDERDELIVERY s2 ON s2.SALESORDERLINESALESORDERCODE = s.CODE AND s2.SALORDLINESALORDERCOMPANYCODE = s.COMPANYCODE AND s2.SALORDLINESALORDERCOUNTERCODE = s.COUNTERCODE 
+                                                                            WHERE
+                                                                                s2.SALESORDERLINESALESORDERCODE = '$resultHanger[ORIGDLVSALORDLINESALORDERCODE]'
+                                                                                AND s2.SALESORDERLINEORDERLINE = '$resultHanger[ORIGDLVSALORDERLINEORDERLINE]'");
+                                $row_actual_delivery    = db2_fetch_assoc($q_actual_delivery);
+                            ?>
+                            <td style="text-align: center;"><?= $row_actual_delivery['ACTUAL_DELIVERY']; ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['no_mesin']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['langganan']) ?></td>
                             <td style="text-align: center;"><?= htmlspecialchars($row['warna']) ?></td>
