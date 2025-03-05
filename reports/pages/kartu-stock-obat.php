@@ -179,6 +179,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Stok Obat Finishing</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+
         tr {
             border-bottom: 1px solid black;
         }
