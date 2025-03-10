@@ -331,6 +331,9 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 							<td width="12%" rowspan="2" scope="col">
 								<div align="center">Jenis Kain</div>
 							</td>
+							<td width="12%" rowspan="2" scope="col">
+								<div align="center">No Hanger</div>
+							</td>
 							<td width="7%" rowspan="2" scope="col">
 								<div align="center">Lebar x Gramasi</div>
 							</td>
@@ -453,6 +456,15 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 												$dataClean_jenis_kain = implode(',<br> ', $dataUnique_jenis_kain);
 												
 												echo $dataClean_jenis_kain; // Output: DOM2401663
+											?>
+										</div>
+									</td>
+									<td valign="top">
+										<div style="font-size: 8px;">
+											<?php
+												$dataHanger	= db2_exec($conn_db2, "SELECT TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03 FROM PRODUCTIONDEMAND WHERE CODE = '$value2[nodemand]'");
+												$rowHanger	= db2_fetch_assoc($dataHanger);
+												echo $rowHanger['SUBCODE02'].'-'.$rowHanger['SUBCODE03'];
 											?>
 										</div>
 									</td>

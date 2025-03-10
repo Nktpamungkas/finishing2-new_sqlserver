@@ -398,6 +398,7 @@ include('../koneksi.php');
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">BUYER</th>
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO ORDER</th>
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">JENIS KAIN</th>
+				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO HANGER</th>
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">LEBAR X GRAMASI</th>
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">NO WARNA</th>
 				<th style="border:1px solid;vertical-align:middle; font-weight: bold;">WARNA</th>
@@ -583,6 +584,9 @@ include('../koneksi.php');
 															iptip.MACHINECODE
 														ORDER BY p.STEPNUMBER ASC");
 				$row_cekposisikk = db2_fetch_assoc($q_cekposisikk);
+
+				$dataHanger	= db2_exec($conn_db2, "SELECT TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03 FROM PRODUCTIONDEMAND WHERE CODE = '$row_schedule[nodemand]'");
+				$rowHanger	= db2_fetch_assoc($dataHanger);
 				?>
 
 				<tr <?php if ($row_cekposisikk['STATUS_OPERATION'] == 'Closed') { if(TRIM($row_cekposisikk['MACHINECODE']) != TRIM($row_schedule['no_mesin'])){ echo 'style="background-color: #F19CBB" class="blink"'; } } ?>>
@@ -667,6 +671,7 @@ include('../koneksi.php');
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['buyer'] ?></td>
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['no_order'] ?></td>
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['jenis_kain'] ?></td>
+					<td style="border:1px solid;vertical-align:middle;"><?= $rowHanger['SUBCODE02'].'-'.$rowHanger['SUBCODE03']; ?></td>
 					<td style="border:1px solid;vertical-align:middle;"><?= $row_schedule['lebar'] ?> x
 						<?= $row_schedule['gramasi'] ?>
 					</td>
