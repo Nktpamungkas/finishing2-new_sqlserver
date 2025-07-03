@@ -676,20 +676,33 @@
 																		AND b.no_mesin = a.no_mesin
 																	)";
 									}
+									echo "SELECT * FROM db_finishing.tbl_schedule_new a
+																				WHERE nokk = '$idkk' $nourut ";
 									$sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
 																				WHERE nokk = '$idkk' $nourut ");
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
 								?>
-									<?php
-										// CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
-										$cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.[tbl_produksi] 
-										WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
-										$data_proses  = sqlsrv_fetch_array($cek_proses);
-									?>
-									<?php if(empty($data_proses['jml'])) : ?>
-										<option value="<?= $r_demand['nodemand']; ?>" <?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>><?= $r_demand['nodemand']; ?></option>
+									<?php if($_GET['kklanjutan']) : ?>
+										<?php echo $r_demand['nodemand'];?>
+										<option value="<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>" <?php if (isset($_GET['demand']) && $r_demand['nodemand'] == $_GET['demand']) {
+												echo 'selected';
+											} ?>>
+											<?= htmlspecialchars($r_demand['nodemand'], ENT_QUOTES, 'UTF-8'); ?>
+										</option>
+									<?php else : ?>
+										<?php
+											// CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
+											$cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.tbl_produksi WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
+											$data_proses  = sqlsrv_fetch_array($cek_proses,SQLSRV_FETCH_ASSOC);
+											
+										?>
+										<?php if(empty($data_proses['jml'])) : ?>
+										<option value="<?php echo $r_demand['nodemand']; ?>"
+											<?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>>
+											<?php echo $r_demand['nodemand']; ?></option>
+										<?php endif; ?>
 									<?php endif; ?>
-								<?php endwhile; ?>
+									<?php endwhile; ?>
 							</select>
 						<?php } else { ?>
 							<input name="demand" id="demand" type="text" placeholder="Nomor Demand">

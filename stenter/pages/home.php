@@ -879,11 +879,11 @@
                             </option>
                             <?php else : ?>
                             <?php
-                                        // CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
-                                        $cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.tbl_produksi WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
-                                        $data_proses  = sqlsrv_fetch_array($cek_proses,SQLSRV_FETCH_ASSOC);
-                                       
-                                    ?>
+                                // CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
+                                $cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.tbl_produksi WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
+                                $data_proses  = sqlsrv_fetch_array($cek_proses,SQLSRV_FETCH_ASSOC);
+                                
+                            ?>
                             <?php if(empty($data_proses['jml'])) : ?>
                             <option value="<?php echo $r_demand['nodemand']; ?>"
                                 <?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>>
