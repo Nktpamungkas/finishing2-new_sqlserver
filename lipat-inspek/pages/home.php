@@ -110,13 +110,13 @@
 			}
 		} elseif ($_GET['typekk'] == "SCHEDULE") {
 			if ($idkk != "") {
-                if ($_GET['demand'] != "") {
-                    $nomordemand = $_GET['demand'];
-                    $anddemand = "AND nodemand = '$nomordemand'";
-                } else {
-                    $anddemand = "";
-                }
-                // CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
+				if ($_GET['demand'] != "") {
+					$nomordemand = $_GET['demand'];
+					$anddemand = "AND nodemand = '$nomordemand'";
+				} else {
+					$anddemand = "";
+				}
+				// CEK JIKA blm ada nomor urut dan group shift kasih peringatan tidak bisa input saat operator mau proses
 				$q_cekshedule    = sqlsrv_query($con, "SELECT * FROM db_finishing.[tbl_schedule_new] a
 														WHERE 
 														NOT EXISTS (
@@ -144,19 +144,19 @@
 							</script>";
 				}else{
 					if($_GET['operation']){
-                        $andoperation   = "AND operation = '$_GET[operation]'";
-                    }else{
-                        $andoperation   = "";
-                    }
-                    if($_GET['kklanjutan']){
-                        $q_kkmasuk      = sqlsrv_query($con, "SELECT
-                                                                    *
-                                                                FROM
-                                                                    db_finishing.[tbl_schedule_new] a
-                                                                WHERE nokk = '$idkk' $anddemand $andoperation");
-                        $row_kkmasuk    = sqlsrv_fetch_array($q_kkmasuk);
-                        include_once("../now.php");
-                    }else{
+						$andoperation   = "AND operation = '$_GET[operation]'";
+					}else{
+						$andoperation   = "";
+					}
+					if($_GET['kklanjutan']){
+						$q_kkmasuk      = sqlsrv_query($con, "SELECT
+																	*
+																FROM
+																	db_finishing.[tbl_schedule_new] a
+																WHERE nokk = '$idkk' $anddemand $andoperation");
+						$row_kkmasuk    = sqlsrv_fetch_array($q_kkmasuk);
+						include_once("../now.php");
+					}else{
 						// Query Asli di mysql nya
 						// $q_kkmasuk		= sqlsrv_query($con, "SELECT
 						// 											*
@@ -199,7 +199,7 @@
 						include_once("../now.php");
 					}
 				}
-            }
+			}
 		}
 	?>
 	<?php
@@ -354,47 +354,47 @@
 
 			if($_GET['kklanjutan'] != '1'){
 				$mesin = $_POST['no_mesin'];
-                // cek kondisi jika nourut 1 masih ada nokk dan nodemand
+				// cek kondisi jika nourut 1 masih ada nokk dan nodemand
 				$cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0
-                                        AND nourut = 1
-                                        AND NOT EXISTS (
-                                                SELECT 1
-                                                FROM db_finishing.tbl_produksi b
-                                                WHERE
-                                                        b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                        AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                        AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                        AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                                        )
-                                    ORDER BY nourut ASC";
-                $exec_nourut	= sqlsrv_query($con, $cek_nourut);
-                $result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
+									WHERE
+										status = 'SCHEDULE'
+										AND no_mesin = '$mesin'
+										AND nourut <> 0
+										AND nourut = 1
+										AND NOT EXISTS (
+												SELECT 1
+												FROM db_finishing.tbl_produksi b
+												WHERE
+														b.nokk = db_finishing.tbl_schedule_new.nokk
+														AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+														AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+														AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+														)
+									ORDER BY nourut ASC";
+				$exec_nourut	= sqlsrv_query($con, $cek_nourut);
+				$result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
 
-                if(empty($result_nourut)){
-                    //Ubah nomor urut otomatis jika berhasil simpan
-                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
-                                    SET nourut = nourut - 1
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0 
-                                        AND NOT EXISTS (
-                                            SELECT 1
-                                            FROM db_finishing.tbl_produksi b
-                                            WHERE
-                                                b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                        )";
-                    sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
-                }
-                
-            }
+				if(empty($result_nourut)){
+					//Ubah nomor urut otomatis jika berhasil simpan
+					$nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+									SET nourut = nourut - 1
+									WHERE
+										status = 'SCHEDULE'
+										AND no_mesin = '$mesin'
+										AND nourut <> 0 
+										AND NOT EXISTS (
+											SELECT 1
+											FROM db_finishing.tbl_produksi b
+											WHERE
+												b.nokk = db_finishing.tbl_schedule_new.nokk
+												AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+												AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+												AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+										)";
+					sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+				}
+				
+			}
 
 			// Refresh form
 			echo "<meta http-equiv='refresh' content='0; url=?idkk=$idkk&status=Data Sudah DiUbah'>";
@@ -562,48 +562,48 @@
 			insertIntoTable($con,'db_finishing.tbl_produksi',$dataInsert);
 
 			if($_GET['kklanjutan'] != '1'){
-                $mesin = $_POST['no_mesin'];
-                // cek kondisi jika nourut 1 masih ada nokk dan nodemand
+				$mesin = $_POST['no_mesin'];
+				// cek kondisi jika nourut 1 masih ada nokk dan nodemand
 				$cek_nourut		= "SELECT * FROM db_finishing.tbl_schedule_new
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0
-                                        AND nourut = 1
-                                        AND NOT EXISTS (
-                                                SELECT 1
-                                                FROM db_finishing.tbl_produksi b
-                                                WHERE
-                                                        b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                        AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                        AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                        AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                                        )
-                                    ORDER BY nourut ASC";
-                $exec_nourut	= sqlsrv_query($con, $cek_nourut);
-                $result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
+									WHERE
+										status = 'SCHEDULE'
+										AND no_mesin = '$mesin'
+										AND nourut <> 0
+										AND nourut = 1
+										AND NOT EXISTS (
+												SELECT 1
+												FROM db_finishing.tbl_produksi b
+												WHERE
+														b.nokk = db_finishing.tbl_schedule_new.nokk
+														AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+														AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+														AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+														)
+									ORDER BY nourut ASC";
+				$exec_nourut	= sqlsrv_query($con, $cek_nourut);
+				$result_nourut	= sqlsrv_fetch_array($exec_nourut, SQLSRV_FETCH_ASSOC);
 
-                if(empty($result_nourut)){
-                    //Ubah nomor urut otomatis jika berhasil simpan
-                    $nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
-                                    SET nourut = nourut - 1
-                                    WHERE
-                                        status = 'SCHEDULE'
-                                        AND no_mesin = '$mesin'
-                                        AND nourut <> 0 
-                                        AND NOT EXISTS (
-                                            SELECT 1
-                                            FROM db_finishing.tbl_produksi b
-                                            WHERE
-                                                b.nokk = db_finishing.tbl_schedule_new.nokk
-                                                AND b.demandno = db_finishing.tbl_schedule_new.nodemand
-                                                AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
-                                                AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
-                                        )";
-                    sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
-                }
-                
-            }
+				if(empty($result_nourut)){
+					//Ubah nomor urut otomatis jika berhasil simpan
+					$nourut_otomatis = "UPDATE db_finishing.tbl_schedule_new
+									SET nourut = nourut - 1
+									WHERE
+										status = 'SCHEDULE'
+										AND no_mesin = '$mesin'
+										AND nourut <> 0 
+										AND NOT EXISTS (
+											SELECT 1
+											FROM db_finishing.tbl_produksi b
+											WHERE
+												b.nokk = db_finishing.tbl_schedule_new.nokk
+												AND b.demandno = db_finishing.tbl_schedule_new.nodemand
+												AND b.no_mesin = db_finishing.tbl_schedule_new.no_mesin
+												AND b.nama_mesin = db_finishing.tbl_schedule_new.operation
+										)";
+					sqlsrv_query($con, $nourut_otomatis) or die("Gagal Otomatis Nomor urut Schedule" . sqlsrv_errors());
+				}
+				
+			}
 		}
 	?>
 	<form id="form1" name="form1" method="post" action="">
@@ -632,7 +632,12 @@
 							<option value="SCHEDULE" <?php if ($_GET['typekk'] == "SCHEDULE") {
 													echo "SELECTED";
 												} ?>>SCHEDULE</option>
-						</select>
+					</select>
+					<input type="checkbox" name="kklanjutan" id="kklanjutan"
+						value="<?php if($_GET['kklanjutan']){ echo "1"; }else{echo "0";} ?>"
+						<?php if($_GET['kklanjutan']){ echo "checked"; } ?>
+						onchange="window.location='?typekk='+document.getElementById('typekk').value+'&kklanjutan=1'">
+					KK LANJUTAN
 					</td>
 				</tr>
 				<tr>
@@ -641,7 +646,7 @@
 					</td>
 					<td width="1%">:</td>
 					<td width="26%">
-						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
+						<input name="nokk" type="text" id="nokk" size="17" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&kklanjutan='+document.getElementById('kklanjutan').value+'&idkk='+this.value" value="<?php echo $_GET['idkk']; ?>" /><input type="hidden" value="<?php echo $rw['id']; ?>" name="id" />
 
 						<?php if ($_GET['typekk'] == 'NOW') { ?>
 							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
@@ -656,7 +661,7 @@
 								<?php endwhile; ?>
 							</select>
 						<?php }elseif($_GET['typekk'] == 'SCHEDULE'){ ?>
-                            <select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
+							<select style="width: 40%" name="demand" id="demand" onchange="window.location='?typekk='+document.getElementById('typekk').value+'&idkk='+document.getElementById('nokk').value+'&demand='+this.value" required>
 								<option value="" disabled selected>Pilih Nomor Demand</option>
 								<?php
 									if ($_GET['kklanjutan'] == '1') {
@@ -671,20 +676,20 @@
 																		AND b.no_mesin = a.no_mesin
 																	)";
 									}
-                                    $sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
-                                                                                WHERE nokk = '$idkk' $nourut ");
+									$sql_ITXVIEWKK_demand  = sqlsrv_query($con, "SELECT * FROM db_finishing.tbl_schedule_new a
+																				WHERE nokk = '$idkk' $nourut ");
 									while ($r_demand = sqlsrv_fetch_array($sql_ITXVIEWKK_demand)) :
-                                ?>
-                                    <?php
-                                        // CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
-                                        $cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.[tbl_produksi] 
+								?>
+									<?php
+										// CEK, JIKA KARTU KERJA SUDAH DIPROSES MAKA TIDAK AKAN MUNCUL. 
+										$cek_proses   = sqlsrv_query($con, "SELECT COUNT(*) AS jml FROM db_finishing.[tbl_produksi] 
 										WHERE nokk = '$r_demand[nokk]' AND demandno = '$r_demand[nodemand]' AND nama_mesin = '$r_demand[operation]'");
-                                        $data_proses  = sqlsrv_fetch_array($cek_proses);
-                                    ?>
-                                    <?php if(empty($data_proses['jml'])) : ?>
+										$data_proses  = sqlsrv_fetch_array($cek_proses);
+									?>
+									<?php if(empty($data_proses['jml'])) : ?>
 										<option value="<?= $r_demand['nodemand']; ?>" <?php if ($r_demand['nodemand'] == $_GET['demand']) { echo 'SELECTED'; } ?>><?= $r_demand['nodemand']; ?></option>
-                                    <?php endif; ?>
-                                <?php endwhile; ?>
+									<?php endif; ?>
+								<?php endwhile; ?>
 							</select>
 						<?php } else { ?>
 							<input name="demand" id="demand" type="text" placeholder="Nomor Demand">
@@ -855,8 +860,8 @@
 						<?php endif; ?>
 
 						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $langganan_buyer  = $row_kkmasuk['langganan'].'/'.$row_kkmasuk['buyer']; ?>
-                        <?php endif; ?>
+							<?php $langganan_buyer  = $row_kkmasuk['langganan'].'/'.$row_kkmasuk['buyer']; ?>
+						<?php endif; ?>
 
 						<input name="buyer" type="text" id="buyer" size="30" value="<?= $langganan_buyer; ?>">
 					</td>
@@ -935,8 +940,8 @@
 						<?php endif; ?>
 
 						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $no_order =  $row_kkmasuk['no_order']; ?>
-                        <?php endif; ?>
+							<?php $no_order =  $row_kkmasuk['no_order']; ?>
+						<?php endif; ?>
 
 						<input type="text" name="no_order" id="no_order" value="<?= $no_order; ?>" />
 					</td>
@@ -961,8 +966,8 @@
 						<?php endif; ?>
 
 						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $jk =  $row_kkmasuk['jenis_kain']; ?>
-                        <?php endif; ?>
+							<?php $jk =  $row_kkmasuk['jenis_kain']; ?>
+						<?php endif; ?>
 
 						<textarea name="jenis_kain" cols="35" id="jenis_kain"><?= $jk; ?></textarea>
 					</td>
@@ -972,9 +977,9 @@
 					<td valign="top">:</td>
 					<td colspan="2" valign="top">
 						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $catatan =  $row_kkmasuk['catatan']; ?>
-                        <?php endif; ?>
-                        <textarea name="catatan" cols="35" id="catatan"><?= $catatan; ?></textarea>
+							<?php $catatan =  $row_kkmasuk['catatan']; ?>
+						<?php endif; ?>
+						<textarea name="catatan" cols="35" id="catatan"><?= $catatan; ?></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -1009,13 +1014,13 @@
 					<td colspan="2"><input name="qty" type="text" id="qty" size="5" value="<?= $berat; ?>" placeholder="0.00" />
 						&nbsp;&nbsp;&nbsp;&nbsp;<strong>L X G </strong>:
 						<?php if ($_GET['typekk'] == "NOW") : ?>
-                            <?php $nlebar = floor($dt_lg['LEBAR']); ?>
-                        <?php endif; ?>
+							<?php $nlebar = floor($dt_lg['LEBAR']); ?>
+						<?php endif; ?>
 
-                        <?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $nlebar =  $row_kkmasuk['lebar']; ?>
-                            <?php $ngramasi =  $row_kkmasuk['gramasi']; ?>
-                        <?php endif; ?>
+						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
+							<?php $nlebar =  $row_kkmasuk['lebar']; ?>
+							<?php $ngramasi =  $row_kkmasuk['gramasi']; ?>
+						<?php endif; ?>
 						<input name="lebar" type="text" id="lebar" size="6" value="<?= $nlebar; ?>" placeholder="0" />
 						&quot;X
 						<input name="gramasi" type="text" id="gramasi" size="6" value="<?= $ngramasi; ?>" placeholder="0" />
@@ -1052,8 +1057,8 @@
 						<?php endif; ?>
 
 						<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
-                            <?php $nomor_warna =  $row_kkmasuk['no_warna']; ?>
-                        <?php endif; ?>
+							<?php $nomor_warna =  $row_kkmasuk['no_warna']; ?>
+						<?php endif; ?>
 
 						<input name="no_warna" type="text" id="no_warna" size="30" value="<?= $nomor_warna; ?>" />
 					</td>
@@ -1086,8 +1091,8 @@
 					</td>
 					<td>:</td>
 					<?php if ($_GET['typekk'] == "NOW") : ?>
-                            <?php $lot =  $dt_ITXVIEWKK['LOT']; ?>
-                        <?php endif; ?>
+							<?php $lot =  $dt_ITXVIEWKK['LOT']; ?>
+						<?php endif; ?>
 
 					<?php if ($_GET['typekk'] == "SCHEDULE") : ?>
 						<?php $lot =  $row_kkmasuk['lot']; ?>
