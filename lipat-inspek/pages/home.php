@@ -482,8 +482,9 @@
 			$jmlKonsen4 = $_POST['jmlKonsen4'];
 			$jmlKonsen5 = $_POST['jmlKonsen5'];
 
+			$kklanjutan = isset($_GET['kklanjutan']) ? $_GET['kklanjutan'] : 0;
 			$dataInsert=[
-				'kklanjutan'=>(int) 0,
+			   	'kklanjutan'=>(int) $kklanjutan,
 				'nokk'=>(string)$nokk,
 				'demandno'=>(string)$demand,
 				'shift'=>(string)$shift,
