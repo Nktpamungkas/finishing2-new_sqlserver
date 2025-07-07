@@ -854,7 +854,7 @@
                                                             FROM
                                                                 RESOURCES r
                                                             WHERE
-                                                                SUBSTR(CODE, 1,4) = 'P3ST' $where_schedule
+                                                                CODE = 'P3IN350' $where_schedule
                                                             ORDER BY 
                                                                 SUBSTR(CODE, 6,2) 
                                                             ASC");
