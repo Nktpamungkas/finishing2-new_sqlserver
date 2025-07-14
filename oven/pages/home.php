@@ -215,6 +215,7 @@
         $item = $_POST['no_item'];
         $jenis_kain = str_replace("'", "''", $_POST['jenis_kain']);
         $kain = $_POST['kondisi_kain'];
+        $kain2 = $_POST['kondisi_kain2'];
         $bahan = $_POST['jenis_bahan'];
         $warna = str_replace("'", "''", $_POST['warna']);
         $nowarna = $_POST['no_warna'];
@@ -289,6 +290,7 @@
             cek($nowarna),
             cek($bahan),
             cek($kain),
+            cek($kain2),
             cek($qty2),
             cek($qty3),
             cek($gerobak),
@@ -366,6 +368,7 @@
                         no_warna,
                         jenis_bahan,
                         kondisi_kain,
+                        kondisi_kain2,
                         panjang,
                         panjang_h,
                         no_gerobak,
@@ -432,7 +435,7 @@
                         tgl_update)VALUES(
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
                         ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
-                        ?,?,?,?,?,?,?,?,?,?
+                        ?,?,?,?,?,?,?,?,?,?,?
                         )";
             // sqlsrv_query($con, $simpanSql) or die("Gagal Simpan" . sqlsrv_errors());
             $stmt = $pdo->prepare($simpanSql);
@@ -862,7 +865,7 @@
                             } ?>>CAMPURAN</option>
                         </select></td>
                     <td>
-                        <h4>Kondisi Kain</h4>
+                        <h4>Kondisi Kain Masuk </h4>
                     </td>
                     <td>:</td>
                     <td colspan="2"><select name="kondisi_kain" id="kondisi_kain" required="required">
@@ -874,6 +877,26 @@
                                 echo "SELECTED";
                             } ?>>KERING</option>
                         </select></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <h4>Kondisi Kain Keluar</h4>
+                    </td>
+                    <td>:</td>
+                    <td colspan="2">
+                        <select name="kondisi_kain2" id="kondisi_kain2" required="required">
+                            <option value="">Pilih</option>
+                            <option value="BASAH" <?php if ($rw['kondisi_kain2'] == "BASAH") {
+                                                        echo "SELECTED";
+                                                    } ?>>BASAH</option>
+                            <option value="KERING" <?php if ($rw['kondisi_kain2'] == "KERING") {
+                                                        echo "SELECTED";
+                                                    } ?>>KERING</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td scope="row">
