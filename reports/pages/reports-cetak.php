@@ -113,7 +113,7 @@
                                                           echo 'colspan="7"';
                                                         } ?>>TANGGAL:<strong> <?php echo $tglawal." ".$jamawal; ?> s/d <?php echo $tglakhir." ".$jamakhir; ?></strong></td>
         <td colspan="9">GROUP SHIFT:<strong><?php echo $shft; ?></strong></td>
-        <td colspan="13">NO MESIN :<strong><?php if ($_GET['mesin'] == "") {
+        <td colspan="17">NO MESIN :<strong><?php if ($_GET['mesin'] == "") {
                                               echo "ALL";
                                             } else {
                                               echo $_GET['mesin'];
