@@ -72,7 +72,12 @@ include ('../../koneksi.php');
         </div>
       <td rowspan="3">
         <div align="center">
-          <font size="-2">B / K</font>
+          <font size="-2">B / K Masuk</font>
+        </div>
+      </td>
+      <td rowspan="3">
+        <div align="center">
+          <font size="-2">B / K Keluar</font>
         </div>
       </td>
       <?php if ($_GET['mesin'] == "") { ?>
@@ -322,6 +327,11 @@ include ('../../koneksi.php');
         <td>
           <div align="center">
             <font size="-2"><?php echo $rowd['kondisi_kain']; ?></font>
+          </div>
+        </td>
+        <td>
+          <div align="center">
+            <font size="-2"><?php echo $rowd['kondisi_kain2']; ?></font>
           </div>
         </td>
         <?php if ($_GET['mesin'] == "") { ?>
