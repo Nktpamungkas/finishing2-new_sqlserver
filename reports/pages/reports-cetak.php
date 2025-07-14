@@ -83,7 +83,7 @@
   <table width="100%" border="0" class="table-list1">
     <thead>
       <tr valign="top">
-        <td colspan="33">
+        <td colspan="34">
           <table width="100%" border="0" class="table-list1">
             <thead>
               <tr>
