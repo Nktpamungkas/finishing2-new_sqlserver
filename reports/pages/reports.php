@@ -121,7 +121,12 @@
             </th>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
               <div align="center"><strong>
-                  <font size="-2">B/K</font>
+                  <font size="-2">B/K Masuk</font>
+                </strong></div>
+            </th>
+            <th rowspan="2" style="border:1px solid;vertical-align:middle;">
+              <div align="center"><strong>
+                  <font size="-2">B/K Keluar</font>
                 </strong></div>
             </th>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
@@ -341,6 +346,11 @@
               <td style="border:1px solid;vertical-align:middle;">
                 <div align="center">
                   <font size="-2"><?php echo $rowd['kondisi_kain']; ?></font>
+                </div>
+              </td>
+              <td style="border:1px solid;vertical-align:middle;">
+                <div align="center">
+                  <font size="-2"><?php echo $rowd['kondisi_kain2']; ?></font>
                 </div>
               </td>
               <td style="border:1px solid;vertical-align:middle;">
