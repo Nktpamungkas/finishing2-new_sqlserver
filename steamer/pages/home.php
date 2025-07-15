@@ -556,6 +556,7 @@
                         cek($nowarna),
                         cek($bahan),
                         cek($kain),
+                        cek($kain2),
                         cek($qty2),
                         cek($qty3),
                         cek($gerobak),
