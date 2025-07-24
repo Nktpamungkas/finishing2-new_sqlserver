@@ -67,7 +67,8 @@
         $mesin1 = $_GET['msn'];
       }
       if ($tglakhir != "" and $tglawal != "") {
-        $tgl = " CONVERT(DATE, a.tgl_update) BETWEEN '$tglawal' AND '$tglakhir' ";
+        // $tgl = " CONVERT(DATE, a.tgl_update) BETWEEN '$tglawal' AND '$tglakhir' ";
+        $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:01' AND '$tglakhir 23:00' ";
       } else {
         $tgl = " ";
       }
@@ -746,7 +747,7 @@
       $mesin1 = $_GET['msn'];
     }
     if ($tglakhir != "" and $tglawal != "") {
-      $tgl = " DATE_FORMAT(a.tgl_update,'%Y-%m-%d') BETWEEN '$tglawal' AND '$tglakhir' ";
+      $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:01' AND '$tglakhir 23:00' ";
     } else {
       $tgl = " ";
     }
