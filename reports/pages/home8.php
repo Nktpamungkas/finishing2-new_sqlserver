@@ -12,7 +12,9 @@
   <script>
     function ganti() {
       var lprn = document.forms['form1']['jns'].value;
-      if (lprn == "Adm Finishing") {
+      if (lprn == "Produksi Finishing") {
+        window.location.href = "?p=home";	
+	  } else if (lprn == "Adm Finishing") {
         window.location.href = "?p=home2";
       } else if (lprn == "Detail In-Out") {
         window.location.href = "?p=home3";

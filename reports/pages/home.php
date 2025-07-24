@@ -67,6 +67,9 @@
         <td>
           <select name="jnsmesin" id="jnsmesin" onChange="window.location='?p=home&jns='+this.value" required>
             <option value="">Pilih</option>
+			<option value="ALL" <?php if ($_GET['jns'] == "ALL") {
+                                                                       echo "SELECTED";
+                                                                   }?>>All</option>  
             <option value="belah"                                                                   <?php if ($_GET['jns'] == "belah") {
                                                                        echo "SELECTED";
                                                                    }?>>Belah</option>
@@ -123,6 +126,9 @@
             <option value="C">C</option>
           </select>
         </td>
+      </tr>
+      <tr>
+        <td colspan="3">*) Data satu hari dihitung dari jam 23:01 dan jam 23:00 di hari setelahnya</td>
       </tr>
       <tr>
         <td colspan="3"><input type="submit" name="button" id="button" value="Lihat Data" class="art-button" /> <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'" class="art-button" /></td>

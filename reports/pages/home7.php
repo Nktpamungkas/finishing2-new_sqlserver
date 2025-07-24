@@ -12,7 +12,9 @@
   <script>
     function ganti() {
       var lprn = document.forms['form1']['jns'].value;
-      if (lprn == "Adm Finishing") {
+	  if (lprn == "Produksi Finishing") {
+        window.location.href = "?p=home";	
+	  } else if (lprn == "Adm Finishing") {
         window.location.href = "?p=home2";
       } else if (lprn == "Detail In-Out") {
         window.location.href = "?p=home3";
@@ -87,37 +89,80 @@
             <option value="OVEN"<?php if ("OVEN" == $_GET['jns']) {echo "SELECTED";}?>>OVEN</option>
           </select></td>
       </tr> -->
-      <tr valign="middle">
-        <td width="127"><strong>Tanggal Awal</strong></td>
-        <td width="3">:</td>
-        <td width="280">
-			<input name="jam_awal" type="text" id="jam_awal" placeholder="23:00" pattern="[0-9]{2}:[0-9]{2}$" title=" e.g 23:00" onkeyup="
-            var time = this.value;
-            if (time.match(/^\d{2}$/) !== null) {
-              this.value = time + ':';
-            } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
-              this.value = time + '';
-            }" value="<?php echo $_GET['jam1']; ?>" size="5" maxlength="5" onChange="window.location='?p=home7&jns=<?php echo $_GET['jns']; ?>&jam1='+this.value" hidden/>
-            <input name="awal" type="date" id="awal" value="<?php echo $_GET['awal']; ?>"
-                onChange="window.location='?p=home7&jns=<?php echo $_GET['jns']; ?>&jam1=<?php echo $_GET['jam1']; ?>&awal='+this.value" size="14" required="required" />
-        </td>
-      </tr>
-      <tr>
+     <tr valign="middle">
+		  <td width="127"><strong>Tanggal Awal</strong></td>
+		  <td width="3">:</td>
+		  <td width="280">
+			<input name="jam_awal" type="text" id="jam_awal" placeholder="23:00" pattern="[0-9]{2}:[0-9]{2}$"
+			  title=" e.g 23:00"
+			  onkeyup="
+				var time = this.value;
+				if (time.match(/^\d{2}$/) !== null) {
+				  this.value = time + ':';
+				} else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
+				  this.value = time + '';
+				}"
+			  value="<?php echo $_GET['jam1']; ?>" size="5" maxlength="5"
+			  hidden />
 
-        <td><strong>Tanggal Akhir</strong></td>
-        <td>:</td>
-        <td width="280">
-			<input name="jam_akhir" type="text" id="jam_akhir" placeholder="23:00" pattern="[0-9]{2}:[0-9]{2}$" title=" e.g 23:00" onkeyup="
-            var time = this.value;
-            if (time.match(/^\d{2}$/) !== null) {
-              this.value = time + ':';
-            } else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
-              this.value = time + '';
-            }" value="<?php echo $_GET['jam2']; ?>" size="5" maxlength="5" onChange="window.location='?p=home7&jns=<?php echo $_GET['jns']; ?>&jam1=<?php echo $_GET['jam1']; ?>&awal=<?php echo $_GET['awal']; ?>&jam2='+this.value" hidden/>
-            <input name="akhir" type="date" id="akhir" value="<?php echo $_GET['akhir']; ?>"
-                onChange="window.location='?p=home7&jns=<?php echo $_GET['jns']; ?>&jam1=<?php echo $_GET['jam1']; ?>&awal=<?php echo $_GET['awal']; ?>&jam2=<?php echo $_GET['jam2']; ?>&akhir='+this.value" size="14" required="required" />
-        </td>
-      </tr>
+			<input name="awal" type="date" id="awal"
+			  value="<?php echo $_GET['awal']; ?>"
+			  size="14" required="required"
+			  onChange="
+				const awal = this.value;
+				const jam1 = '<?php echo $_GET['jam1']; ?>';
+				const jns = '<?php echo $_GET['jns']; ?>';
+
+				// Hitung tanggal akhir (awal + 1 hari)
+				const tgl = new Date(awal);
+				tgl.setDate(tgl.getDate() + 1);
+				const yyyy = tgl.getFullYear();
+				const mm = String(tgl.getMonth() + 1).padStart(2, '0');
+				const dd = String(tgl.getDate()).padStart(2, '0');
+				const akhir = `${yyyy}-${mm}-${dd}`;
+
+				// Set input akhir secara otomatis
+				document.getElementById('akhir').value = akhir;
+
+				// Redirect
+				window.location = `?p=home7&jns=${jns}&jam1=${jam1}&awal=${awal}&akhir=${akhir}`;
+			  "
+			/>
+		  </td>
+		</tr>
+
+		<tr>
+		  <td><strong>Tanggal Akhir</strong></td>
+		  <td>:</td>
+		  <td width="280">
+			<input name="jam_akhir" type="text" id="jam_akhir" placeholder="23:00" pattern="[0-9]{2}:[0-9]{2}$"
+			  title=" e.g 23:00"
+			  onkeyup="
+				var time = this.value;
+				if (time.match(/^\d{2}$/) !== null) {
+				  this.value = time + ':';
+				} else if (time.match(/^\d{2}\:\d{2}$/) !== null) {
+				  this.value = time + '';
+				}"
+			  value="<?php echo $_GET['jam2']; ?>" size="5" maxlength="5"
+			  hidden />
+
+			<input name="akhir" type="date" id="akhir"
+			  value="<?php echo $_GET['akhir']; ?>"
+			  size="14" required="required"
+			  onChange="
+				const awal = document.getElementById('awal').value;
+				const jam1 = '<?php echo $_GET['jam1']; ?>';
+				const jam2 = '<?php echo $_GET['jam2']; ?>';
+				const jns = '<?php echo $_GET['jns']; ?>';
+				const akhir = this.value;
+
+				window.location = `?p=home7&jns=${jns}&jam1=${jam1}&awal=${awal}&jam2=${jam2}&akhir=${akhir}`;
+			  "
+			/>
+		  </td>
+		</tr>
+
       <tr>
         <td><strong>Mesin</strong></td>
         <td>:</td>
@@ -154,6 +199,9 @@
             <option value="C">C</option>
           </select>
         </td>
+      </tr>
+      <tr>
+        <td colspan="3">*) Data satu hari dihitung dari jam 23:01 dan jam 23:00 di hari setelahnya</td>
       </tr>
       <tr>
         <td colspan="3"><input type="submit" name="button" id="button" value="Lihat Data" class="art-button" /> <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'" class="art-button" /></td>
