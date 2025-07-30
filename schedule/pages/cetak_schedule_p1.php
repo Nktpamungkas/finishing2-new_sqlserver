@@ -55,7 +55,7 @@ if($_GET['params'] == 'viewreport'){
 }
 
 
-$query_schedule = "SELECT 
+ $query_schedule = "SELECT 
 						nama_mesin,
 						no_mesin,
 						nourut,
@@ -70,6 +70,10 @@ $query_schedule = "SELECT
 						STRING_AGG(roll, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS roll,
 						SUM(qty_order) AS qty_order,
 						STRING_AGG(proses, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS proses,
+						SUM(CASE WHEN proses LIKE '%Preset (Normal)%' THEN qty_order ELSE 0 END) AS qty_preset_normal,
+						SUM(CASE WHEN proses LIKE '%Steamer (Normal)%' THEN qty_order ELSE 0 END) AS qty_steamer_normal,
+						SUM(CASE WHEN proses LIKE '%Finishing Jadi (Normal)%' THEN qty_order ELSE 0 END) AS qty_finishing_jadi_normal,
+						SUM(CASE WHEN proses LIKE '%Oven Greige (Normal)%' THEN qty_order ELSE 0 END) AS qty_oven_greige_normal,
 						STRING_AGG(operation, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS operation,
 						STRING_AGG(TRIM(nokk), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
 						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
@@ -159,7 +163,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="../../styles_cetak.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="refresh" content="60">
+    <!-- <meta http-equiv="refresh" content="60"> -->
 	<title>Cetak Schedule</title>
 	<script>
 		// set portrait orientation
@@ -729,31 +733,84 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 		</tr>
 
 	</table>
-	<table width="100%" border="0">
+	<table width="100%" border="0" style="font-size:13px;">
 		<tbody>
 			<tr>
-				<td width="73%" rowspan="4">
+				<td style="width:35%;padding:4px;">
+					<?php
+					// Hitung total Qty Preset (Normal) yang muncul di tabel
+					$totalQtyPresetNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyPresetNormal += (float)$value2['qty_preset_normal'];
+							}
+						}
+					}
+					?>
+					Qty Preset (Normal) : <strong><?= number_format($totalQtyPresetNormal, 2) ?></strong>
+				</td>
+				<td style="width:45%;" rowspan="4">
 					<div style="font-size: 11px; font-family:sans-serif, Roman, serif;">
 						
 					</div>
 				</td>
-				<td width="20%">
-					<pre>No. Form &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 14-11</pre>
+				<td style="width:20%;padding:4px;">
+					<pre style="font-size:12px;margin:0;">No. Form      : 14-11</pre>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<pre>No. Revisi	: 23</pre>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Steamer (Normal) yang muncul di tabel
+					$totalQtySteamerNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtySteamerNormal += (float)$value2['qty_steamer_normal'];
+							}
+						}
+					}
+					?>
+					Qty Steamer (Normal) : <strong><?= number_format($totalQtySteamerNormal, 2) ?></strong>
+				</td>
+				<td style="padding:4px;">
+					<pre style="font-size:12px;margin:0;">No. Revisi    : 23</pre>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<pre>Tgl. Terbit	: </pre>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Finishing Jadi (Normal) yang muncul di tabel
+					$totalQtyFinishingJadiNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyFinishingJadiNormal += (float)$value2['qty_finishing_jadi_normal'];
+							}
+						}
+					}
+					?>
+					Qty Finishing Jadi (Normal) : <strong><?= number_format($totalQtyFinishingJadiNormal, 2) ?></strong>
+				</td>
+				<td style="padding:4px;">
+					<pre style="font-size:12px;margin:0;">Tgl. Terbit   : </pre>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<pre></pre>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Oven Greige (Normal) yang muncul di tabel
+					$totalQtyOvenGreigeNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyOvenGreigeNormal += (float)$value2['qty_oven_greige_normal'];
+							}
+						}
+					}
+					?>
+					Qty Oven Greige (Normal) : <strong><?= number_format($totalQtyOvenGreigeNormal, 2) ?></strong>
 				</td>
 			</tr>
 		</tbody>
