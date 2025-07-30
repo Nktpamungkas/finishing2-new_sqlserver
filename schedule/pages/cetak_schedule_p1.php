@@ -794,7 +794,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					Qty Finishing Jadi (Normal) : <strong><?= number_format($totalQtyFinishingJadiNormal, 2) ?></strong>
 				</td>
 				<td style="padding:4px;">
-					<pre style="font-size:12px;margin:0;">Tgl. Terbit   : </pre>
+					<pre style="font-size:12px;margin:0;">Tgl. Terbit   &nbsp; : </pre>
 				</td>
 			</tr>
 			<tr>
