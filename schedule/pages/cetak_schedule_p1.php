@@ -55,7 +55,7 @@ if($_GET['params'] == 'viewreport'){
 }
 
 
- $query_schedule = "SELECT 
+  $query_schedule = "SELECT 
 						nama_mesin,
 						no_mesin,
 						nourut,
@@ -74,6 +74,9 @@ if($_GET['params'] == 'viewreport'){
 						SUM(CASE WHEN proses LIKE '%Steamer (Normal)%' THEN qty_order ELSE 0 END) AS qty_steamer_normal,
 						SUM(CASE WHEN proses LIKE '%Finishing Jadi (Normal)%' THEN qty_order ELSE 0 END) AS qty_finishing_jadi_normal,
 						SUM(CASE WHEN proses LIKE '%Oven Greige (Normal)%' THEN qty_order ELSE 0 END) AS qty_oven_greige_normal,
+						SUM(CASE WHEN proses LIKE '%Finishing 1X (Normal)%' THEN qty_order ELSE 0 END) AS qty_finishing_1x_normal,
+						SUM(CASE WHEN proses LIKE '%Oven Stenter (Normal)%' THEN qty_order ELSE 0 END) AS qty_oven_stenter_normal,
+						SUM(CASE WHEN proses LIKE '%Compact (Normal)%' THEN qty_order ELSE 0 END) AS qty_compact_normal,
 						STRING_AGG(operation, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS operation,
 						STRING_AGG(TRIM(nokk), ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS nokk,
 						STRING_AGG(lebar, ', ') WITHIN GROUP (ORDER BY lebar ASC, no_order ASC, nodemand ASC) AS lebar,
@@ -811,6 +814,54 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					}
 					?>
 					Qty Oven Greige (Normal) : <strong><?= number_format($totalQtyOvenGreigeNormal, 2) ?></strong>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Finishing 1X (Normal) yang muncul di tabel
+					$totalQtyFinishing1xNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyFinishing1xNormal += (float)$value2['qty_finishing_1x_normal'];
+							}
+						}
+					}
+					?>
+					Qty Finishing 1X (Normal) : <strong><?= number_format($totalQtyFinishing1xNormal, 2) ?></strong>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Oven Stenter (Normal) yang muncul di tabel
+					$totalQtyOvenStenterNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyOvenStenterNormal += (float)$value2['qty_oven_stenter_normal'];
+							}
+						}
+					}
+					?>
+					Qty Oven Stenter (Normal) : <strong><?= number_format($totalQtyOvenStenterNormal, 2) ?></strong>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:4px;">
+				<?php
+					// Hitung total Qty Compact (Normal) yang muncul di tabel
+					$totalQtyCompactNormal = 0;
+					foreach ($row_schedules as $key0 => $value0) {
+						foreach ($value0 as $key1 => $value1) {
+							foreach ($value1 as $key2 => $value2) {
+								$totalQtyCompactNormal += (float)$value2['qty_compact_normal'];
+							}
+						}
+					}
+					?>
+					Qty Compact (Normal) : <strong><?= number_format($totalQtyCompactNormal, 2) ?></strong>
 				</td>
 			</tr>
 		</tbody>
