@@ -19,7 +19,7 @@ include ('../../koneksi.php');
   $jamakhir = $_GET['jamakhir'];
   $shft = $_GET['shift'];
   if ($tglakhir != "" and $tglawal != "") {
-    $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in))  BETWEEN '$tglawal 23:01' AND '$tglakhir 23:00' ";
+    $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in))  BETWEEN '$tglawal 23:00' AND '$tglakhir 23:00' ";
   } else {
     $tgl = " ";
   }

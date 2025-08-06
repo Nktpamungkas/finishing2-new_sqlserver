@@ -1025,7 +1025,7 @@
                         <h4>Kondisi Kain Masuk</h4>
                     </td>
                     <td>:</td>
-                    <td colspan="2"><select name="kondisi_kain" id="kondisi_kain" required="required">
+                    <td colspan="2"><select name="kondisi_kain" id="kondisi_kain" required>
                             <option value="">Pilih</option>
                             <option value="BASAH" <?php if ($rw['kondisi_kain'] == "BASAH") {
                                 echo "SELECTED";
@@ -1046,7 +1046,7 @@
                     </td>
                     <td>:</td>
                     <td colspan="2">
-                        <select name="kondisi_kain2" id="kondisi_kain2" required="required">
+                        <select name="kondisi_kain2" id="kondisi_kain2" required>
                             <option value="">Pilih</option>
                             <option value="BASAH" <?php if ($rw['kondisi_kain2'] == "BASAH") {
                                                         echo "SELECTED";
