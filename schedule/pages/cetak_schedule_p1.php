@@ -269,7 +269,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 				<td>
 					<table width="100%" border="1" class="table-list1">
 						<tr>
-							<td width="9%" align="center"><img src="../../indo.jpg" width="40" height="40" /></td>
+							<td width="9%" align="center"><img src="../../indo1.jpg" width="40" height="40" /></td>
 							<td align="center" valign="middle"><strong>
 									<font size="+1">
 										<?php if($_GET['params'] == 'viewreport') : ?>
@@ -288,7 +288,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					<table width="100%" border="0">
 						<tbody>
 							<tr>
-							<td width="78%">
+							<td width="40%">
 								<?php
 									if($_GET['params'] == 'viewreport'){
 										$date1 = date_create($_GET['datestart']);
@@ -306,7 +306,10 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 								?>
 								<br />
 							</td>
-								<td width="22%" align="right">
+							<td width="20%" align="right">
+								FW-14-PPC-11/01
+							</td>
+								<td width="40%" align="right">
 									Jam: <?php echo date('H:i:s'); ?>
 								</td>
 							</tr>
