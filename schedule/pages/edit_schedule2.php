@@ -104,14 +104,13 @@
             sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = ?", [$id_schedule]);
         }
 
-        $currentUrl = $_SERVER['REQUEST_URI'];
         echo "<script>
                 swal({
                     title: 'Data Terupdate',
                     text: 'Klik Ok untuk input data kembali',
                     type: 'success',
                 }).then(function() {
-                    window.location.href = '$currentUrl';
+                    window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';
                 });
             </script>";
         exit;
@@ -119,7 +118,7 @@
         if ($id_schedule !== null) {
             sqlsrv_query($con, "DELETE FROM db_finishing.active_lock WHERE id_schedule = ?", [$id_schedule]);
         }
-        echo "<script>window.location.href = '$currentUrl';</script>";
+        echo "<script>window.location.href = 'http://online.indotaichen.com/finishing2-new/schedule/index.php?p=LihatData';</script>";
         exit;
     }
 ?>
