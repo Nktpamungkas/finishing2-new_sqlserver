@@ -68,7 +68,7 @@
       }
       if ($tglakhir != "" and $tglawal != "") {
         // $tgl = " CONVERT(DATE, a.tgl_update) BETWEEN '$tglawal' AND '$tglakhir' ";
-        $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:00' AND '$tglakhir 23:00' ";
+        $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:01' AND '$tglakhir 23:00' ";
       } else {
         $tgl = " ";
       }
@@ -96,7 +96,7 @@
     <strong><br />
     </strong>
     <form id="form1" name="form1" method="post" action="">
-      <strong> Periode: <?php echo $tglawal." ".$jamawal; ?> s/d <?php echo $tglakhir." ".$jamakhir; ?></strong>
+      <strong> Periode: <?php echo $tglawal." ".$jamawal; ?> 23:01 s/d <?php echo $tglakhir." ".$jamakhir; ?> 23:00</strong>
       <strong>Shift: <?php echo $shft; ?> Jenis Mesin: <?php echo $_POST['jnsmesin']; ?> No Mesin: <?php if ($msn == "") {
                                                                                                       echo "ALL";
                                                                                                     } else {
@@ -747,7 +747,7 @@
       $mesin1 = $_GET['msn'];
     }
     if ($tglakhir != "" and $tglawal != "") {
-      $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:00' AND '$tglakhir 23:00' ";
+      $tgl = " CONCAT(a.tgl_update,CONCAT(' ',a.jam_in)) BETWEEN '$tglawal 23:01' AND '$tglakhir 23:00' ";
     } else {
       $tgl = " ";
     }
@@ -769,7 +769,7 @@
     <strong><br />
     </strong>
     <form id="form1" name="form1" method="post" action="">
-      <strong> Periode: <?php echo $tglawal; ?> s/d <?php echo $tglakhir; ?></strong><br />
+      <strong> Periode: <?php echo $tglawal; ?> 23:01 s/d <?php echo $tglakhir; ?> 23:00</strong><br />
       <strong>Shift: <?php echo $shft; ?> Jenis Mesin: <?php echo $_POST['jnsmesin']; ?> No Mesin:
         <?php if ($msn == "") {
           echo "ALL";

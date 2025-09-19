@@ -128,7 +128,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="3">*) Data satu hari dihitung dari jam 23:00 dan jam 23:00 di hari setelahnya</td>
+        <td colspan="3">*) Data satu hari dihitung dari jam 23:01 dan jam 23:00 di hari setelahnya</td>
       </tr>
       <tr>
         <td colspan="3"><input type="submit" name="button" id="button" value="Lihat Data" class="art-button" /> <input type="button" name="button2" id="button2" value="Kembali" onclick="window.location.href='../index.php'" class="art-button" /></td>
