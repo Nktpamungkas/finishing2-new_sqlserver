@@ -12,7 +12,7 @@ date_default_timezone_set('Asia/Jakarta');
 $hostSVR19 = "10.0.0.221";
 $usernameSVR19 = "sa";
 $passwordSVR19 = "Ind@taichen2024";
-$finishing = "db_finishing_test";
+$finishing = "db_finishing";
 $db_finishing = array("Database" => $finishing, "UID" => $usernameSVR19, "PWD" => $passwordSVR19);
 $con = sqlsrv_connect($hostSVR19, $db_finishing);
 // pdo
