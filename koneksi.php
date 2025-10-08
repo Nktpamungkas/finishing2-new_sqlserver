@@ -17,7 +17,7 @@ $db_finishing = array("Database" => $finishing, "UID" => $usernameSVR19, "PWD" =
 $con = sqlsrv_connect($hostSVR19, $db_finishing);
 // pdo
 try {
-    $pdo = new PDO("sqlsrv:server=10.0.0.221;Database=db_finishing_test", "sa", "Ind@taichen2024");
+    $pdo = new PDO("sqlsrv:server=10.0.0.221;Database=db_finishing", "sa", "Ind@taichen2024");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
