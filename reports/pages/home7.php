@@ -178,7 +178,7 @@
                                                   SUBSTR(CODE, 1,4) = 'P3CP' OR
                                                   SUBSTR(CODE, 1,4) = 'P3BC' OR CODE = 'P3IN350' OR
                                                   SUBSTR(CODE, 1,4) = 'P3ST' OR SUBSTR(CODE, 1,4) = 'P3DR' OR
-                                                  SUBSTR(CODE, 1,4) = 'P3SM'
+                                                  SUBSTR(CODE, 1,4) = 'P3SM' OR SUBSTR(CODE, 1,4) = 'P3LS'
                                                 ORDER BY
                                                   CODE
                                                 ASC");
