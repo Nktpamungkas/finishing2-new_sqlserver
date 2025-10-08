@@ -96,14 +96,14 @@ $page    = strtolower($page);
                     <li><a href="../oven/?typekk=NOW">Oven</a></li>
                     <li><a href="../steamer/?typekk=NOW">Steamer</a></li>
                     <li><a href="index.php" class="active">Keluar</a></li> -->
-                    <
-                    li><a href="../masuk/?typekk=SCHEDULE">Masuk</a></>
+                    <li><a href="../masuk/?typekk=SCHEDULE">Masuk</a></li>
                     <li><a href="../stenter/?typekk=SCHEDULE">Stenter</a></li>
                     <li><a href="../compact/?typekk=SCHEDULE">Compact</a></li>
                     <li><a href="../belah-lipat/?typekk=NOW">Belah Cuci</a></li>
                     <li><a href="../lipat-inspek/?typekk=SCHEDULE">Lipat/Inspek</a></li>
                     <li><a href="../oven/?typekk=SCHEDULE">Oven</a></li>
                     <li><a href="../steamer/?typekk=SCHEDULE">Steamer</a></li>
+                    <li><a href="../lsr/?typekk=SCHEDULE">LSR</a></li>
                     <li><a href="index.php" class="active">Keluar</a></li>
                     <li><a href="../reports/">Reports</a>
                         <?php if (!isset($_SESSION['usr']) || !isset($_SESSION['pass'])) { ?>

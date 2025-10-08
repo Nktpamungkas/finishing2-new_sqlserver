@@ -1,6 +1,7 @@
 <?php
 ini_set("error_reporting", 1);
 session_start();
+include_once('koneksi.php');
 $timeout = 480; // Set timeout menit
 $logout_redirect_url = "../login.php"; // Set logout URL
 
@@ -24,7 +25,7 @@ $page    = strtolower($page);
 
 <head><!-- Created by Artisteer v4.3.0.60745 -->
     <meta charset="utf-8">
-    <title>Belah &amp; Lipat</title>
+    <title>LSR</title>
     <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no, width = device-width">
     <link rel="icon" type="image/png" href="../images/icon.png">
     <!--[if lt IE 9]><script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -94,19 +95,19 @@ $page    = strtolower($page);
                     <?php if ($_SESSION['lvl'] != "Operator") { ?>
                         <li><a href="../masuk/?typekk=NOW">Masuk</a></li>
                     <?php } ?>
-                    <!-- <li><a href="../stenter/?typekk=NOW">Stenter</a></li>
+                    <!-- <li><a href="index.php?typekk=NOW" class="active">Stenter</a></li>
                     <li><a href="../compact/?typekk=NOW">Compact</a></li>
-                    <li><a href="index.php?typekk=NOW" class="active">Belah &amp; Lipat</a></li>
+                    <li><a href="../belah-lipat/?typekk=NOW">Belah &amp; Lipat</a></li>
                     <li><a href="../oven/?typekk=NOW">Oven</a></li>
                     <li><a href="../steamer/?typekk=NOW">Steamer</a></li> -->
                     
-                    <li><a href="../stenter/?typekk=SCHEDULE">Stenter</a></li>
+                    <li><a href="index.php?typekk=SCHEDULE">Stenter</a></li>
                     <li><a href="../compact/?typekk=SCHEDULE">Compact</a></li>
-                    <li><a href="index.php?typekk=NOW" class="active">Belah Cuci</a></li>
+                    <li><a href="../belah-lipat/?typekk=NOW">Belah Cuci</a></li>
                     <li><a href="../lipat-inspek/?typekk=SCHEDULE">Lipat/Inspek</a></li>
                     <li><a href="../oven/?typekk=SCHEDULE">Oven</a></li>
                     <li><a href="../steamer/?typekk=SCHEDULE">Steamer</a></li>
-                    <li><a href="../lsr/?typekk=SCHEDULE">LSR</a></li>
+                    <li><a href="../lsr/?typekk=SCHEDULE" class="active">LSR</a></li>
                     <?php if ($_SESSION['lvl'] != "Operator") { ?>
                         <li><a href="../keluar/">Keluar</a></li>
                     <?php } ?>

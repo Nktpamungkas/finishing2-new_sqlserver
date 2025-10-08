@@ -85,9 +85,9 @@
             <option value="stenter"                                                                       <?php if ($_GET['jns'] == "stenter") {
                                                                            echo "SELECTED";
                                                                        }?>>Stenter</option>
-            <option value="steamer"                                                                       <?php if ($_GET['jns'] == "steamer") {
+            <option value="lsr"                                                                       <?php if ($_GET['jns'] == "lsr") {
                                                                            echo "SELECTED";
-                                                                       }?>>Steamer</option>
+                                                                       }?>>LSR</option>
           </select>
         </td>
       </tr>

@@ -107,7 +107,7 @@
           <tr>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
               <div align="center"><strong>
-                  <font size="-2">AKSI</font>
+                  <font size="-2">AKSI tes</font>
                 </strong></div>
             </th>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
@@ -190,21 +190,23 @@
                   <font size="-2">SPEED</font>
                 </strong></div>
             </th>
-            <th rowspan="2" style="border:1px solid;vertical-align:middle;">
-              <div align="center"><strong>
-                  <font size="-2">VMT</font>
-                </strong></div>
-            </th>
-            <th rowspan="2" style="border:1px solid;vertical-align:middle;">
-              <div align="center"><strong>
-                  <font size="-2">OVER FEED</font>
-                </strong></div>
-            </th>
-            <th rowspan="2" style="border:1px solid;vertical-align:middle;">
-              <div align="center"><strong>
-                  <font size="-2">BUKA RANTAI</font>
-                </strong></div>
-            </th>
+            <?php if ($_POST['jnsmesin'] != "lsr"): ?>
+              <th rowspan="2" style="border:1px solid;vertical-align:middle;">
+                <div align="center"><strong>
+                    <font size="-2">VMT</font>
+                  </strong></div>
+              </th>
+              <th rowspan="2" style="border:1px solid;vertical-align:middle;">
+                <div align="center"><strong>
+                    <font size="-2">OVER FEED</font>
+                  </strong></div>
+              </th>
+              <th rowspan="2" style="border:1px solid;vertical-align:middle;">
+                <div align="center"><strong>
+                    <font size="-2">BUKA RANTAI</font>
+                  </strong></div>
+              </th>
+            <?php endif; ?>
             <th colspan="2" style="border:1px solid;vertical-align:middle;">
               <div align="center"><strong>
                   <font size="-2">LEBAR (INCHI)</font>

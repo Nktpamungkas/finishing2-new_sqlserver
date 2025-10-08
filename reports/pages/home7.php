@@ -42,7 +42,8 @@
     <table width="470" border="0">
       <tr>
         <td colspan="3">
-          <div align="center"><strong>LAPORAN STOPPAGE MESIN</strong></div>
+          <!-- <div align="center"><strong>LAPORAN STOPPAGE MESIN</strong></div> -->
+          <div align="center"><strong>LAPORAN Produksi Finishing</strong></div>
           </div>
           <?php
               $user_name = $_SESSION['username'];

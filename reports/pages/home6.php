@@ -87,6 +87,9 @@
             <option value="steamer"                                                                       <?php if ($_GET['jns'] == "steamer") {
                                                                            echo "SELECTED";
                                                                        }?>>Steamer</option>
+            <option value="lsr"                                                                       <?php if ($_GET['jns'] == "lsr") {
+                                                                           echo "SELECTED";
+                                                                       }?>>LSR</option>
           </select></td>
       </tr>
       <tr valign="middle">
@@ -105,7 +108,7 @@
         <td>:</td>
         <td><select name="nama_mesin" id="nama_mesin" onchange="myFunction();">
             <option value="">Pilih</option>
-            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE no_mesin LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
+            <?php $qry1 = sqlsrv_query($con, "SELECT no_mesin FROM db_finishing.tbl_no_mesin WHERE jenis LIKE '$_GET[jns]%' ORDER BY no_mesin ASC");
                 while ($r = sqlsrv_fetch_array($qry1, SQLSRV_FETCH_ASSOC)) {
                 ?>
               <option value="<?php echo $r['no_mesin']; ?>"><?php echo $r['no_mesin']; ?></option>
