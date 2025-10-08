@@ -789,15 +789,6 @@
                             onclick="window.open('pages/data-mesin.php','MyWindow','height=400,width=650');" />
                         <?php } ?>
                     </td>
-                    <?php echo "SELECT
-                                              *
-                                            FROM
-                                              RESOURCES r
-                                            WHERE
-                                            CODE = 'P3DR101' $where_schedule
-                                            ORDER BY 
-                                              SUBSTR(CODE, 6,2) 
-                                            ASC"; ?>
                     <td>
                         <h4>Tgl Proses</h4>
                     </td>
