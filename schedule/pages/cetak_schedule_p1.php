@@ -711,7 +711,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					</tr>
 					<tr>
 						<td>Nama</td>
-						<td align="center">Husni Jr</td>
+						<td align="center">Ihsan Jaelani</td>
 						<td align="center">Aressa</td>
 						<td align="center">Indra Cahya</td>
 					</tr>
@@ -729,7 +729,7 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					</tr>
 					<tr>
 						<td valign="top" style="height: 0.5in;">Tanda Tangan</td>
-						<td align="center"><img src="../../ttd/husni.jpg" width="80" height="73" alt="" /></td>
+						<td align="center"><img src="../../ttd/ihsan.jpg" width="80" height="73" alt="" /></td>
 						<td align="center"><img src="../../ttd/aressa.jpeg" width="80" height="73" alt="" /></td>
 						<td align="center"><img src="../../ttd/indra_cahya.png" width="80" height="73" alt="" /></td>
 					</tr>
