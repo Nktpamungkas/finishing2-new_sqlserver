@@ -762,9 +762,6 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 						
 					</div>
 				</td>
-				<td style="width:20%;padding:4px;">
-					<pre style="font-size:12px;margin:0;">No. Form      : 14-11</pre>
-				</td>
 			</tr>
 			<tr>
 				<td style="padding:4px;">
@@ -781,9 +778,6 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					?>
 					Qty Steamer (Normal) : <strong><?= number_format($totalQtySteamerNormal, 2) ?></strong>
 				</td>
-				<td style="padding:4px;">
-					<pre style="font-size:12px;margin:0;">No. Revisi    : 23</pre>
-				</td>
 			</tr>
 			<tr>
 				<td style="padding:4px;">
@@ -799,9 +793,6 @@ $tanggal_lengkap_ttd = $tanggal_indonesia . ' ' . $bulan_indonesia . ' ' . $tahu
 					}
 					?>
 					Qty Finishing Jadi (Normal) : <strong><?= number_format($totalQtyFinishingJadiNormal, 2) ?></strong>
-				</td>
-				<td style="padding:4px;">
-					<pre style="font-size:12px;margin:0;">Tgl. Terbit   &nbsp; : </pre>
 				</td>
 			</tr>
 			<tr>
