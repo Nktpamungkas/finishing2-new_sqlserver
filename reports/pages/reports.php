@@ -107,7 +107,7 @@
           <tr>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
               <div align="center"><strong>
-                  <font size="-2">AKSI tes</font>
+                  <font size="-2">AKSI</font>
                 </strong></div>
             </th>
             <th rowspan="2" style="border:1px solid;vertical-align:middle;">
@@ -190,7 +190,7 @@
                   <font size="-2">SPEED</font>
                 </strong></div>
             </th>
-            <?php if ($_POST['jnsmesin'] != "lsr"): ?>
+            <?php if (($_POST['jnsmesin'] != "lsr") && ($msn != "P3LS101")): ?>
               <th rowspan="2" style="border:1px solid;vertical-align:middle;">
                 <div align="center"><strong>
                     <font size="-2">VMT</font>
@@ -450,6 +450,7 @@
                   ?>
                 </font>
               </td>
+              <?php if (($_POST['jnsmesin'] != "lsr") && ($msn != "P3LS101")): ?>
               <td style="border:1px solid;vertical-align:middle;">
                 <font size="-2">
                   <?php
@@ -531,6 +532,7 @@
                   ?>
                 </font>
               </td>
+              <?php endif; ?>
               <td style="border:1px solid;vertical-align:middle;">
                 <div align="center">
                   <font size="-2"><?php echo $rowd['lebar']; ?></font>
